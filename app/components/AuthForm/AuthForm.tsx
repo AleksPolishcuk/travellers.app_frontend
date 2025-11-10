@@ -21,7 +21,6 @@ export default function AuthForm({ initialTab }: AuthFormProps) {
 
   return (
     <div className={styles.container}>
-      {/* Таби для перемикання */}
       <div className={styles.tabs}>
         <button
           className={`${styles.tab} ${activeTab === 'register' ? styles.active : ''}`}
@@ -30,7 +29,7 @@ export default function AuthForm({ initialTab }: AuthFormProps) {
           Реєстрація
         </button>
         <button
-          className={`${styles.tab} ${activeTab === 'register' ? styles.active : ''}`}
+          className={`${styles.tab} ${activeTab === 'login' ? styles.active : ''}`} 
           onClick={() => handleTabChange('login')}
         >
           Вхід
@@ -50,13 +49,12 @@ export default function AuthForm({ initialTab }: AuthFormProps) {
           <>
             <h1 className={styles.title}>Вхід</h1>
             <p className={styles.subtitle}>
-              Вітаємо знову у спільноту мандрівників!
+              Вітаємо знову у спільноті мандрівників!
             </p>
             <LoginForm />
           </>
         )}
       </div>
-
     </div>
   );
 }
