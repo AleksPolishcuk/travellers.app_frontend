@@ -1,4 +1,4 @@
-
+import Join from "./components/Join/Join";
 import Link from "next/link";
 
 export default function HomePage() {
