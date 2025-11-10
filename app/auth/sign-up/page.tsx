@@ -4,7 +4,7 @@ import RegisterForm from '@/app/components/AuthForm/RegistrationForm';
 export default function RegisterPage() {
   return (
     <div className="auth-page">
-      <AuthForm initialTab="sign-up" />
+      <AuthForm initialTab="register" />
     </div>
   );
 }
