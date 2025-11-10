@@ -215,7 +215,7 @@ ul, ol {
 .container {
   width: 100%;
   margin: 0 auto;
-  padding: 0 64px;
+  padding: 0 20px;
 }
 
 /* Адаптивний mobile (375px+) */
@@ -236,7 +236,7 @@ ul, ol {
 /* Tablet (768px+) */
 @media (min-width: 768px) {
   body {
-    padding: 0 ;
+    padding: 0;
   }
   
   .container {

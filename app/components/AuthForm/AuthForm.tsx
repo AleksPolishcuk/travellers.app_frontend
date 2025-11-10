@@ -30,7 +30,7 @@ export default function AuthForm({ initialTab }: AuthFormProps) {
           Реєстрація
         </button>
         <button
-          className={`${styles.tab} ${activeTab === 'sign-in' ? styles.active : ''}`}
+          className={`${styles.tab} ${activeTab === 'sign-up' ? styles.active : ''}`}
           onClick={() => handleTabChange('sign-in')}
         >
           Вхід

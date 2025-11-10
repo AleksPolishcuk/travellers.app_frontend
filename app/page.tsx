@@ -1,4 +1,4 @@
-
+import Join from "./components/Join/Join";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -8,8 +8,7 @@ export default function HomePage() {
       <h1 className="text-red-500 font-bold underline ">HomePage</h1>
       <Link href="/stories">Переглянути всі</Link><br/>
       <Link href="/travellers">переглянути всіх</Link> <br/>
-      <Link href="/auth/sign-in">Зареєструватися</Link> <br/>
-    
+      <Join/>
     </div>
   );
 }
