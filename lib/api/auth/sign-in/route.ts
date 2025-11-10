@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Мок-користувач
+   
     const user = {
       _id: 'user123',
       name: 'Тестовий Користувач',
