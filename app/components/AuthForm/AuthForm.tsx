@@ -7,14 +7,14 @@ import LoginForm from './LoginForm';
 import styles from './AuthForm.module.css';
 
 interface AuthFormProps {
-  initialTab: 'sign-up' | 'sign-in';
+  initialTab: 'register' | 'login';
 }
 
 export default function AuthForm({ initialTab }: AuthFormProps) {
-  const [activeTab, setActiveTab] = useState<'sign-up' | 'sign-in'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'register' | 'login'>(initialTab);
   const router = useRouter();
 
-  const handleTabChange = (tab: 'sign-up' | 'sign-in') => {
+  const handleTabChange = (tab: 'register' | 'login') => {
     setActiveTab(tab);
     router.push(`/auth/${tab}`);
   };
@@ -24,21 +24,21 @@ export default function AuthForm({ initialTab }: AuthFormProps) {
       {/* Таби для перемикання */}
       <div className={styles.tabs}>
         <button
-          className={`${styles.tab} ${activeTab === 'sign-up' ? styles.active : ''}`}
-          onClick={() => handleTabChange('sign-up')}
+          className={`${styles.tab} ${activeTab === 'register' ? styles.active : ''}`}
+          onClick={() => handleTabChange('register')}
         >
           Реєстрація
         </button>
         <button
-          className={`${styles.tab} ${activeTab === 'sign-up' ? styles.active : ''}`}
-          onClick={() => handleTabChange('sign-in')}
+          className={`${styles.tab} ${activeTab === 'register' ? styles.active : ''}`}
+          onClick={() => handleTabChange('login')}
         >
           Вхід
         </button>
       </div>
 
       <div className={styles.content}>
-        {activeTab === 'sign-up' ? (
+        {activeTab === 'register' ? (
           <>
             <h1 className={styles.title}>Реєстрація</h1>
             <p className={styles.subtitle}>
