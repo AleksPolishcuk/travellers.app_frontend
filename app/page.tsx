@@ -9,7 +9,7 @@ export default function HomePage() {
       <Link href="/stories">Переглянути всі</Link><br/>
       <Link href="/travellers">переглянути всіх</Link> <br/>
     
-    
+      <Join/>
     </div>
   );
 }
