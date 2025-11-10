@@ -1,0 +1,131 @@
+.container {
+box-sizing: border-box;
+max-width: 1440px;
+margin: 0 auto;
+margin-top: 72px;
+margin-bottom: 72px;
+display: flex;
+align-items: flex-start;
+flex-direction: column;
+justify-content: space-between;
+flex: 1;
+gap: 64px;
+  }
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+
+
+}
+.aboutTitle {
+  font-size: 52px;
+  max-width: 755px;
+
+}
+.subtitle {
+  max-width: 533px;
+  font-size: 20px;
+}
+.cards {
+  max-width: 1312px;
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+  gap: 48px;
+
+}
+
+.card {
+  flex: 1 1 calc((100% - 48px) /3);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+}
+.cardTitle {
+  font-size: 32px;
+
+}
+
+.cardSubtitle {
+  font-size: 18px;
+}
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+  .container {
+    max-width: 768px;
+    margin-top: 64px;
+    margin-bottom: 64px;
+      }
+    
+
+    .aboutTitle {
+      font-size: 44px;
+      max-width: 340px;
+    
+    }
+    .subtitle {
+      max-width: 340px;
+      font-size: 16px;
+    }
+    .cards {
+      max-width: 704px;
+      gap: 32px;
+    
+    }
+    .card {
+      flex: 1 1 calc((100% - 32px) /3);
+      gap: 8px;
+    }
+    .cardTitle {
+      font-size: 20px;
+    
+    }
+    .cardSubtitle {
+      font-size: 16px;
+    }
+}
+
+@media screen and (min-width: 375px) and (max-width: 767px) {
+  .container {
+    max-width: 375px;
+    align-items: center;
+    justify-content: center;
+      }
+    
+    .titleContainer {
+      flex-direction: column;
+      gap: 24px;
+    
+    }
+    .aboutTitle {
+      font-size: 28px;
+      max-width: 100%;
+    
+    }
+    .subtitle {
+      max-width: 100%;
+    }
+    .cards {
+      max-width: auto;
+      flex-direction: column;
+      gap: 32px;
+    
+    }
+    .card {
+      flex: 1 1 calc((100% - 32px) /3);
+      gap: 8px;
+    }
+    .cardTitle {
+      font-size: 20px;
+    
+    }
+    .cardSubtitle {
+      font-size: 16px;
+    }
+}
