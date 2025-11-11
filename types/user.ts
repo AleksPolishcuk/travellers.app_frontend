@@ -29,7 +29,7 @@ export interface Traveller {
   _id: string;
   name: string;
   email: string;
-  avatarUrl?: string;
+  avatar?: string;
   description?: string;
 }
 
