@@ -1,3 +1,4 @@
+import OurTravellersSection from './components/OurTravellersSection';
 import Join from './components/Join/Join';
 import Link from 'next/link';
 import Header from './components/Header/Header';
@@ -11,6 +12,7 @@ export default function HomePage() {
       <br />
       <Link href="/travellers">переглянути всіх</Link> <br />
       <Join />
+      <OurTravellersSection />
     </div>
   );
 }
