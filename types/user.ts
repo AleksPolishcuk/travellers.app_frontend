@@ -25,6 +25,24 @@ export interface User {
     data: User;
   }
 
+export interface Traveller {
+  _id: string;
+  name: string;
+  email: string;
+  avatarUrl?: string;
+  description?: string;
+}
+
+export interface TravellersResponseData {
+  travellers: Traveller[];
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}Ï
+
   type AuthStore = {
     isAuthenticated: boolean;
     user: User | null;
