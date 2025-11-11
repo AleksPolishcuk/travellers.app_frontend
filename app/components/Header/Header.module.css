@@ -1,0 +1,137 @@
+.headerSection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 72px;
+    background: transparent;
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+.headerContainer {
+    max-width: 375px;
+    margin: 0 auto;
+    padding: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+
+.headerLogoWrapper {
+    display: flex;
+    align-items: center;
+    gap: 3, 31px;
+}
+
+.headerLogo {
+    flex-shrink: 0;
+}
+
+.logoText {
+    font-family: "Sora", sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    color: #fff;
+    line-height: 20px;
+    letter-spacing: -0.01em;
+
+}
+
+
+
+.headerNav {
+    display: none;
+}
+
+.headerNavList {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.headerNavList li a,
+.headerNavList li button {
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+
+.burgerBtn {
+    display: block;
+    border-radius: 8px;
+    padding: 4px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff
+}
+
+
+@media screen and (min-width: 768px) {
+    .headerContainer {
+
+        max-width: 768px;
+    }
+
+    .headerNav {
+        width: auto;
+
+    }
+}
+
+
+@media screen and (min-width: 1440px) {
+    .headerSection {
+
+        margin: 0 auto;
+    }
+
+    .headerContainer {
+        max-width: 1440px;
+        height: 72px;
+    }
+
+    .headerNav {
+        display: flex;
+        height: 40px;
+
+    }
+
+    .burgerBtn {
+        display: none;
+    }
+
+    .headerNavList li a {
+        font-size: 18px;
+        line-height: 27px;
+    }
+
+    .headerNavList {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 32px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        color: #fff;
+        font-family: "Nunito Sans", sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 27px;
+        height: 40px;
+
+    }
+}

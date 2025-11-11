@@ -1,0 +1,137 @@
+.hero {
+    width: 100%;
+    height: 100vh;
+    background-image: image-set(url('/bg-mob.1x.jpg') 1x,
+            url('/bg-mob.2x.jpg') 2x);
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+
+
+}
+
+
+.heroContainer {
+    max-width: 335px;
+    height: 285px;
+    text-align: start;
+    margin: 0 auto;
+}
+
+.heroTitle {
+    font-family: "Sora", sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 35px;
+    margin-bottom: 24px;
+    color: #fff
+}
+
+.heroText {
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 32px;
+}
+
+
+.heroBtn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 115px;
+    height: 39px;
+    max-width: 335px;
+    background-color: #4169e1;
+    color: #fff;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.heroBtn:hover {
+    background-color: #e8eeff;
+    color: #000;
+}
+
+
+@media screen and (min-width: 768px) {
+    .hero {
+        background-image: image-set(url('/bg-tabl.1x.jpg') 1x,
+                url('/bg-tabl.2x.jpg') 2x);
+        padding: 0 0;
+    }
+
+    .heroContainer {
+        max-width: 768px;
+        height: 273px;
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+
+    .heroTitle {
+
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 53px;
+        letter-spacing: -0.01em;
+    }
+
+    .heroText {
+
+        font-size: 16px;
+        font-weight: 400px;
+        line-height: 24px;
+    }
+}
+
+
+@media screen and (min-width: 1440px) {
+    .hero {
+        width: 100%;
+        background-image: image-set(url('/bg-desk.1x.jpg') 1x,
+                url('/bg-desk.2x.jpg') 2x);
+        min-height: 809px;
+        justify-content: flex-start;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: 0;
+    }
+
+    .heroContainer {
+        max-width: 759px;
+
+        height: 309px;
+        margin-left: 64px;
+        text-align: start
+    }
+
+    .heroTitle {
+        font-weight: 700;
+        font-size: 56px;
+        line-height: 62px;
+        letter-spacing: -0.01em;
+    }
+
+    .heroText {
+        width: 759px;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    .heroBtn {
+        width: 126px;
+    }
+}
