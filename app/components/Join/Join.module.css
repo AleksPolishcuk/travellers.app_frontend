@@ -1,109 +1,177 @@
-.headerJoin{
-    font-family: var(--second-family);
-    font-size: 48px;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    color: #fff;
-}
-
-.container{
-    max-width: 1440px;
-    margin:  0 auto;
-}
-.infoText{
-    font-family: var(--font-family);
-    font-weight: 400;
-    line-height: 1.5;
-    color: #fff;
-    margin-top: 24px;
-}
-
-.registerButton{
-    height: 48px;
-    width: 169px;
-    border-radius: 8px;
-    padding:  6px 12px;
-    background-color: #4169E1;
-    color: #fff;
-    font-family: var(--font-family);
-    font-size: 18px;
-    line-height: 1.5;
-    margin-top: 42.5px;
-}
-
-.backgroundJoin{
+/* Базові стилі - Mobile First (гумова верстка від 320px) */
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .backgroundJoin {
     background-image: url('/moonlit-coral-reef.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     background-color: #fff;
-    width: 1312px;
-    height: 436px;
-    border-radius: 24px;
-}
-
-.wrapper{
-    padding-left: 64px;
-    padding-top: 77.66px;
-    padding-bottom: 78.34px;
-    max-width: 558px;
-}
-
-
-@media screen and (min-width: 768px) and (max-width: 1439px) {
-    .container{
-        max-width: 768px;
+    width: 100%;
+    height: 262px;
+    border-radius: 16px;
+  }
+  
+  .wrapper {
+    padding: 20px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  
+  .headerJoin {
+    font-family: var(--second-family);
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: #fff;
+    margin: 0;
+  }
+  
+  .infoText {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #fff;
+    margin-top: 16px;
+    margin-bottom: 0;
+  }
+  
+  .registerButton {
+    height: 48px;
+    width: 100%;
+    max-width: 295px;
+    border-radius: 8px;
+    padding: 6px 12px;
+    background-color: #4169E1;
+    color: #fff;
+    font-family: var(--font-family);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 24px;
+    box-sizing: border-box;
+  }
+  
+  .registerButton:hover {
+    background-color: #3151c7;
+    transform: translateY(-1px);
+  }
+  
+  /* Mobile: адаптивна верстка з 375px */
+  @media (min-width: 375px) {
+    .container {
+      padding: 0;
     }
-
-    .backgroundJoin{
-        width: 704px;
-        height: 260px;
+    
+    .backgroundJoin {
+      height: 280px;
     }
-    .headerJoin{
-        font-size: 32px;
-
+    
+    .wrapper {
+      padding: 24px 20px;
     }
-    .infoText{
-        font-size: 16px;
-        margin-top: 8px;
+    
+    .headerJoin {
+      font-size: 28px;
     }
-
-    .registerButton{
-        font-size: 16px;
-        width: 153px;
-        margin-top: 16px;
+    
+    .infoText {
+      font-size: 15px;
     }
-    .wrapper{
-        padding-top: 31.96px;
-        padding-left: 32px;
-        padding-bottom: 64px;
+    
+    .registerButton {
+      width: 295px;
     }
-}
-
-@media screen and (min-width:385px) and (max-width: 767px) {
-    .container{
-        max-width: 385px;
+  }
+  
+  /* Tablet: з 768px */
+  @media (min-width: 768px) {
+    .container {
+      max-width: 768px;
+      padding: 0 32px;
     }
-    .backgroundJoin{
-        width: 335px;
-        height: 262px;
-        background-position: left;
+    
+    .backgroundJoin {
+      width: 100%;
+      height: 260px;
+      border-radius: 20px;
     }
-    .headerJoin{
-        font-size: 26px;
+    
+    .wrapper {
+      padding: 32px;
+      max-width: 558px;
     }
-    .registerButton{
-        width: 295px;
-        margin-top: 24px;
-        margin-bottom: 20px;
+    
+    .headerJoin {
+      font-size: 32px;
     }
-    .wrapper{
-        max-width: 295px;
-        padding-top: 19.6px;
-        padding-left: 20px;
-        padding-right: 20px;
+    
+    .infoText {
+      font-size: 16px;
+      margin-top: 8px;
     }
-    .infoText{
-        margin-top: 16px;
+    
+    .registerButton {
+      width: 153px;
+      font-size: 16px;
+      margin-top: 16px;
     }
-}
+  }
+  
+  /* Desktop: з 1440px */
+  @media (min-width: 1440px) {
+    .container {
+      max-width: 1440px;
+      padding: 0 64px;
+    }
+    
+    .backgroundJoin {
+      width: 1312px;
+      height: 436px;
+      border-radius: 24px;
+    }
+    
+    .wrapper {
+      padding: 77.66px 0 78.34px 64px;
+      max-width: 558px;
+    }
+    
+    .headerJoin {
+      font-size: 48px;
+    }
+    
+    .infoText {
+      font-size: 18px;
+      margin-top: 24px;
+    }
+    
+    .registerButton {
+      width: 169px;
+      font-size: 18px;
+      margin-top: 42.5px;
+    }
+  }
+  
+  /* Покращення для доступності */
+  @media (prefers-reduced-motion: reduce) {
+    .registerButton {
+      transition: none;
+    }
+    
+    .registerButton:hover {
+      transform: none;
+    }
+  }
