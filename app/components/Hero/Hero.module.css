@@ -9,7 +9,8 @@
     align-items: center;
     justify-content: center;
     color: #fff;
-    padding: 0 16px;
+
+
 }
 
 
@@ -17,7 +18,7 @@
     max-width: 335px;
     height: 285px;
     text-align: start;
-
+    margin: 0 auto;
 }
 
 .heroTitle {
@@ -26,7 +27,7 @@
     font-size: 32px;
     line-height: 35px;
     margin-bottom: 24px;
-
+    color: #fff
 }
 
 .heroText {
@@ -67,6 +68,7 @@
 @media screen and (min-width: 768px) {
     .hero {
         background-image: url('../../../public/bg-768.jpg');
+        padding: 0 0;
     }
 
     .heroContainer {
@@ -77,6 +79,7 @@
     }
 
     .heroTitle {
+
         font-size: 48px;
         font-weight: 700;
         line-height: 53px;
@@ -84,6 +87,7 @@
     }
 
     .heroText {
+
         font-size: 16px;
         font-weight: 400px;
         line-height: 24px;
@@ -93,30 +97,32 @@
 
 @media screen and (min-width: 1440px) {
     .hero {
-        max-width: 1440px;
+        width: 100%;
         background-image: url('../../../public/bg-1440.jpg');
         min-height: 809px;
-        padding: 0 64px;
         justify-content: flex-start;
         margin: 0 auto;
+        box-sizing: border-box;
+        padding: 0;
     }
 
     .heroContainer {
-        max-width: 1312px;
-        height: 309px;
-        width: 759px;
-        text-align: start;
-        padding: 0;
+        max-width: 759px;
 
+        height: 309px;
+        margin-left: 64px;
+        text-align: start
     }
 
     .heroTitle {
         font-weight: 700;
         font-size: 56px;
         line-height: 62px;
+        letter-spacing: -0.01em;
     }
 
     .heroText {
+        width: 759px;
         font-weight: 400;
         font-size: 20px;
         line-height: 30px;
