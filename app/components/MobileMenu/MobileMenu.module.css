@@ -26,9 +26,25 @@
     position: absolute;
     top: 16px;
     left: 16px;
-    width: 148px;
-    height: 22px;
     position: static;
+    display: flex;
+    align-items: center;
+    gap: 3, 31px;
+    text-decoration: none;
+}
+
+.logoIcon {
+
+    flex-shrink: 0;
+}
+
+.logoText {
+    font-family: "Sora", sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    color: #000;
+    line-height: 20px;
+    letter-spacing: -0.01em;
 
 }
 

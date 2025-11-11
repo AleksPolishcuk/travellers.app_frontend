@@ -30,16 +30,16 @@ export default function MobileMenu({
     <nav className={`${css.headerMenu} ${isOpen ? css.open : ''}`}>
       <div className={css.menuHeader}>
         <Link href="/" className={css.menuLogo} onClick={onClose}>
-          <Image
-            src="/Header/logo-dark.svg"
-            alt="logo"
-            width={148}
-            height={22}
-          />
+          <svg width="30" height="30" className={css.logoIcon}>
+            <use href="/icons.svg#icon-company-logo" />
+          </svg>
+          <span className={css.logoText}>Подорожники</span>
         </Link>
 
         <button className={css.closeBtn} onClick={onClose}>
-          <Image src="/Header/close.svg" alt="close" width={24} height={24} />
+          <svg width="24" height="24" aria-label="close">
+            <use href="/icons.svg#icon-close"></use>
+          </svg>
         </button>
       </div>
 
