@@ -12,7 +12,7 @@
 .headerContainer {
     max-width: 375px;
     margin: 0 auto;
-    padding: 16px 0;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -101,6 +101,7 @@
     .headerContainer {
         max-width: 1440px;
         height: 72px;
+        margin: 0 auto;
     }
 
     .headerNav {
