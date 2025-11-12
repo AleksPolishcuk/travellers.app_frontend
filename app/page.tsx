@@ -1,16 +1,20 @@
+import OurTravellersSection from './components/OurTravellersSection';
 import Join from './components/Join/Join';
 import Link from 'next/link';
 import Header from './components/Header/Header';
 import About from './components/About/About';
+import Hero from './components/Hero/Hero';
 
 export default function HomePage() {
   return (
     <div>
+      <Hero />
       <About />
       <Link href="/stories">Переглянути всі</Link>
       <br />
       <Link href="/travellers">переглянути всіх</Link> <br />
       <Join />
+      <OurTravellersSection />
     </div>
   );
 }
