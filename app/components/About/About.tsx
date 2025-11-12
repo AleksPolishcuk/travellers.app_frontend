@@ -2,7 +2,8 @@ import styles from './About.module.css';
 
 export default function About(){
     return (
-    <section className={styles.container}>
+    <section className={styles.about}>
+        <div className={styles.container}>
         <div className={styles.titleContainer}>
             <h2 className={styles.aboutTitle}>Проєкт, створений для тих, хто живе подорожами</h2>
             <p className={styles.subtitle}>Ми віримо, що кожна подорож — це унікальна історія, варта того, щоб нею поділилися. Наша платформа створена, щоб об'єднати людей, закоханих у відкриття нового. Тут ви можете ділитися власним досвідом, знаходити друзів та надихатися на наступні пригоди разом з нами.</p>
@@ -31,6 +32,7 @@ export default function About(){
                 <p className={styles.cardSubtitle}>Станьте частиною спільноти, де кожен може бути і автором, і читачем.</p>
             </li>
         </ul>
+        </div>
     </section>
     );
 }
