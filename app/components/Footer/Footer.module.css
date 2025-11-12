@@ -143,8 +143,13 @@
 
 @media (min-width: 1440px) {
 
+
     .footer {
-        padding: 0;
+        padding: 0 64px;
+    }
+
+    .footerContainer {
+        padding: 0 64px;
     }
 
     .logoWrapper {
@@ -170,8 +175,8 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        padding: 0 64px;
         padding-top: 80px;
-
         width: 1440px;
         gap: 0;
     }
