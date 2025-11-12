@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Traveller } from '@/lib/api/clientApi';
+import { Traveller } from '@/types/user';
 import styles from './TravellerCard.module.css';
 
 interface TravellerCardProps {
@@ -13,7 +13,7 @@ export default function TravellerCard({ traveller }: TravellerCardProps) {
       (traveller.description.length > 100 ? '...' : '')
     : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.';
 
-  const avatarSrc = traveller.avatarUrl || '/images/default-avatar.png';
+  const avatarSrc = traveller.avatar || '/images/default-avatar.png';
 
   return (
     <li className={styles.card}>

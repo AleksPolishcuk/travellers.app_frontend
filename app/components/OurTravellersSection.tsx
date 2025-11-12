@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getTravellers, Traveller } from '@/lib/api/clientApi';
+import { getTravellers } from '@/lib/api/clientApi';
+import { Traveller } from '@/types/user';
 import TravellerCard from '@/app/components/TravellerCard/TravellerCard';
 import styles from '@/app/Home.module.css';
 
