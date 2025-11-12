@@ -6,13 +6,13 @@
     height: 72px;
     background: transparent;
     z-index: 100;
+    box-sizing: border-box;
 }
 
 .headerContainer {
-    max-width: 335px;
-    width: 100%;
+    max-width: 375px;
     margin: 0 auto;
-    padding: 16px 0;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,12 +23,24 @@
 .headerLogoWrapper {
     display: flex;
     align-items: center;
+    gap: 3, 31px;
 }
 
 .headerLogo {
-    width: 148px;
-    height: auto;
+    flex-shrink: 0;
 }
+
+.logoText {
+    font-family: "Sora", sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    color: #fff;
+    line-height: 20px;
+    letter-spacing: -0.01em;
+
+}
+
+
 
 .headerNav {
     display: none;
@@ -63,12 +75,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #fff
 }
 
 
 @media screen and (min-width: 768px) {
     .headerContainer {
-        padding: 16px 0px;
+
         max-width: 768px;
     }
 
@@ -81,15 +94,14 @@
 
 @media screen and (min-width: 1440px) {
     .headerSection {
-        padding: 0 64px;
-        margin: 0;
+
+        margin: 0 auto;
     }
 
     .headerContainer {
         max-width: 1440px;
         height: 72px;
-        margin: 0;
-        padding: 16px 0;
+        margin: 0 auto;
     }
 
     .headerNav {
