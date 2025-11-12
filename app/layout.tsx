@@ -2,7 +2,7 @@ import Header from './components/Header/Header';
 import Popular from './components/Popular/Popular';
 import Footer from './components/Footer/Footer';
 import './globals.css';
-import { QueryClientProvider } from '@tanstack/react-query';
+
 
 export const metadata = {
   title: 'Подорожники',
@@ -34,8 +34,9 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <body>
+        
         <div className="container">
-          {/* <Header /> */}
+         <Header/>
           <main>
       {children}
           </main>
