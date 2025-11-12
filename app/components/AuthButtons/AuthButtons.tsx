@@ -27,7 +27,7 @@ export default function AuthButtons({
             className={loginClass}
             onClick={() => {
               onClick?.();
-              router.push('/auth/sign-in');
+              router.push('/auth/login');
             }}
           >
             Вхід
@@ -38,7 +38,7 @@ export default function AuthButtons({
             className={registerClass}
             onClick={() => {
               onClick?.();
-              router.push('/auth/sign-up');
+              router.push('/auth/register');
             }}
           >
             Реєстрація

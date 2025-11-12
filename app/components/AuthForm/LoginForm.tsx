@@ -1,24 +1,53 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/store/authStore';
 import styles from './AuthForm.module.css';
 
+interface FormDataState {
+  email: string;
+  password: string;
+}
+
 export default function LoginForm() {
   const router = useRouter();
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<FormDataState>({
+    email: '',
+    password: ''
+  });
+  
   const setUser = useAuthStore((state) => state.setUser);
 
-  const handleSubmit = async (formData: FormData) => {
+  useEffect(() => {
+    const savedData = localStorage.getItem('loginFormData');
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('loginFormData', JSON.stringify(formData));
+  }, [formData]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
     setError('');
 
     try {
-      const email = formData.get('email') as string;
-      const password = formData.get('password') as string;
+      const { email, password } = formData;
 
       if (!email.includes('@')) {
         setError('Некоректний формат email');
@@ -37,6 +66,8 @@ export default function LoginForm() {
 
       const user = await login(userData);
       setUser(user);
+      
+      localStorage.removeItem('loginFormData');
       router.push('/');
 
     } catch (error) {
@@ -50,7 +81,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form action={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.inputGroup}>
         <label htmlFor="email" className={styles.label}>
           Пошта*
@@ -61,6 +92,8 @@ export default function LoginForm() {
           type="email"
           placeholder="hello@podorozhnyky.ua"
           className={styles.input}
+          value={formData.email}
+          onChange={handleInputChange}
           required
         />
       </div>
@@ -75,6 +108,8 @@ export default function LoginForm() {
           type="password"
           placeholder="********"
           className={styles.input}
+          value={formData.password}
+          onChange={handleInputChange}
           required
         />
       </div>

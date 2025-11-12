@@ -41,13 +41,15 @@ export default function Header({ user }: HeaderProps) {
     <header className={css.headerSection}>
       <div className={css.headerContainer}>
         <div className={css.headerLogoWrapper}>
-          <Image
-            src="/Header/logo.svg"
-            alt="Logo"
-            width={50}
-            height={50}
+          <svg
             className={css.headerLogo}
-          />
+            width="30"
+            height="30"
+            aria-label="Logo"
+          >
+            <use href="/icons.svg#icon-company-logo"></use>
+          </svg>
+          <span className={css.logoText}>Подорожники</span>
         </div>
 
         <nav className={css.headerNav}>
@@ -78,7 +80,14 @@ export default function Header({ user }: HeaderProps) {
         </nav>
 
         <button className={css.burgerBtn} onClick={toggleMenu}>
-          <Image src="/Header/burger.svg" alt="Меню" width={24} height={24} />
+          <svg
+            className={css.headerLogo}
+            width="24"
+            height="24"
+            aria-label="Logo"
+          >
+            <use href="/icons.svg#icon-menu"></use>
+          </svg>
         </button>
       </div>
       <MobileMenu
