@@ -215,7 +215,7 @@ ul, ol {
 .container {
   width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 ;
 }
 
 /* Адаптивний mobile (375px+) */
@@ -224,7 +224,7 @@ ul, ol {
   
   .container {
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0;
     width: 100%;
   }
   
@@ -240,7 +240,7 @@ ul, ol {
   }
   
   .container {
-    padding: 0 32px;
+    padding: 0;
   }
   
   h1 {
@@ -260,7 +260,7 @@ ul, ol {
   }
   
   .container {
-    padding: 0 64px;
+    padding: 0;
   }
   
   h1 {
@@ -276,45 +276,4 @@ ul, ol {
   }
 }
 
-/* Спеціальні медіа-запити для конкретних випадків */
-@media (max-width: 767px) {
-  .hide-mobile {
-    display: none !important;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1439px) {
-  .hide-tablet {
-    display: none !important;
-  }
-}
-
-@media (min-width: 1440px) {
-  .hide-desktop {
-    display: none !important;
-  }
-}
-
-/* Стани та інтерактивність */
-@media (hover: hover) {
-  .hover-lift:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-  }
-  
-  .hover-scale:hover {
-    transform: scale(1.05);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
 
