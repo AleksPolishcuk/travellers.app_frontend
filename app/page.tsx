@@ -1,4 +1,4 @@
-import OurTravellersSection from './components/OurTravellersSection';
+import OurTravellersSection from './components/OurTravellersSection/OurTravellersSection';
 import Join from './components/Join/Join';
 
 import Popular from './components/Popular/Popular';
@@ -10,10 +10,9 @@ export default function HomePage() {
     <div>
       <Hero />
       <About />
-      
+
       <OurTravellersSection />
       <Join />
-      
     </div>
   );
 }

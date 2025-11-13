@@ -2,7 +2,7 @@ export interface User {
   _id: string;
   name: string;
   email: string;
-  avatar?: string;
+  avatarUrl?: string;
   description?: string;
   onboardingCompleted: boolean;
   savedStories?: string[];
@@ -29,7 +29,7 @@ export interface Traveller {
   _id: string;
   name: string;
   email: string;
-  avatar?: string;
+  avatarUrl?: string;
   description?: string;
 }
 
