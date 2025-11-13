@@ -7,7 +7,7 @@ function Join(){
 
     const {isAuthenticated} = useAuthStore();
     return (
-        <section className={css.container}>
+        <section id='join' className={css.container}>
             <div className={css.backgroundJoin}>
                 <div className={css.wrapper}>
                     <h2 className={css.headerJoin}>Приєднуйтесь до нашої спільноти</h2>
