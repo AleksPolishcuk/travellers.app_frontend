@@ -40,7 +40,9 @@
 
 }
 
-
+.publishTabletOnly {
+    display: none;
+}
 
 .headerNav {
     display: none;
@@ -83,6 +85,28 @@
     .headerContainer {
 
         max-width: 768px;
+    }
+
+    .publishTabletOnly {
+        display: block;
+        margin-left: 16px;
+
+    }
+
+    .publishTabletOnly .publishBtn {
+        border: 1px solid #fff;
+        border-radius: 8px;
+        padding: 4px 10px;
+        width: 202px;
+        height: 35px;
+        background: #fff;
+        color: #000;
+    }
+
+    .publishTabletOnly .publishBtn:hover {
+        background: #4169e1;
+        color: #fff;
+        border: 1px solid #4169e1
     }
 
     .headerNav {

@@ -41,7 +41,7 @@ export default function UserNav({
       <li className={css.userRow}>
         <Link href="/profile" onClick={onClose}>
           <Image
-            src={user.avatar || '/Header/avatar.png'}
+            src={user.avatar || '/avatar.png'}
             alt={user.name}
             width={32}
             height={32}
@@ -56,7 +56,7 @@ export default function UserNav({
           }}
         >
           <Image
-            src="/Header/logout-icon.svg"
+            src="/icons.svg/icon-logout.svg"
             alt="Вихід"
             width={24}
             height={24}
