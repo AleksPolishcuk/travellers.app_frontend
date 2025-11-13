@@ -187,6 +187,8 @@
         margin: 0 auto;
     }
 
-
+    .footerBottom::before {
+        width: 100%;
+    }
 
 }
