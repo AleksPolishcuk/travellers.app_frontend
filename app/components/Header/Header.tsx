@@ -64,6 +64,18 @@ export default function Header({ user }: HeaderProps) {
               <Link href="/travellers">Мандрівники</Link>
             </li>
 
+            {/* Кнопка для авторизованих на планшеті */}
+            {user && (
+              <li className={css.publishTabletOnly}>
+                <Link href="/create-story">
+                  <button className={css.publishBtn}>
+                    Опублікувати історію
+                  </button>
+                </Link>
+              </li>
+            )}
+
+            {/* Десктопна навігація для авторизованих */}
             <nav className={css.headerNav}>
               {user ? (
                 <UserNav
