@@ -1,0 +1,101 @@
+.BtnItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
+}
+
+.mobileLoginBtn,
+.mobileRegisterBtn {
+    width: 335px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.mobileLoginBtn {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: #000;
+}
+
+.mobileLoginBtn:hover {
+    background: #4169e1;
+    color: #fff;
+}
+
+.mobileRegisterBtn {
+    background: #4169e1;
+    border: 1px solid #4169e1;
+    color: #fff;
+}
+
+.mobileRegisterBtn:hover {
+    background: #e8eeff;
+    color: #000;
+}
+
+
+@media screen and (min-width: 1440px) {
+    .BtnItem {
+        flex-direction: row;
+        justify-content: center;
+        gap: 16px;
+        width: auto;
+    }
+
+    .desktopLoginBtn {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        cursor: pointer;
+        text-align: center;
+        font-family: "Nunito Sans", sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 27px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 4px 10px;
+        width: 58px;
+        height: 35px;
+    }
+
+    .desktopLoginBtn:hover {
+        background: #4169e1;
+        color: #fff;
+    }
+
+    .desktopRegisterBtn {
+        display: inline-block;
+        background-color: #fff !important;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid #fff;
+        border-radius: 8px;
+        padding: 4px 10px;
+        width: 113px;
+        height: 35px;
+        font-family: "Nunito Sans", sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 27px;
+        color: #000;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .desktopRegisterBtn:hover {
+        background-color: #4169e1 !important;
+        color: #fff !important;
+
+    }
+}

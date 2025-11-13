@@ -7,38 +7,37 @@ import LoginForm from './LoginForm';
 import styles from './AuthForm.module.css';
 
 interface AuthFormProps {
-  initialTab: 'sign-up' | 'sign-in';
+  initialTab: 'register' | 'login';
 }
 
 export default function AuthForm({ initialTab }: AuthFormProps) {
-  const [activeTab, setActiveTab] = useState<'sign-up' | 'sign-in'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'register' | 'login'>(initialTab);
   const router = useRouter();
 
-  const handleTabChange = (tab: 'sign-up' | 'sign-in') => {
+  const handleTabChange = (tab: 'register' | 'login') => {
     setActiveTab(tab);
     router.push(`/auth/${tab}`);
   };
 
   return (
     <div className={styles.container}>
-      {/* Таби для перемикання */}
       <div className={styles.tabs}>
         <button
-          className={`${styles.tab} ${activeTab === 'sign-up' ? styles.active : ''}`}
-          onClick={() => handleTabChange('sign-up')}
+          className={`${styles.tab} ${activeTab === 'register' ? styles.active : ''}`}
+          onClick={() => handleTabChange('register')}
         >
           Реєстрація
         </button>
         <button
-          className={`${styles.tab} ${activeTab === 'sign-in' ? styles.active : ''}`}
-          onClick={() => handleTabChange('sign-in')}
+          className={`${styles.tab} ${activeTab === 'login' ? styles.active : ''}`} 
+          onClick={() => handleTabChange('login')}
         >
           Вхід
         </button>
       </div>
 
       <div className={styles.content}>
-        {activeTab === 'sign-up' ? (
+        {activeTab === 'register' ? (
           <>
             <h1 className={styles.title}>Реєстрація</h1>
             <p className={styles.subtitle}>
@@ -50,13 +49,12 @@ export default function AuthForm({ initialTab }: AuthFormProps) {
           <>
             <h1 className={styles.title}>Вхід</h1>
             <p className={styles.subtitle}>
-              Вітаємо знову у спільноту мандрівників!
+              Вітаємо знову у спільноті мандрівників!
             </p>
             <LoginForm />
           </>
         )}
       </div>
-
     </div>
   );
 }

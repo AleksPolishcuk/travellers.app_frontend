@@ -1,0 +1,138 @@
+.headerMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #f7f9ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    pointer-events: none;
+
+}
+
+.headerMenu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.menuLogo {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: 3, 31px;
+    text-decoration: none;
+}
+
+.logoIcon {
+
+    flex-shrink: 0;
+}
+
+.logoText {
+    font-family: "Sora", sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    color: #000;
+    line-height: 20px;
+    letter-spacing: -0.01em;
+
+}
+
+.menuHeader {
+    position: absolute;
+    left: 7%;
+    right: 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 20;
+    padding-top: 16px;
+    margin: auto;
+    height: 40px;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: static;
+}
+
+
+.mobNavList {
+    list-style: none;
+    padding-top: 72px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+
+}
+
+.publishBtn {
+    border: 1px solid #4169e1;
+    border-radius: 8px;
+    padding: 4px 10px;
+    width: 335px;
+    height: 32px;
+    background: #4169e1;
+    color: #fff;
+}
+
+.publishBtn:hover {
+    background: #e8eeff;
+    color: #000;
+}
+
+.userRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    width: 102px;
+    height: 32px;
+    margin: 0 auto;
+
+}
+
+
+@media screen and (min-width: 1440px) {
+    .desktopUserNav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 24px;
+        justify-content: flex-end;
+
+    }
+
+    .desktopUserNav .publishBtn {
+        width: auto;
+        height: auto;
+        padding: 8px 14px;
+    }
+
+    .desktopUserNav .userRow {
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
+    }
+}
