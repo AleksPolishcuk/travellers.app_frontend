@@ -8,26 +8,24 @@ import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import AuthButtons from '../AuthButtons/AuthButtons';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import UserNav from '../UserNav/UserNav';
+import { useAuthStore } from '@/store/authStore';
+import { usePathname } from 'next/navigation';
 
-interface User {
-  name: string;
-  avatar?: string;
-}
-
-interface HeaderProps {
-  user?: User | null;
-}
-
-export default function Header({ user }: HeaderProps) {
+export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const handleLogout = () => {
-    console.log('User logged out');
+    useAuthStore.getState().clearUser();
     setLogoutModalOpen(false);
   };
+
+  const pathname = usePathname();
+  const isAuthPage = pathname.startsWith('/auth');
+
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
@@ -38,7 +36,7 @@ export default function Header({ user }: HeaderProps) {
   }, [menuOpen]);
 
   return (
-    <header className={css.headerSection}>
+    <header className={isAuthPage ? css.authHeader : css.headerSection}>
       <div className={css.headerContainer}>
         <div className={css.headerLogoWrapper}>
           <svg
@@ -52,6 +50,15 @@ export default function Header({ user }: HeaderProps) {
           <span className={css.logoText}>Подорожники</span>
         </div>
 
+        {/* 🔹 Кнопка "Опублікувати історію" — только на планшете */}
+        {user && (
+          <div className={css.publishTabletOnly}>
+            <Link href="/create-story">
+              <button className={css.publishBtn}>Опублікувати історію</button>
+            </Link>
+          </div>
+        )}
+
         <nav className={css.headerNav}>
           <ul className={css.headerNavList}>
             <li>
@@ -63,17 +70,6 @@ export default function Header({ user }: HeaderProps) {
             <li>
               <Link href="/travellers">Мандрівники</Link>
             </li>
-
-            {/* Кнопка для авторизованих на планшеті */}
-            {user && (
-              <li className={css.publishTabletOnly}>
-                <Link href="/create-story">
-                  <button className={css.publishBtn}>
-                    Опублікувати історію
-                  </button>
-                </Link>
-              </li>
-            )}
 
             {/* Десктопна навігація для авторизованих */}
             <nav className={css.headerNav}>
