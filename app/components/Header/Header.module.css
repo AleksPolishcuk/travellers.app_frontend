@@ -12,7 +12,7 @@
 .headerContainer {
     max-width: 375px;
     margin: 0 auto;
-
+    padding-top: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,10 +23,11 @@
 .headerLogoWrapper {
     display: flex;
     align-items: center;
-    gap: 3, 31px;
+    justify-content: center;
+    gap: 3px;
 }
 
-.headerLogo {
+.headerLogout {
     flex-shrink: 0;
 }
 
@@ -80,6 +81,21 @@
     color: #fff
 }
 
+.authHeader .headerNav,
+.authHeader .burgerBtn,
+.authHeader .publishTabletOnly {
+    display: none;
+}
+
+.authHeader .logoText {
+    color: #000;
+}
+
+.authHeader .headerLogoWrapper {
+    padding-top: 8.5px;
+}
+
+
 
 @media screen and (min-width: 768px) {
     .headerContainer {
@@ -87,31 +103,33 @@
         max-width: 768px;
     }
 
-    .publishTabletOnly {
-        display: block;
-        margin-left: 16px;
-
-    }
-
-    .publishTabletOnly .publishBtn {
-        border: 1px solid #fff;
-        border-radius: 8px;
-        padding: 4px 10px;
-        width: 202px;
-        height: 35px;
-        background: #fff;
-        color: #000;
-    }
-
-    .publishTabletOnly .publishBtn:hover {
-        background: #4169e1;
-        color: #fff;
-        border: 1px solid #4169e1
-    }
-
     .headerNav {
         width: auto;
 
+    }
+
+    .publishTabletOnly {
+        display: block;
+        margin-left: auto;
+        margin-right: 16px;
+    }
+
+    .publishBtn {
+        border: 1px solid #fff;
+        border-radius: 8px;
+        padding: 6px 14px;
+        background: #fff;
+        color: #000;
+        font-weight: 500;
+        height: 35px;
+        font-size: 18px;
+        font-family: 500;
+    }
+
+    .publishBtn:hover {
+        background: #4169e1;
+        color: #fff;
+        border-color: #4169e1;
     }
 }
 
@@ -158,5 +176,14 @@
         line-height: 27px;
         height: 40px;
 
+    }
+
+    .mobNavList .headerLogout {
+        color: #fff;
+
+    }
+
+    .publishTabletOnly {
+        display: none;
     }
 }

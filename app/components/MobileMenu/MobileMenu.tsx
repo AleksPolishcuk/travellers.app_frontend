@@ -28,6 +28,7 @@ export default function MobileMenu({
 }: MobileMenuProps) {
   return (
     <nav className={`${css.headerMenu} ${isOpen ? css.open : ''}`}>
+      {/* Хедер */}
       <div className={css.menuHeader}>
         <Link href="/" className={css.menuLogo} onClick={onClose}>
           <svg width="30" height="30" className={css.logoIcon}>
@@ -43,35 +44,38 @@ export default function MobileMenu({
         </button>
       </div>
 
-      <ul className={css.mobNavList}>
-        <li>
-          <Link href="/" onClick={onClose}>
-            Головна
-          </Link>
-        </li>
-        <li>
-          <Link href="/stories" onClick={onClose}>
-            Історії
-          </Link>
-        </li>
-        <li>
-          <Link href="/travellers" onClick={onClose}>
-            Мандрівники
-          </Link>
-        </li>
+      {/* Меню */}
+      <div className={css.mobMenu}>
+        <ul className={css.mobNavList}>
+          <li>
+            <Link href="/" onClick={onClose}>
+              Головна
+            </Link>
+          </li>
+          <li>
+            <Link href="/stories" onClick={onClose}>
+              Історії
+            </Link>
+          </li>
+          <li>
+            <Link href="/travellers" onClick={onClose}>
+              Мандрівники
+            </Link>
+          </li>
 
-        {user ? (
-          <UserNav
-            user={user}
-            onLogout={onLogout}
-            setLogoutModalOpen={setLogoutModalOpen}
-            variant="mobile"
-            onClose={onClose}
-          />
-        ) : (
-          <AuthButtons variant="mobile" onClick={onClose} />
-        )}
-      </ul>
+          {user ? (
+            <UserNav
+              user={user}
+              onLogout={onLogout}
+              setLogoutModalOpen={setLogoutModalOpen}
+              variant="mobile"
+              onClose={onClose}
+            />
+          ) : (
+            <AuthButtons variant="mobile" onClick={onClose} />
+          )}
+        </ul>
+      </div>
     </nav>
   );
 }
