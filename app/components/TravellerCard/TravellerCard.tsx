@@ -21,8 +21,8 @@ export default function TravellerCard({ traveller }: TravellerCardProps) {
         <Image
           src={avatarSrc}
           alt={traveller.name}
-          width={112} // ✅ Оновлено згідно з фінальними стилями (112px)
-          height={112} // ✅ Оновлено згідно з фінальними стилями (112px)
+          width={112}
+          height={112}
           className={styles.photo}
         />
       </div>

@@ -1,85 +1,87 @@
-/* app/travellers/Travellers.module.css */
-
-/* 1. КЛАС-ОБГОРТКА СТОРІНКИ: Забезпечує горизонтальні відступи 64px */
-.travellersPageWrapper {
-  padding-left: 64px;
-  padding-right: 64px;
-  box-sizing: border-box;
-  width: 100%;
-  background: #f7f9ff;
-}
-
-/* 2. СТИЛІ ЗАГОЛОВКА */
-
-.sectionTitle {
-  color: #000000;
-  font-family: 'Sora', sans-serif;
-  font-size: 52px;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  margin-bottom: 48px;
-  margin-top: 72px;
-}
-
-.centeredTitle {
-  /* Центрування заголовка "Мандрівники" на цій сторінці */
-  text-align: center;
-}
-
-/* 3. СТИЛІ СІТКИ: Фіксований gap 24px та Центрування */
-.travellersGrid {
-  display: grid;
-  gap: 24px; /* Фіксований проміжок */
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  /* Адаптивна сітка для мобільних та планшетів */
-  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-
-  /* Відступ до кнопки */
-  margin-bottom: 24px;
+@media (min-width: 768px) {
 }
 
 @media (min-width: 1440px) {
-  .travellersGrid {
-    /* Обмежуємо ширину контейнера сітки для 4 карток і центруємо */
-    width: 1312px; /* (4 * 310) + (3 * 24) = 1312px */
-    margin-left: auto;
-    margin-right: auto;
-
-    grid-template-columns: repeat(4, 310px);
+  .travellersPageWrapper {
+    padding-left: 64px;
+    padding-right: 64px;
+    box-sizing: border-box;
+    width: 100%;
+    background: #f7f9ff;
   }
-}
 
-/* 4. СТИЛІ ЕЛЕМЕНТІВ ПАГІНАЦІЇ та УТИЛІТИ */
+  /* 2. СТИЛІ ЗАГОЛОВКА */
 
-.loadMoreContainer {
-  text-align: center;
-}
+  .sectionTitle {
+    color: #000000;
+    font-family: 'Sora', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 48px;
+    margin-top: 72px;
+  }
 
-.buttonToFooterMargin {
-  /* Відступ 72px до футера */
-  margin-bottom: 72px;
-}
+  .centeredTitle {
+    /* Центрування заголовка "Мандрівники" на цій сторінці */
+    text-align: center;
+  }
 
-.loadMoreButton {
-  /* Стилі кнопки Royal Blue */
-  justify-content: center;
-  align-items: center;
-  padding: 12px 32px;
-  border-radius: 8px;
-  border: 1px solid #4169e1;
-  background: #4169e1;
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
+  /* 3. СТИЛІ СІТКИ: Фіксований gap 24px та Центрування */
+  .travellersGrid {
+    display: grid;
+    gap: 24px; /* Фіксований проміжок */
+    list-style: none;
+    padding: 0;
+    margin: 0;
 
-.noMoreTravellers {
-  color: #000000;
-  padding-top: 20px;
-  padding-bottom: 20px;
+    /* Адаптивна сітка для мобільних та планшетів */
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+
+    /* Відступ до кнопки */
+    margin-bottom: 24px;
+  }
+
+  @media (min-width: 1440px) {
+    .travellersGrid {
+      /* Обмежуємо ширину контейнера сітки для 4 карток і центруємо */
+      width: 1312px; /* (4 * 310) + (3 * 24) = 1312px */
+      margin-left: auto;
+      margin-right: auto;
+
+      grid-template-columns: repeat(4, 310px);
+    }
+  }
+
+  /* 4. СТИЛІ ЕЛЕМЕНТІВ ПАГІНАЦІЇ та УТИЛІТИ */
+
+  .loadMoreContainer {
+    text-align: center;
+  }
+
+  .buttonToFooterMargin {
+    /* Відступ 72px до футера */
+    margin-bottom: 72px;
+  }
+
+  .loadMoreButton {
+    /* Стилі кнопки Royal Blue */
+    justify-content: center;
+    align-items: center;
+    padding: 12px 32px;
+    border-radius: 8px;
+    border: 1px solid #4169e1;
+    background: #4169e1;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .noMoreTravellers {
+    color: #000000;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 }
