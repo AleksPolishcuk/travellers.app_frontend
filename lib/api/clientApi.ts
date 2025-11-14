@@ -3,11 +3,10 @@ import {
   RegisterRequest,
   LoginRequest,
   AuthResponse,
-  Traveller,
   TravellersResponseData,
 } from '@/types/user';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export const register = async (userData: RegisterRequest): Promise<User> => {
   const response = await fetch(`${API_BASE_URL}/auth/register`, {
