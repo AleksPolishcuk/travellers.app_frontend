@@ -31,36 +31,43 @@ export default function UserNav({
           Мій профіль
         </Link>
       </li>
-
       <li>
-        <Link href="/create-story" onClick={onClose}>
-          <button className={css.publishBtn}>Опублікувати історію</button>
+        <Link
+          href="/stories/create"
+          onClick={onClose}
+          className={css.publishBtn}
+        >
+          Опублікувати історію
         </Link>
       </li>
-
       <li className={css.userRow}>
-        <Link href="/profile" onClick={onClose}>
-          <Image
-            src={user.avatar || '/avatar.png'}
-            alt={user.name}
-            width={32}
-            height={32}
+        <Link className={css.userRowRow} href="/profile" onClick={onClose}>
+          <img
+            src={user.avatar ? user.avatar : '/Avatar.svg'}
+            alt=""
+            width={24}
+            height={24}
           />
-          <span>{user.name}</span>
+          <span className="userName">{user.name}</span>
         </Link>
 
+        <span className={css.divider}></span>
+
         <button
+          className={css.headerLogoutButton}
           onClick={() => {
             setLogoutModalOpen(true);
             onClose?.();
           }}
         >
-          <Image
-            src="/icons.svg/icon-logout.svg"
-            alt="Вихід"
-            width={24}
-            height={24}
-          />
+          <svg
+            className={css.headerLogout}
+            width="24"
+            height="24"
+            aria-label="Logout"
+          >
+            <use href="/icons.svg#icon-logout"></use>
+          </svg>
         </button>
       </li>
     </ul>
