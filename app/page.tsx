@@ -4,15 +4,17 @@ import Link from 'next/link';
 import Header from './components/Header/Header';
 import About from './components/About/About';
 import Hero from './components/Hero/Hero';
+import Popular from './components/Popular/Popular';
+import { getStories } from '@/lib/api/clientApi';
 
-export default function HomePage() {
+export default async function HomePage() {
+
+ 
   return (
     <div>
       <Hero />
       <About />
-      <Link href="/stories">Переглянути всі</Link>
-      <br />
-      <Link href="/travellers">переглянути всіх</Link> <br />
+      <Popular />
       <Join />
       <OurTravellersSection />
     </div>
