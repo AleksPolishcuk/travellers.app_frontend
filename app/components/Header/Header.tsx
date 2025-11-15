@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import css from './Header.module.css';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import AuthButtons from '../AuthButtons/AuthButtons';
@@ -35,10 +34,35 @@ export default function Header() {
     };
   }, [menuOpen]);
 
+  const transparentPages = ['/'];
+  const whitePages = [
+    '/travellers',
+    '/travellers/',
+    '/stories',
+    '/stories/create',
+    '/stories/',
+    '/stories/',
+    '/profile',
+  ];
+
+  let headerClass = css.headerWhite;
+
+  if (pathname.startsWith('/auth')) {
+    headerClass = css.authHeader;
+  } else if (transparentPages.some((p) => pathname === p)) {
+    headerClass = css.headerTransparent;
+  } else if (whitePages.some((p) => pathname.startsWith(p))) {
+    headerClass = css.headerWhite;
+  }
+
+  const headerColor = headerClass === css.headerTransparent ? '#fff' : '#000';
+  const headerHoverColor =
+    headerClass === css.headerTransparent ? '#e8eeff' : '#4169e1';
+
   return (
-    <header className={isAuthPage ? css.authHeader : css.headerSection}>
+    <header className={headerClass}>
       <div className={css.headerContainer}>
-        <div className={css.headerLogoWrapper}>
+        <Link href="/" className={css.headerLogoWrapper}>
           <svg
             className={css.headerLogo}
             width="30"
@@ -48,13 +72,20 @@ export default function Header() {
             <use href="/icons.svg#icon-company-logo"></use>
           </svg>
           <span className={css.logoText}>Подорожники</span>
-        </div>
-
-        {/* 🔹 Кнопка "Опублікувати історію" — только на планшете */}
+        </Link>
+        {/*  Кнопка "Опублікувати історію" — только на планшете */}
         {user && (
           <div className={css.publishTabletOnly}>
             <Link href="/create-story">
-              <button className={css.publishBtn}>Опублікувати історію</button>
+              <button
+                className={`${css.publishBtn} ${
+                  headerClass === css.headerTransparent
+                    ? css.publishWhite
+                    : css.publishBlue
+                }`}
+              >
+                Опублікувати історію
+              </button>
             </Link>
           </div>
         )}
@@ -62,13 +93,19 @@ export default function Header() {
         <nav className={css.headerNav}>
           <ul className={css.headerNavList}>
             <li>
-              <Link href="/">Головна</Link>
+              <Link href="/" style={{ color: headerColor }}>
+                Головна
+              </Link>
             </li>
             <li>
-              <Link href="/stories">Історії</Link>
+              <Link href="/stories" style={{ color: headerColor }}>
+                Історії
+              </Link>
             </li>
             <li>
-              <Link href="/travellers">Мандрівники</Link>
+              <Link href="/travellers" style={{ color: headerColor }}>
+                Мандрівники
+              </Link>
             </li>
 
             {/* Десктопна навігація для авторизованих */}
@@ -78,7 +115,13 @@ export default function Header() {
                   user={user}
                   onLogout={handleLogout}
                   setLogoutModalOpen={setLogoutModalOpen}
-                  variant="desktop"
+                  iconColor={
+                    headerClass === css.headerTransparent ? '#fff' : '#000'
+                  }
+                  buttonVariant={
+                    headerClass === css.headerTransparent ? 'white' : 'blue'
+                  }
+                  textColor={headerColor}
                 />
               ) : (
                 <AuthButtons variant="desktop" />
