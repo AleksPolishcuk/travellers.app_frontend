@@ -1,0 +1,210 @@
+/* Базові стилі для кнопок */
+.publishBtn {
+    border-radius: 8px;
+    padding: 4px 10px;
+    width: 335px;
+    height: 32px;
+    font-size: 16px;
+    font-family: "Nunito Sans", sans-serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease, border 0.2s ease;
+}
+
+/* Синя кнопка */
+.publishBlue {
+    background-color: #4169e1;
+    color: #fff;
+    border: 1px solid #4169e1;
+}
+
+.publishBlue:hover,
+.publishBlue:focus-visible {
+    background-color: #e8eeff;
+    color: #000;
+    border-color: #4169e1;
+}
+
+.publishBlue:active {
+    background-color: #7a96ea;
+    color: #000;
+    border-color: #7a96ea;
+}
+
+/* Біла кнопка */
+.publishWhite {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.publishWhite:hover,
+.publishWhite:focus-visible {
+    background-color: #e8eeff;
+    color: #000;
+    border-color: #4169e1;
+}
+
+.publishWhite:active {
+    background-color: #7a96ea;
+    color: #000;
+    border-color: #7a96ea;
+}
+
+.userRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin: 0 auto;
+}
+
+.userRowRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+}
+
+.userName {
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #000;
+
+}
+
+
+.divider {
+    width: 1px;
+    background-color: #ccc;
+    height: 29px;
+
+}
+
+.headerLogoutButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.headerLogoutButton:hover,
+.headerLogoutButton:focus,
+.headerLogoutButton:active {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid #fff;
+}
+
+.mobileUserNav {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+}
+
+@media screen and (min-width: 1440px) {
+    .desktopUserNav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 24px;
+        justify-content: flex-end;
+
+    }
+
+    .desktopUserNav .userRow {
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+
+    .headerLogout {
+        color: #fff;
+    }
+
+    .desktopUserNav .publishBtn {
+        border: 1px solid;
+        border-radius: 8px;
+        padding: 4px 10px;
+        width: 202px;
+        height: 35px;
+        font-weight: 500;
+        font-size: 17px;
+    }
+
+    /*desktop-pages*/
+    .desktopUserNav .publishBtn.publishBlue {
+        background: #4169e1;
+        color: #fff;
+        border: 1px solid #4169e1
+    }
+
+
+    .desktopUserNav .publishBtn.publishBlue:hover,
+    .desktopUserNav .publishBtn.publishBlue:focus-visible {
+        background-color: #e8eeff;
+        color: #000;
+        border: 1px solid #4169e1;
+    }
+
+
+    .desktopUserNav .publishBtn.publishBlue:active {
+        background-color: #7a96ea;
+        color: #000;
+    }
+
+
+    /* desktop-main*/
+    .desktopUserNav .publishBtn.publishWhite {
+        background: #4169e1;
+        color: #fff;
+        border: 1px solid #4169e1;
+    }
+
+    .desktopUserNav .publishBtn.publishWhite:hover,
+    .desktopUserNav .publishBtn.publishWhite:focus-visible {
+        background-color: #e8eeff;
+        color: #000;
+        border: 1px solid #4169e1;
+    }
+
+    .desktopUserNav .publishBtn.publishWhite:active {
+        background-color: #7a96ea;
+        color: #000;
+    }
+
+
+    .desktopUserNav .linkDark {
+        color: #000;
+        text-decoration: none;
+    }
+
+    .desktopUserNav .linkDark:hover {
+        color: #4169e1;
+    }
+
+    .desktopUserNav .userNameDark {
+        color: #000;
+    }
+
+    .desktopUserNav .userProf {
+        color: #000;
+
+    }
+
+    .desktopUserNav .userRowRow {
+        color: #000;
+        text-decoration: none;
+    }
+}

@@ -1,3 +1,4 @@
+/* Базові стилі - Mobile First (гумова верстка від 320px) */
 .hero {
     width: 100%;
     height: 100vh;
@@ -10,128 +11,141 @@
     align-items: center;
     justify-content: center;
     color: #fff;
-
-
 }
 
-
 .heroContainer {
+    width: 100%;
     max-width: 335px;
-    height: 285px;
+    padding: 0 16px;
     text-align: start;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .heroTitle {
     font-family: "Sora", sans-serif;
     font-weight: 700;
     font-size: 32px;
-    line-height: 35px;
+    line-height: 1.1;
     margin-bottom: 24px;
-    color: #fff
+    color: #fff;
 }
 
 .heroText {
     font-family: "Nunito Sans", sans-serif;
     font-weight: 400;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 1.5;
     margin-bottom: 32px;
 }
-
 
 .heroBtn {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 115px;
+    width: 100%;
+    max-width: 295px;
     height: 39px;
-    max-width: 335px;
     background-color: #4169e1;
     color: #fff;
     font-family: "Nunito Sans", sans-serif;
     font-weight: 500;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 1.5;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     text-decoration: none;
+    box-sizing: border-box;
 }
 
 .heroBtn:hover {
     background-color: #e8eeff;
     color: #000;
+    transform: translateY(-2px);
 }
 
-
-@media screen and (min-width: 768px) {
-    .hero {
-        background-image: image-set(url('/bg-tabl.1x.jpg') 1x,
-                url('/bg-tabl.2x.jpg') 2x);
-        padding: 0 0;
-    }
-
+/* Mobile: адаптивна верстка з 375px */
+@media (min-width: 375px) {
     .heroContainer {
-        max-width: 768px;
-        height: 273px;
-        padding-left: 32px;
-        padding-right: 32px;
+        max-width: 335px;
+        padding: 0 20px;
     }
 
     .heroTitle {
-
-        font-size: 48px;
-        font-weight: 700;
-        line-height: 53px;
-        letter-spacing: -0.01em;
-    }
-
-    .heroText {
-
-        font-size: 16px;
-        font-weight: 400px;
-        line-height: 24px;
+        font-size: 34px;
     }
 }
 
-
-@media screen and (min-width: 1440px) {
+/* Tablet: з 768px */
+@media (min-width: 768px) {
     .hero {
-        width: 100%;
+        background-image: image-set(url('/bg-tabl.1x.jpg') 1x,
+                url('/bg-tabl.2x.jpg') 2x);
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .heroContainer {
+        max-width: 704px;
+        padding: 0 32px;
+        margin: 0 auto;
+        height: auto;
+    }
+
+    .heroTitle {
+        font-size: 48px;
+        line-height: 1.1;
+        margin-bottom: 24px;
+    }
+
+    .heroText {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 32px;
+        max-width: 500px;
+    }
+
+    .heroBtn {
+        max-width: 115px;
+        height: 44px;
+    }
+}
+
+/* Desktop: з 1440px */
+@media (min-width: 1440px) {
+    .hero {
         background-image: image-set(url('/bg-desk.1x.jpg') 1x,
                 url('/bg-desk.2x.jpg') 2x);
         min-height: 809px;
         justify-content: flex-start;
-        margin: 0 auto;
-        box-sizing: border-box;
-        padding: 0;
+        align-items: center;
     }
 
     .heroContainer {
-        max-width: 759px;
-
-        height: 309px;
-        margin-left: 64px;
-        text-align: start
+        max-width: 1312px;
+        padding: 0;
+        margin: 0 auto;
+        height: auto;
     }
 
     .heroTitle {
-        font-weight: 700;
         font-size: 56px;
-        line-height: 62px;
-        letter-spacing: -0.01em;
+        line-height: 1.1;
+        margin-bottom: 24px;
     }
 
     .heroText {
-        width: 759px;
-        font-weight: 400;
         font-size: 20px;
-        line-height: 30px;
+        line-height: 1.5;
+        margin-bottom: 32px;
+        max-width: 759px;
     }
 
     .heroBtn {
-        width: 126px;
+        max-width: 126px;
+        height: 48px;
+        font-size: 17px;
     }
 }
