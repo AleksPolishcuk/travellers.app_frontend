@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import css from './Header.module.css';
-import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import AuthButtons from '../AuthButtons/AuthButtons';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import UserNav from '../UserNav/UserNav';
@@ -106,9 +106,13 @@ export default function Header() {
         setLogoutModalOpen={setLogoutModalOpen}
       />
 
-      <ConfirmationModal
+      <ConfirmModal
         isOpen={logoutModalOpen}
         onClose={() => setLogoutModalOpen(false)}
+        title="Ви точно хочете вийти?"
+        message="Ми будемо сумувати за вами!"
+        confirmButtonText="Вийти"
+        cancelButtonText="Скасувати"
         onConfirm={handleLogout}
       />
     </header>

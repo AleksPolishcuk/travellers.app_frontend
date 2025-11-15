@@ -1,0 +1,179 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+}
+
+.modal {
+    position: relative;
+    border-radius: 24px;
+    width: 335px;
+    height: 338px;
+    max-width: 768px;
+    background: #f7f9ff;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 64px 20px 20px 20px;
+
+
+}
+
+.title {
+    font-family: "Sora", sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 31px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-align: center;
+    padding-bottom: 16px;
+
+}
+
+.message {
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    line-height: 1.5;
+    text-align: center;
+    padding-bottom: 32px;
+
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.cancel {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 6px 12px;
+    width: 295px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.05);
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 27px;
+    color: #000;
+}
+
+.cancel:hover {
+    background: #4169e1;
+    color: #fff;
+}
+
+.confirm {
+    border: 1px solid #4169e1;
+    border-radius: 8px;
+    padding: 6px 12px;
+    width: 295px;
+    height: 48px;
+    background: #4169e1;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 27px;
+    color: #000;
+}
+
+.confirm:hover {
+    background: #e8eeff;
+    color: #000;
+}
+
+.closeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton svg {
+
+    display: block;
+}
+
+@media screen and (min-width: 768px) {
+    .modal {
+        width: 704px;
+        height: 286px;
+        max-width: 768px;
+        padding: 64px 32px;
+    }
+
+    .title {
+        font-weight: 700;
+        font-size: 32px;
+    }
+
+    .message {
+        font-weight: 400;
+        font-size: 16px;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .cancel {
+
+        width: 203px;
+        height: 48px;
+    }
+
+    .confirm {
+        width: 203px;
+        height: 48px;
+    }
+
+    .closeButton {
+        top: 16px;
+        right: 16px;
+    }
+}
+
+@media screen and (min-width:1440px) {
+    .modal {
+        padding: 64px;
+        width: 768px;
+        height: 312px;
+        max-width: 768px;
+    }
+
+    .title {
+        font-weight: 700;
+        font-size: 48px;
+    }
+
+    .message {
+        font-weight: 400;
+        font-size: 20px;
+    }
+
+    .closeButton {
+        top: 24px;
+        right: 24px;
+    }
+}
