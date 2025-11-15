@@ -51,6 +51,23 @@ export const login = async (userData: LoginRequest): Promise<User> => {
   return data.data;
 };
 
+export const getCurrentUser = async (): Promise<User> => {
+  const response = await fetch(`${API_BASE_URL}/users/me`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || `Failed to get current user: ${response.status}`,
+    );
+  }
+
+  const data = await response.json();
+  return data;
+};
+
 export const getTravellers = async (
   page: number,
   limit: number,
