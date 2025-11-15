@@ -58,6 +58,8 @@ export default function Header() {
   const headerColor = headerClass === css.headerTransparent ? '#fff' : '#000';
   const headerHoverColor =
     headerClass === css.headerTransparent ? '#e8eeff' : '#4169e1';
+  const headerVariant =
+    headerClass === css.headerTransparent ? 'transparent' : 'white';
 
   return (
     <header className={headerClass}>

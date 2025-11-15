@@ -10,7 +10,7 @@
 }
 
 .headerContainer {
-    max-width: 375px;
+    max-width: 335px;
     margin: 0 auto;
     padding-top: 16px;
     display: flex;
@@ -113,7 +113,7 @@
 @media screen and (min-width: 768px) {
     .headerContainer {
 
-        max-width: 768px;
+        max-width: 704px;
     }
 
     .headerNav {
@@ -159,7 +159,7 @@
     }
 
     .headerContainer {
-        max-width: 1440px;
+        max-width: 1312px;
         height: 72px;
         margin: 0 auto;
     }

@@ -32,7 +32,6 @@ export default function Footer() {
         {!isAuthPage && (
           <div className={css.footerDeck}>
             <div className={css.footerTop}>
-              {/* Лого */}
               <div className={css.logoWrapper}>
                 <Link
                   href="/"
