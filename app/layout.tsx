@@ -2,6 +2,8 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import './globals.css';
 import TanStackProvider from './components/TanStackProvider/TanStackProvider';
+import AuthProvider  from './components/AuthProvider/AuthProvider';
+
 
 export const metadata = {
   title: 'Подорожники',
@@ -31,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="uk">
+    <html lang="uk" data-scroll-behavior="smooth">
       <body>
         <TanStackProvider>
         <div className="container">

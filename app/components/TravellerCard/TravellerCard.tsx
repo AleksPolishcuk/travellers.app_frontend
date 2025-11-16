@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Traveller } from '@/lib/api/clientApi';
+import { Traveller } from '@/types/user';
 import styles from './TravellerCard.module.css';
 
 interface TravellerCardProps {
@@ -11,7 +11,7 @@ export default function TravellerCard({ traveller }: TravellerCardProps) {
   const shortDescription = traveller.description
     ? traveller.description.substring(0, 100) +
       (traveller.description.length > 100 ? '...' : '')
-    : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.';
+    : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.'; // ✅ ВИПРАВЛЕНО: Використовуємо avatarUrl замість avatar
 
   const avatarSrc = traveller.avatarUrl || '/images/default-avatar.png';
 
@@ -21,15 +21,13 @@ export default function TravellerCard({ traveller }: TravellerCardProps) {
         <Image
           src={avatarSrc}
           alt={traveller.name}
-          width={100}
-          height={100}
+          width={112}
+          height={112}
           className={styles.photo}
         />
       </div>
       <h3 className={styles.name}>{traveller.name}</h3>
       <p className={styles.description}>{shortDescription}</p>
-
-      {}
       <Link href={`/profile/${traveller._id}`} passHref>
         <button className={styles.button}>Переглянути профіль</button>
       </Link>

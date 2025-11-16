@@ -1,0 +1,116 @@
+.ourTravellersSection {
+  width: 100%;
+  padding: 64px 20px;
+  box-sizing: border-box;
+  background: #f7f9ff;
+  margin: 0;
+}
+
+.sectionTitle {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 auto 48px auto;
+}
+
+.travellersGrid {
+  display: grid;
+  gap: 24px;
+  list-style: none;
+  padding: 0;
+}
+
+.loadMoreContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.loadMoreButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #4169e1;
+  background: #4169e1;
+  color: #ffffff;
+
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.loadMoreButton:hover:not(:disabled) {
+  background: #325ac8;
+}
+
+/* MOBILE */
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .sectionTitle {
+    font-size: 28px;
+    max-width: 335px;
+    height: 34px;
+    text-align: left;
+  }
+
+  .travellersGrid {
+    max-width: 335px;
+    margin: 0 auto;
+    grid-template-columns: repeat(auto-fit, minmax(335px, 1fr));
+  }
+
+  .loadMoreButton {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1439px) {
+  .ourTravellersSection {
+    padding: 64px 32px;
+  }
+
+  .sectionTitle {
+    font-size: 44px;
+    height: 53px;
+    max-width: 704px;
+  }
+
+  .travellersGrid {
+    max-width: 704px;
+    margin: 0 auto 48px auto;
+    grid-template-columns: repeat(2, calc((100% - 24px) / 2));
+  }
+
+  .loadMoreButton {
+    padding: 12px 12px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .ourTravellersSection {
+    padding: 72px 64px;
+  }
+
+  .sectionTitle {
+    max-width: 1312px;
+    font-size: 52px;
+    height: 53px;
+  }
+
+  .travellersGrid {
+    max-width: 1312px;
+    margin: 0 auto 48px auto;
+    grid-template-columns: repeat(4, 310px);
+  }
+
+  .loadMoreButton {
+    font-size: 18px;
+    padding: 6px 12px;
+  }
+}

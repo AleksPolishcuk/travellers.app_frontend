@@ -1,8 +1,6 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import css from '../MobileMenu/MobileMenu.module.css';
+import css from './UserNav.module.css';
 
 interface User {
   name: string;
@@ -15,52 +13,74 @@ interface UserNavProps {
   setLogoutModalOpen: (value: boolean) => void;
   variant?: 'desktop' | 'mobile';
   onClose?: () => void;
+  iconColor?: string;
+  buttonVariant?: 'white' | 'blue';
+  textColor?: string;
 }
 
 export default function UserNav({
   user,
-  onLogout,
   setLogoutModalOpen,
   variant = 'desktop',
   onClose,
+  iconColor = '#000',
+  buttonVariant = 'blue',
+  textColor = '#000',
 }: UserNavProps) {
   return (
-    <ul className={variant === 'desktop' ? css.desktopUserNav : css.mobNavList}>
+    <ul
+      className={variant === 'desktop' ? css.desktopUserNav : css.mobileUserNav}
+    >
       <li>
-        <Link href="/profile" onClick={onClose}>
+        <Link href="/profile" onClick={onClose} style={{ color: textColor }}>
           Мій профіль
         </Link>
       </li>
-
       <li>
-        <Link href="/create-story" onClick={onClose}>
-          <button className={css.publishBtn}>Опублікувати історію</button>
+        <Link
+          href="/stories"
+          onClick={onClose}
+          className={`${css.publishBtn} ${
+            buttonVariant === 'white' ? css.publishWhite : css.publishBlue
+          }`}
+        >
+          Опублікувати історію
         </Link>
       </li>
-
       <li className={css.userRow}>
-        <Link href="/profile" onClick={onClose}>
+        <Link
+          className={css.userRowRow}
+          style={{ color: textColor }}
+          href="/profile"
+          onClick={onClose}
+        >
           <Image
-            src={user.avatar || '/Header/avatar.png'}
+            src={user.avatar || '/Avatar.svg'}
             alt={user.name}
-            width={32}
-            height={32}
+            width={24}
+            height={24}
           />
-          <span>{user.name}</span>
+          <span className="userName">{user.name}</span>
         </Link>
 
+        <span className={css.divider}></span>
+
         <button
+          className={css.headerLogoutButton}
           onClick={() => {
             setLogoutModalOpen(true);
             onClose?.();
           }}
         >
-          <Image
-            src="/Header/logout-icon.svg"
-            alt="Вихід"
-            width={24}
-            height={24}
-          />
+          <svg
+            className={css.headerLogout}
+            width="24"
+            height="24"
+            aria-label="Logout"
+            style={{ color: iconColor }}
+          >
+            <use href="/icons.svg#icon-logout"></use>
+          </svg>
         </button>
       </li>
     </ul>

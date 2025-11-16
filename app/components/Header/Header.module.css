@@ -1,4 +1,4 @@
-.headerSection {
+.headerTransparent {
     position: absolute;
     top: 0;
     left: 0;
@@ -10,9 +10,9 @@
 }
 
 .headerContainer {
-    max-width: 375px;
+    max-width: 335px;
     margin: 0 auto;
-    padding: 16px 0;
+    padding-top: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -20,13 +20,27 @@
 }
 
 
+.headerWhite {
+    background: #f7f9ff;
+    color: #000;
+}
+
+.headerWhite .logoText {
+    color: #000;
+}
+
+.headerWhite .headerNavList {
+    color: #000;
+}
+
 .headerLogoWrapper {
     display: flex;
     align-items: center;
-    gap: 3, 31px;
+    justify-content: center;
+    gap: 3px;
 }
 
-.headerLogo {
+.headerLogout {
     flex-shrink: 0;
 }
 
@@ -40,7 +54,9 @@
 
 }
 
-
+.publishTabletOnly {
+    display: none;
+}
 
 .headerNav {
     display: none;
@@ -78,16 +94,60 @@
     color: #fff
 }
 
+.authHeader .headerNav,
+.authHeader .burgerBtn,
+.authHeader .publishTabletOnly {
+    display: none;
+}
+
+.authHeader .logoText {
+    color: #000;
+}
+
+.authHeader .headerLogoWrapper {
+    padding-top: 8.5px;
+}
+
+
 
 @media screen and (min-width: 768px) {
     .headerContainer {
 
-        max-width: 768px;
+        max-width: 704px;
     }
 
     .headerNav {
         width: auto;
 
+    }
+
+    .publishTabletOnly {
+        display: block;
+        margin-left: auto;
+        margin-right: 16px;
+    }
+
+    .publishBtn {
+        border: 1px solid #4169e1;
+        border-radius: 8px;
+        padding: 6px 14px;
+        background: #4169e1;
+        color: #fff;
+        font-weight: 500;
+        height: 35px;
+        font-size: 18px;
+        font-family: 500;
+    }
+
+    .publishBtn:hover,
+    .publishBtn:focus {
+        background: #e8eeff;
+        color: #000;
+        border: 1px solid #4169e1;
+    }
+
+    .publishBtn:active {
+        background: #7a96ea;
     }
 }
 
@@ -99,8 +159,9 @@
     }
 
     .headerContainer {
-        max-width: 1440px;
+        max-width: 1312px;
         height: 72px;
+        margin: 0 auto;
     }
 
     .headerNav {
@@ -133,5 +194,54 @@
         line-height: 27px;
         height: 40px;
 
+    }
+
+    .headerNavList li a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        border-radius: 8px;
+        color: #fff;
+        text-decoration: none;
+        transition: all 0.3s ease;
+
+    }
+
+
+    .headerNavList li a:hover {
+        border: 1px solid #fff;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+
+    .headerNavList li a:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .headerNav button:focus-visible,
+    .headerNav a:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+        background: #4169e1;
+    }
+
+    .headerNavList li a:active {
+        background: #d8d8d8;
+        color: #000;
+        transform: scale(0.98);
+    }
+
+
+
+    .mobNavList .headerLogout {
+        color: #fff;
+
+    }
+
+    .publishTabletOnly {
+        display: none;
     }
 }
