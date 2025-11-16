@@ -1,7 +1,6 @@
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import './globals.css';
-import { QueryClientProvider } from '@tanstack/react-query';
 import TanStackProvider from './components/TanStackProvider/TanStackProvider';
 
 export const metadata = {
