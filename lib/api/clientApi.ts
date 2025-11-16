@@ -8,6 +8,7 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
+
 export const register = async (userData: RegisterRequest): Promise<User> => {
   const response = await fetch(`${API_BASE_URL}/auth/register`, {
     method: 'POST',
@@ -49,6 +50,37 @@ export const login = async (userData: LoginRequest): Promise<User> => {
 
   const data: AuthResponse = await response.json();
   return data.data;
+};
+
+export const logout = async (): Promise<void> => {
+  const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+    method: 'POST',
+    credentials: 'include', // Важливо для роботи з cookie
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || `Logout failed with status: ${response.status}`,
+    );
+  }
+};
+
+export const getCurrentUser = async (): Promise<User> => {
+  const response = await fetch(`${API_BASE_URL}/users/me`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || `Failed to get current user: ${response.status}`,
+    );
+  }
+
+  const data = await response.json();
+  return data;
 };
 
 export const getTravellers = async (

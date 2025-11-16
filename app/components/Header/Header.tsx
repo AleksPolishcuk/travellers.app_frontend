@@ -8,18 +8,35 @@ import AuthButtons from '../AuthButtons/AuthButtons';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import UserNav from '../UserNav/UserNav';
 import { useAuthStore } from '@/store/authStore';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { logout } from '@/lib/api/clientApi';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
+  const router = useRouter();
+
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  const handleLogout = () => {
-    useAuthStore.getState().clearUser();
-    setLogoutModalOpen(false);
+  const handleLogout = async () => {
+    try {
+      
+      await logout();
+      
+      useAuthStore.getState().clearUser();
+      
+      setLogoutModalOpen(false);
+      
+      router.push('/');
+      
+    } catch (error) {
+      console.error('Logout failed:', error);
+      useAuthStore.getState().clearUser();
+      setLogoutModalOpen(false);
+    }
   };
+
 
   const pathname = usePathname();
   const isAuthPage = pathname.startsWith('/auth');
@@ -115,7 +132,7 @@ export default function Header() {
               {user ? (
                 <UserNav
                   user={user}
-                  onLogout={handleLogout}
+                  onLogout={() => setLogoutModalOpen(true)}
                   setLogoutModalOpen={setLogoutModalOpen}
                   iconColor={
                     headerClass === css.headerTransparent ? '#fff' : '#000'
@@ -147,7 +164,7 @@ export default function Header() {
         user={user}
         isOpen={menuOpen}
         onClose={toggleMenu}
-        onLogout={handleLogout}
+        onLogout={() => setLogoutModalOpen(true)}
         setLogoutModalOpen={setLogoutModalOpen}
       />
 
