@@ -1,0 +1,69 @@
+.ourTravellersSection {
+  margin-top: 72px;
+  margin-bottom: 72px;
+}
+
+.sectionTitle {
+  color: #000000;
+  font-family: 'Sora', sans-serif;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: left;
+  margin-bottom: 48px;
+  margin-top: 0;
+}
+
+.travellersGrid {
+  display: grid;
+  gap: 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 48px;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  justify-content: space-between;
+}
+
+@media (min-width: 1440px) {
+  .travellersGrid {
+    grid-template-columns: repeat(4, 310px);
+    justify-content: space-between;
+  }
+}
+
+.loadMoreContainer {
+  text-align: center;
+}
+
+.loadMoreButton {
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #4169e1;
+
+  background: #4169e1;
+
+  color: #ffffff;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.loadMoreButton:hover:not(:disabled) {
+  background: #325ac8;
+}
+
+.noMoreTravellers {
+  /* Робимо його чорним, щоб уникнути синього кольору */
+  color: #000000;
+  /* Можна додати відступи, якщо потрібно */
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
