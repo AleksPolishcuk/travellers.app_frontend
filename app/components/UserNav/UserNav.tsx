@@ -1,8 +1,6 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import css from '../MobileMenu/MobileMenu.module.css';
+import css from './UserNav.module.css';
 
 interface User {
   name: string;
@@ -15,36 +13,50 @@ interface UserNavProps {
   setLogoutModalOpen: (value: boolean) => void;
   variant?: 'desktop' | 'mobile';
   onClose?: () => void;
+  iconColor?: string;
+  buttonVariant?: 'white' | 'blue';
+  textColor?: string;
 }
 
 export default function UserNav({
   user,
-  onLogout,
   setLogoutModalOpen,
   variant = 'desktop',
   onClose,
+  iconColor = '#000',
+  buttonVariant = 'blue',
+  textColor = '#000',
 }: UserNavProps) {
   return (
-    <ul className={variant === 'desktop' ? css.desktopUserNav : css.mobNavList}>
+    <ul
+      className={variant === 'desktop' ? css.desktopUserNav : css.mobileUserNav}
+    >
       <li>
-        <Link href="/profile" onClick={onClose}>
+        <Link href="/profile" onClick={onClose} style={{ color: textColor }}>
           Мій профіль
         </Link>
       </li>
       <li>
         <Link
-          href="/stories/create"
+          href="/stories"
           onClick={onClose}
-          className={css.publishBtn}
+          className={`${css.publishBtn} ${
+            buttonVariant === 'white' ? css.publishWhite : css.publishBlue
+          }`}
         >
           Опублікувати історію
         </Link>
       </li>
       <li className={css.userRow}>
-        <Link className={css.userRowRow} href="/profile" onClick={onClose}>
-          <img
-            src={user.avatar ? user.avatar : '/Avatar.svg'}
-            alt=""
+        <Link
+          className={css.userRowRow}
+          style={{ color: textColor }}
+          href="/profile"
+          onClick={onClose}
+        >
+          <Image
+            src={user.avatar || '/Avatar.svg'}
+            alt={user.name}
             width={24}
             height={24}
           />
@@ -65,6 +77,7 @@ export default function UserNav({
             width="24"
             height="24"
             aria-label="Logout"
+            style={{ color: iconColor }}
           >
             <use href="/icons.svg#icon-logout"></use>
           </svg>

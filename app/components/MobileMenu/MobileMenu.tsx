@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import AuthButtons from '../AuthButtons/AuthButtons';
 import css from './MobileMenu.module.css';
 import UserNav from '../UserNav/UserNav';
