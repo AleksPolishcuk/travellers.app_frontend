@@ -45,8 +45,8 @@ export default function RootLayout({
           </main>
           <Footer />
         </div>
-        </TanStackProvider>
         </AuthProvider>
+        </TanStackProvider>
       </body>
     </html>
   );
