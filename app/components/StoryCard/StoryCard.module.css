@@ -1,0 +1,235 @@
+.listItem {
+  width: 335px;
+  height: 575px;
+
+  background-color: #e8eeff;
+  border: 0px solid rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 3s ease-out,
+    box-shadow 3s ease-out;
+  overflow: hidden;
+}
+
+.storyImg {
+  width: 100%;
+  height: 223px;
+  object-fit: cover;
+}
+
+.listImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin-bottom: 24px;
+}
+.category {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #000;
+  text-align: left;
+  margin-bottom: 8px;
+}
+.storyContent {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #000;
+  text-align: left;
+  margin-bottom: 8px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 48px;
+}
+
+.article {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+  text-align: left;
+}
+
+.imgCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  width: 100%;
+}
+.user {
+  margin-bottom: 24px;
+}
+
+.userImg {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.userName {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #000;
+  text-align: left;
+}
+.userContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.listDate {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #000;
+}
+.point {
+  width: 8px;
+  height: 8px;
+  background-color: #000;
+  border-radius: 50%;
+}
+.rate {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.userCount {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.userBookmark {
+  width: 10px;
+  height: 12px;
+  fill: #000;
+  display: block;
+}
+
+.storyView {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+}
+.storyButton {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  width: 229px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.storyButton:hover,
+.storyButton:focus {
+  border-color: #000;
+}
+
+.storyButton:active {
+  background-color: #d8d8d8;
+}
+
+.saveButton {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  color: #000;
+  background: rgba(0, 0, 0, 0.05);
+}
+.saveButton:hover,
+.saveButton:focus {
+  border-color: #000;
+}
+
+.saveButton:active {
+  background-color: #d8d8d8;
+}
+
+@media screen and (min-width: 768px) {
+  .listItem {
+    width: 340px;
+  }
+  .storyButton {
+    width: 234px;
+  }
+  .storyImg {
+    height: 226px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .storyButton {
+    width: 315px;
+    font-size: 16px;
+  }
+  .userName {
+    font-size: 16px;
+  }
+  .listDate {
+    font-size: 16px;
+  }
+  .userCount {
+    font-size: 16px;
+  }
+  .article {
+    font-size: 18px;
+  }
+  .title {
+    font-size: 26px;
+  }
+  .category {
+    font-size: 16px;
+  }
+  .storyImg {
+    height: 280px;
+  }
+  .listItem {
+    height: 677px;
+    width: 421px;
+  }
+  .list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

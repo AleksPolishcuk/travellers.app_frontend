@@ -1,113 +1,145 @@
 'use client';
 
-import css from './Popular.module.css';
-import { Story } from '@/lib/api/storyApi';
-import { useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect, useRef } from 'react';
+import { getStories } from '@/lib/api/clientApi';
+import styles from './Popular.module.css';
+import { useScreenSize } from '../../../hooks/useScreenSize';
+import { StoryCard } from '../StoryCard/StoryCard';
 
-type PopularListProps = {
-    stories: Story[];
+interface Story {
+  _id: string;
+  img?: string;
+  title: string;
+  article: string;
+  category: {
+    _id: string;
+    name: string;
+  };
+  ownerId: {
+    _id: string;
+    name: string;
+    avatarUrl?: string;
+    articlesAmount: number;
+  };
+  date: string;
+  favoriteCount: number;
 }
 
- const PopularList = ({stories}: PopularListProps) => {
-const queryClient = useQueryClient();
-    return (
-        <ul className={css.list}>
-{stories.map((story) => (
-  <li key={story.id} className={css.listItem}>
-    <img className={css.listImg} src={story.img} alt={story.title}  />
-    <p className={css.listCategory}>{story.category.name}</p>
-    <h3 className={css.listTitle}>{story.title}</h3>
-    <p className={css.listArticle}>{story.article}</p>
-    <div className={css.user}>
-    <img className={css.userImg} src={story.ownerId.avatarUrl}/>
-    <h4 className={css.userName}>{story.ownerId.name}</h4>
-    <p className={css.userCount}>{story.ownerId.articlesAmount}</p>
+const Popular = () => {
+  const [stories, setStories] = useState<Story[]>([]);
+
+  const [buffer, setBuffer] = useState<Story[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isFetching, setIsFetching] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadMoreRef = useRef<HTMLButtonElement | null>(null);
+
+  const width = useScreenSize();
+  const perPage = width > 1024 ? 3 : width > 768 ? 4 : 3;
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        setLoading(true);
+        const response = await getStories(1, perPage);
+        console.log('Full API response:', response);
+
+        // ДОСТУП ДО ДАНИХ
+        if (response && response.data && Array.isArray(response.data.data)) {
+          console.log('Stories found:', response.data.data);
+          setStories(response.data.data.slice(0, perPage));
+          setBuffer(response.data.data.slice(perPage));
+        } else {
+          console.warn('Unexpected response structure:', response);
+          setStories([]);
+        }
+      } catch (err) {
+        console.error('Error fetching stories:', err);
+        setError(
+          err instanceof Error ? err.message : 'Failed to fetch stories',
+        );
+        setStories([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStories();
+  }, [perPage]);
+
+  const renderFromBuffer = () => {
+    const toRender = buffer.slice(0, perPage);
+    setStories((prev) => [...prev, ...toRender]);
+    setBuffer((prev) => prev.slice(perPage));
+  };
+
+  const fetchMore = async () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    setIsFetching(true);
+
+    try {
+      const response = await getStories(nextPage, perPage);
+      const list = response?.data?.data ?? [];
+
+      setBuffer((prev) => [...prev, ...list]);
+
+      if (list.length < perPage) {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    if (buffer.length >= perPage && !isFetching) {
+      renderFromBuffer();
+    }
+  }, [buffer, isFetching]);
+
+  const handleLoadMore = () => {
+    loadMoreRef.current?.blur();
+    if (buffer.length >= perPage) {
+      renderFromBuffer();
+    } else if (!isFetching) {
+      fetchMore();
+    }
+  };
+
+  if (loading)
+    return <div className={styles.loading}>Завантаження історій...</div>;
+  if (error) return <div className={styles.error}>Помилка: {error}</div>;
+  if (!stories || stories.length === 0)
+    return <div className={styles.empty}>Історії відсутні</div>;
+
+  return (
+    <div className={styles.storyPopular}>
+      <h2 className={styles.storyTitle}>Популярні історії</h2>
+      <ul className={styles.list}>
+        {Array.isArray(stories) &&
+          stories.map((story) => <StoryCard key={story._id} story={story} />)}
+      </ul>
+      <div className={styles.readBtn}>
+        {hasMore && (
+          <button
+            className={styles.readButton}
+            ref={loadMoreRef}
+            onClick={handleLoadMore}
+            disabled={isFetching}
+          >
+            {isFetching ? 'loader...' : 'Переглянути всі'}
+          </button>
+        )}
+      </div>
     </div>
-  </li>
-))}
-        </ul>
-      );
-}
-export default PopularList
+  );
+};
 
-
-
-// 'use client';
-// import React, { useEffect, useState } from 'react';
-// import css from './Popular.module.css';
-
-// const Popular = () => {
-//   const [stories, setStories] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   // Функція для отримання популярних історій
-//   const fetchPopularStories = async () => {
-//     try {
-//       const response = await fetch(
-    //     'http://localhost:4000/travellers.travellers?page=1&perPage=3&sortBy=favoriteCount&sortOrder=desc'
-    //   );
-//       if (!response.ok) throw new Error('Failed to fetch stories');
-//       const data = await response.json();
-//       setStories(data.data); // з getAllStories повертається { data, page, perPage, ... }
-//     } catch (err) {
-//       setError(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchPopularStories();
-//   }, []);
-
-//   if (loading) return <p>Loading popular stories...</p>;
-//   if (error) return <p>Error: {error}</p>;
-
-//   return (
-//     <div className={css.popular}>
-//       <h2>Популярні історії</h2>
-//       <ul className={css.list}>
-//         {stories.map((story) => (
-//           <li key={story._id} className={css.listItem}>
-            // <img
-            //   className={css.popularImg}
-            //   src={story.img || '/default-image.png'}
-            //   alt={story.title}
-            // />
-            // <p className={css.popularText}>{story.category}</p>
-            // <h3 className={css.title}>{story.title}</h3>
-            // <p className={css.content}>{story.article}</p>
-//             <img
-//               className={css.avatar}
-//               src={story.ownerAvatar || '/default-avatar.png'}
-//               alt="Author avatar"
-//             />
-//             <button className={css.button}>Переглянути статтю</button>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default Popular;
-
-
-
-// <div className={css.popular}>{item.title}
-         /* <h2>Популярні історії</h2>
-        <ul className={css.list}>
-
-  <li className={css.listItem}>
-    <div className={css.popularCard}>
-    <img className={css.popularImg} src="/moonlit-coral-reef.png" alt='img title'/>
-    </div>
-    <p className={css.popularText}>Story country</p>
-    <h3 className={css.title}>Story title</h3>
-    <p className={css.content}>Story content</p>
-<img className={css.avatar} src="/moonlit-coral-reef.png"/>
-      <button className={css.button}>Переглянути статтю</button>
-  </li>
-</ul> */
-// </div>;
+export default Popular;
