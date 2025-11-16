@@ -3,6 +3,8 @@ import Footer from './components/Footer/Footer';
 import './globals.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import TanStackProvider from './components/TanStackProvider/TanStackProvider';
+import AuthProvider  from './components/AuthProvider/AuthProvider';
+
 
 export const metadata = {
   title: 'Подорожники',
@@ -32,9 +34,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="uk">
+    <html lang="uk" data-scroll-behavior="smooth">
       <body>
         <TanStackProvider>
+        <AuthProvider>
         <div className="container">
           <Header />  
           <main>
@@ -43,6 +46,7 @@ export default function RootLayout({
           <Footer />
         </div>
         </TanStackProvider>
+        </AuthProvider>
       </body>
     </html>
   );

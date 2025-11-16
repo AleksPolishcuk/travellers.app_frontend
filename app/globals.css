@@ -124,8 +124,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   overflow-x: hidden;
+  width: 100%;
 }
 
 /* Основні теги */
@@ -228,7 +228,7 @@ ol {
 /* Адаптивний mobile (375px+) */
 @media (min-width: 375px) {
   .container {
-    margin: 0 auto;
+  
     padding: 0;
     width: 100%;
   }
