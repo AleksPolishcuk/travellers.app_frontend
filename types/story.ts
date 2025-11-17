@@ -12,23 +12,6 @@ export type Story = {
   };
   date: string;
   favoriteCount: number;
+  isSaved?: boolean;
 };
 
-// export interface Story {
-//   _id: string;
-//   img?: string;
-//   title: string;
-//   article: string;
-//   category: {
-//     _id: string;
-//     name: string;
-//   };
-//   ownerId: {
-//     _id: string;
-//     name: string;
-//     avatarUrl?: string;
-//     articlesAmount: number;
-//   };
-//   date: string;
-//   favoriteCount: number;
-// }

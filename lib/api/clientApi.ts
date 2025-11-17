@@ -50,6 +50,32 @@ export const getCategories = async (
   return responseData;
 };
 
+export const saveStory = async (storyId: string): Promise<any> => {
+  const response = await fetch(`${API_BASE_URL}/saved/${storyId}`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to save story");
+  }
+
+  return response.json();
+};
+export const removeSavedStory = async (storyId: string): Promise<any> => {
+  const response = await fetch(`${API_BASE_URL}/saved/${storyId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to remove saved story");
+  }
+
+  return response.json();
+};
 
 //todo==============================
 
