@@ -5,8 +5,9 @@ import { getTravellers } from '@/lib/api/clientApi';
 import { Traveller } from '@/types/user';
 import TravellerCard from '@/app/components/TravellerCard/TravellerCard';
 import { useMediaQuery } from '@/lib/hooks/useMediaQuery';
-import styles from './Travellers.module.css';
-import Loading from '@/app/loading';
+import homeStyles from '@/app/Home.module.css'; // Загальні стилі (для кнопки та error)
+import styles from './Travellers.module.css'; // <-- Специфічні стилі сторінки
+import Loading from '@/app/GlobalLoader';
 
 const LIMIT_DESKTOP = 12;
 const LIMIT_MOBILE_TABLET = 8;
