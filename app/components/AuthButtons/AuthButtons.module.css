@@ -1,3 +1,10 @@
+.authButtonsWrapper {
+    display: flex;
+    align-items: center;
+
+
+}
+
 .BtnItem {
     display: flex;
     flex-direction: column;
@@ -8,6 +15,7 @@
     list-style: none;
     width: 100%;
 }
+
 
 .mobileLoginBtn,
 .mobileRegisterBtn {
@@ -41,7 +49,6 @@
     color: #000;
 }
 
-
 @media screen and (min-width: 1440px) {
     .BtnItem {
         flex-direction: row;
@@ -50,52 +57,100 @@
         width: auto;
     }
 
-    .desktopLoginBtn {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        cursor: pointer;
-        text-align: center;
+    /* Общие стили для всех кнопок */
+    .desktopLoginTransparent,
+    .desktopRegisterTransparent,
+    .desktopLoginWhite,
+    .desktopRegisterWhite {
+        border-radius: 8px;
         font-family: "Nunito Sans", sans-serif;
         font-weight: 500;
         font-size: 18px;
         line-height: 27px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        padding: 4px 10px;
-        width: 58px;
-        height: 35px;
-    }
-
-    .desktopLoginBtn:hover {
-        background: #4169e1;
-        color: #fff;
-    }
-
-    .desktopRegisterBtn {
-        display: inline-block;
-        background-color: #fff !important;
-        text-align: center;
         cursor: pointer;
-        transition: all 0.3s ease;
-        border: 1px solid #fff;
-        border-radius: 8px;
-        padding: 4px 10px;
-        width: 113px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 4px 12px;
+        width: auto;
         height: 35px;
-        font-family: "Nunito Sans", sans-serif;
-        font-weight: 500;
-        font-size: 18px;
-        line-height: 27px;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+
+    }
+
+    /* Прозорий хедер */
+    .desktopLoginTransparent {
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .desktopLoginTransparent:hover,
+    .desktopLoginTransparent:focus {
+        background-color: #4169e1;
+        color: #fff;
+        border-color: #4169e1;
+    }
+
+    .desktopLoginTransparent:active {
+        background-color: #1a2a5a;
+        border: 1px solid rgba(255, 255, 255, 0);
+    }
+
+    .desktopRegisterTransparent {
         color: #000;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        border: 1px solid #fff;
     }
 
-    .desktopRegisterBtn:hover {
-        background-color: #4169e1 !important;
-        color: #fff !important;
+    .desktopRegisterTransparent:hover,
+    .desktopRegisterTransparent:focus {
+        background-color: #4169e1;
+        color: #fff;
+        border-color: #4169e1;
+    }
 
+    .desktopRegisterTransparent:active {
+        border: 1px solid rgba(255, 255, 255, 0);
+        background-color: #1a2a5a;
+    }
+
+    /* Білий хедер */
+    .desktopLoginWhite {
+        color: #000;
+        background-color: #f0f0f0;
+        border: 1px solid #000;
+    }
+
+    .desktopLoginWhite:hover,
+    .desktopLoginWhite:focus {
+        background-color: #4169e1;
+        color: #fff;
+        border-color: #4169e1;
+    }
+
+    .desktopLoginWhite:active {
+        background-color: #1a2a5a;
+        border: 1px solid rgba(255, 255, 255, 0);
+    }
+
+    .desktopRegisterWhite {
+        color: #fff;
+        background-color: #4169ff;
+        border: 1px solid #4169ff;
+    }
+
+    .desktopRegisterWhite:hover,
+    .desktopRegisterWhite:focus {
+        background-color: #e8eeff;
+        border: 1px solid #4169e1;
+        color: #000;
+    }
+
+    .desktopRegisterWhite:active {
+        border: 1px solid #4169e1;
+        background: #7a96ea;
     }
 }

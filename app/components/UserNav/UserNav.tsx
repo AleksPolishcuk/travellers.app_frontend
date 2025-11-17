@@ -15,6 +15,7 @@ interface UserNavProps {
   onClose?: () => void;
   iconColor?: string;
   buttonVariant?: 'white' | 'blue';
+  headerVariant?: 'transparent' | 'white';
   textColor?: string;
 }
 
@@ -26,13 +27,23 @@ export default function UserNav({
   iconColor = '#000',
   buttonVariant = 'blue',
   textColor = '#000',
+  headerVariant = 'white',
 }: UserNavProps) {
   return (
     <ul
       className={variant === 'desktop' ? css.desktopUserNav : css.mobileUserNav}
     >
       <li>
-        <Link href="/profile" onClick={onClose} style={{ color: textColor }}>
+        <Link
+          href="/profile"
+          onClick={onClose}
+          className={`${css.profileLink} ${
+            headerVariant === 'transparent'
+              ? css.profileLinkTransparent
+              : css.profileLinkWhite
+          }`}
+          style={{ color: textColor }}
+        >
           Мій профіль
         </Link>
       </li>
