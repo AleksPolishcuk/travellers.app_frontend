@@ -1,3 +1,4 @@
+// components/Header/Header.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -9,43 +10,33 @@ import MobileMenu from '../MobileMenu/MobileMenu';
 import UserNav from '../UserNav/UserNav';
 import { useAuthStore } from '@/store/authStore';
 import { usePathname, useRouter } from 'next/navigation';
-import { logout } from '@/lib/api/clientApi';
+import { useLogout } from '@/lib/api/clientApi';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
   const router = useRouter();
+  const logoutMutation = useLogout();
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   const handleLogout = async () => {
     try {
-      
-      await logout();
-      
-      useAuthStore.getState().clearUser();
-      
+      await logoutMutation.mutateAsync();
       setLogoutModalOpen(false);
-      
       router.push('/');
-      
     } catch (error) {
-      console.error('Logout failed:', error);
-      useAuthStore.getState().clearUser();
+      // Помилки обробляються в useLogout, але все одно закриваємо модалку
       setLogoutModalOpen(false);
     }
   };
 
-
   const pathname = usePathname();
-  const isAuthPage = pathname.startsWith('/auth');
-
   const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
-
     return () => {
       document.body.style.overflow = '';
     };
@@ -58,12 +49,10 @@ export default function Header() {
     '/stories',
     '/stories/create',
     '/stories/',
-    '/stories/',
     '/profile',
   ];
 
   let headerClass = css.headerWhite;
-
   if (pathname.startsWith('/auth')) {
     headerClass = css.authHeader;
   } else if (transparentPages.some((p) => pathname === p)) {
@@ -73,32 +62,33 @@ export default function Header() {
   }
 
   const headerColor = headerClass === css.headerTransparent ? '#fff' : '#000';
-  const headerHoverColor =
-    headerClass === css.headerTransparent ? '#e8eeff' : '#4169e1';
-  const headerVariant =
-    headerClass === css.headerTransparent ? 'transparent' : 'white';
+  const headerHoverColor = headerClass === css.headerTransparent ? '#e8eeff' : '#4169e1';
+  const headerVariant = headerClass === css.headerTransparent ? 'transparent' : 'white';
+
+  const isLoading = logoutMutation.isPending;
 
   return (
-    <header className={headerClass}>
+    <header className={`${css.header} ${headerClass}`}>
       <div className={css.headerContainer}>
         <Link href="/" className={css.headerLogoWrapper}>
           <svg
             className={css.headerLogo}
             width="30"
             height="30"
-            aria-label="Logo"
+            aria-label="Logo Подорожники"
           >
             <use href="/icons.svg#icon-company-logo"></use>
           </svg>
           <span className={css.logoText}>Подорожники</span>
         </Link>
-        {/*  Кнопка "Опублікувати історію" — только на планшете */}
+
+        {/* Кнопка "Опублікувати історію" — тільки на планшете */}
         {user && (
           <div className={css.publishTabletOnly}>
             <Link href="/create-story">
               <button
                 className={`${css.publishBtn} ${
-                  headerClass === css.headerTransparent
+                  headerVariant === 'transparent'
                     ? css.publishWhite
                     : css.publishBlue
                 }`}
@@ -112,17 +102,29 @@ export default function Header() {
         <nav className={css.headerNav}>
           <ul className={css.headerNavList}>
             <li>
-              <Link href="/" style={{ color: headerColor }}>
+              <Link 
+                href="/" 
+                style={{ color: headerColor }}
+                className={css.navLink}
+              >
                 Головна
               </Link>
             </li>
             <li>
-              <Link href="/stories" style={{ color: headerColor }}>
+              <Link 
+                href="/stories" 
+                style={{ color: headerColor }}
+                className={css.navLink}
+              >
                 Історії
               </Link>
             </li>
             <li>
-              <Link href="/travellers" style={{ color: headerColor }}>
+              <Link 
+                href="/travellers" 
+                style={{ color: headerColor }}
+                className={css.navLink}
+              >
                 Мандрівники
               </Link>
             </li>
@@ -147,19 +149,50 @@ export default function Header() {
               )}
             </nav>
           </ul>
+
+          {/* Навігація для авторизованих */}
+          {user && (
+            <div className={css.headerNavAuth}>
+              <UserNav
+                user={user}
+                onLogout={handleLogout}
+                setLogoutModalOpen={setLogoutModalOpen}
+                iconColor={headerColor}
+                buttonVariant={
+                  headerVariant === 'transparent' ? 'white' : 'blue'
+                }
+                headerVariant={headerVariant}
+                textColor={
+                  headerClass === css.headerTransparent ? '#fff' : '#000'
+                }
+              />
+            </div>
+          )}
+
+          {/* Навігація для неавторизованих */}
+          {!user && (
+            <div className={css.authButtonsWrapper}>
+              <AuthButtons variant="desktop" headerVariant={headerVariant} />
+            </div>
+          )}
         </nav>
 
-        <button className={css.burgerBtn} onClick={toggleMenu}>
+        <button 
+          className={css.burgerBtn} 
+          onClick={toggleMenu}
+          aria-label="Відкрити меню"
+        >
           <svg
             className={css.headerLogo}
             width="24"
             height="24"
-            aria-label="Logo"
+            aria-label="Іконка меню"
           >
             <use href="/icons.svg#icon-menu"></use>
           </svg>
         </button>
       </div>
+
       <MobileMenu
         user={user}
         isOpen={menuOpen}
@@ -173,9 +206,10 @@ export default function Header() {
         onClose={() => setLogoutModalOpen(false)}
         title="Ви точно хочете вийти?"
         message="Ми будемо сумувати за вами!"
-        confirmButtonText="Вийти"
+        confirmButtonText={isLoading ? 'Вихід...' : 'Вийти'}
         cancelButtonText="Скасувати"
         onConfirm={handleLogout}
+        isConfirmLoading={isLoading}
       />
     </header>
   );

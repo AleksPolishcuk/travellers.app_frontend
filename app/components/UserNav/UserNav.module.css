@@ -9,7 +9,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s ease, color 0.2s ease, border 0.2s ease;
+
 }
 
 /* Синя кнопка */
@@ -56,7 +56,6 @@
     display: flex;
     align-items: center;
     gap: 12px;
-
     margin: 0 auto;
 }
 
@@ -74,7 +73,6 @@
     font-size: 12px;
     line-height: 18px;
     color: #000;
-
 }
 
 
@@ -94,20 +92,62 @@
     background: none;
     border: none;
     cursor: pointer;
+    border: 1px solid transparent;
 }
 
 .headerLogoutButton:hover,
 .headerLogoutButton:focus,
 .headerLogoutButton:active {
     background-color: rgba(0, 0, 0, 0.1);
+    border-color: #fff;
+}
+
+.mobileUserNav .profileLinkWhite {
+    color: #000;
+    width: 109px;
+    height: 27px;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 27px;
+    padding: 4px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+
+.mobileUserNav .profileLinkWhite:hover {
+    background-color: rgba(255, 255, 255, 0.2);
     border: 1px solid #fff;
 }
+
 
 .mobileUserNav {
     display: flex;
     flex-direction: column;
     gap: 32px;
     align-items: center;
+}
+
+.mobileUserNav .publishBtn.publishBlue,
+.mobileUserNav .publishBtn.publishBlue {
+    background: #4169e1;
+    color: #fff;
+    border: 1px solid #4169e1;
+}
+
+.mobileUserNav .publishBtn.publishBlue:hover,
+.mobileUserNav .publishBtn.publishBlue:hover {
+    background-color: #e8eeff;
+    color: #000;
+    border: 1px solid #4169e1;
+}
+
+.mobileUserNav .publishBtn.publishBlue:active {
+    background-color: #7a96ea;
+    color: #000;
 }
 
 @media screen and (min-width: 1440px) {
@@ -117,7 +157,6 @@
         align-items: center;
         gap: 24px;
         justify-content: flex-end;
-
     }
 
     .desktopUserNav .userRow {
@@ -128,6 +167,31 @@
         padding: 0;
     }
 
+    .profileLink {
+        color: #000;
+        width: 109px;
+        height: 27px;
+        font-family: "Nunito Sans", sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 27px;
+        padding: 4px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+
+    .profileLinkTransparent:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid #fff;
+    }
+
+    .profileLinkWhite:hover {
+        background-color: #e8eeff;
+        border: 1px solid #4169e1;
+    }
 
     .headerLogout {
         color: #fff;
@@ -150,7 +214,6 @@
         border: 1px solid #4169e1
     }
 
-
     .desktopUserNav .publishBtn.publishBlue:hover,
     .desktopUserNav .publishBtn.publishBlue:focus-visible {
         background-color: #e8eeff;
@@ -158,12 +221,10 @@
         border: 1px solid #4169e1;
     }
 
-
     .desktopUserNav .publishBtn.publishBlue:active {
         background-color: #7a96ea;
         color: #000;
     }
-
 
     /* desktop-main*/
     .desktopUserNav .publishBtn.publishWhite {
@@ -183,7 +244,6 @@
         background-color: #7a96ea;
         color: #000;
     }
-
 
     .desktopUserNav .linkDark {
         color: #000;
