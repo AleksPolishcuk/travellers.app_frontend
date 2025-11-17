@@ -7,7 +7,7 @@ import TravellerCard from '@/app/components/TravellerCard/TravellerCard';
 import { useMediaQuery } from '@/lib/hooks/useMediaQuery';
 import homeStyles from '@/app/Home.module.css'; // Загальні стилі (для кнопки та error)
 import styles from './Travellers.module.css'; // <-- Специфічні стилі сторінки
-import Loading from '@/app/loading';
+import Loading from '@/app/GlobalLoader';
 
 const DESKTOP_INITIAL_LIMIT = 12;
 const MOBILE_TABLET_INITIAL_LIMIT = 8;
