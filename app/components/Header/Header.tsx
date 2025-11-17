@@ -1,3 +1,4 @@
+// components/Header/Header.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -8,17 +9,27 @@ import AuthButtons from '../AuthButtons/AuthButtons';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import UserNav from '../UserNav/UserNav';
 import { useAuthStore } from '@/store/authStore';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useLogout } from '@/lib/api/clientApi';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
+  const router = useRouter();
+  const logoutMutation = useLogout();
+
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  const handleLogout = () => {
-    useAuthStore.getState().clearUser();
-    setLogoutModalOpen(false);
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+      setLogoutModalOpen(false);
+      router.push('/');
+    } catch (error) {
+      // Помилки обробляються в useLogout, але все одно закриваємо модалку
+      setLogoutModalOpen(false);
+    }
   };
 
   const pathname = usePathname();
@@ -32,7 +43,14 @@ export default function Header() {
   }, [menuOpen]);
 
   const transparentPages = ['/'];
-  const whitePages = ['/travellers', '/stories', '/stories/create', '/profile'];
+  const whitePages = [
+    '/travellers',
+    '/travellers/',
+    '/stories',
+    '/stories/create',
+    '/stories/',
+    '/profile',
+  ];
 
   let headerClass = css.headerWhite;
   if (pathname.startsWith('/auth')) {
@@ -43,9 +61,11 @@ export default function Header() {
     headerClass = css.headerWhite;
   }
 
-  const headerVariant =
-    headerClass === css.headerTransparent ? 'transparent' : 'white';
   const headerColor = headerClass === css.headerTransparent ? '#fff' : '#000';
+  const headerHoverColor = headerClass === css.headerTransparent ? '#e8eeff' : '#4169e1';
+  const headerVariant = headerClass === css.headerTransparent ? 'transparent' : 'white';
+
+  const isLoading = logoutMutation.isPending;
 
   return (
     <header className={`${css.header} ${headerClass}`}>
@@ -55,13 +75,14 @@ export default function Header() {
             className={css.headerLogo}
             width="30"
             height="30"
-            aria-label="Logo"
+            aria-label="Logo Подорожники"
           >
             <use href="/icons.svg#icon-company-logo"></use>
           </svg>
           <span className={css.logoText}>Подорожники</span>
         </Link>
 
+        {/* Кнопка "Опублікувати історію" — тільки на планшете */}
         {user && (
           <div className={css.publishTabletOnly}>
             <Link href="/create-story">
@@ -81,41 +102,52 @@ export default function Header() {
         <nav className={css.headerNav}>
           <ul className={css.headerNavList}>
             <li>
-              <Link
-                href="/"
-                className={`${css.navLink} ${
-                  headerVariant === 'transparent'
-                    ? css.navLink_transparent
-                    : css.navLink_white
-                }`}
+              <Link 
+                href="/" 
+                style={{ color: headerColor }}
+                className={css.navLink}
               >
                 Головна
               </Link>
             </li>
             <li>
-              <Link
-                href="/stories"
-                className={`${css.navLink} ${
-                  headerVariant === 'transparent'
-                    ? css.navLink_transparent
-                    : css.navLink_white
-                }`}
+              <Link 
+                href="/stories" 
+                style={{ color: headerColor }}
+                className={css.navLink}
               >
                 Історії
               </Link>
             </li>
             <li>
-              <Link
-                href="/travellers"
-                className={`${css.navLink} ${
-                  headerVariant === 'transparent'
-                    ? css.navLink_transparent
-                    : css.navLink_white
-                }`}
+              <Link 
+                href="/travellers" 
+                style={{ color: headerColor }}
+                className={css.navLink}
               >
                 Мандрівники
               </Link>
             </li>
+
+            {/* Десктопна навігація для авторизованих */}
+            <nav className={css.headerNav}>
+              {user ? (
+                <UserNav
+                  user={user}
+                  onLogout={() => setLogoutModalOpen(true)}
+                  setLogoutModalOpen={setLogoutModalOpen}
+                  iconColor={
+                    headerClass === css.headerTransparent ? '#fff' : '#000'
+                  }
+                  buttonVariant={
+                    headerClass === css.headerTransparent ? 'white' : 'blue'
+                  }
+                  textColor={headerColor}
+                />
+              ) : (
+                <AuthButtons variant="desktop" />
+              )}
+            </nav>
           </ul>
 
           {/* Навігація для авторизованих */}
@@ -145,15 +177,16 @@ export default function Header() {
           )}
         </nav>
 
-        <button className={css.burgerBtn} onClick={toggleMenu}>
+        <button 
+          className={css.burgerBtn} 
+          onClick={toggleMenu}
+          aria-label="Відкрити меню"
+        >
           <svg
             className={css.headerLogo}
             width="24"
             height="24"
-            aria-label="Menu"
-            style={{
-              color: headerClass === css.headerTransparent ? '#fff' : '#000',
-            }}
+            aria-label="Іконка меню"
           >
             <use href="/icons.svg#icon-menu"></use>
           </svg>
@@ -164,7 +197,7 @@ export default function Header() {
         user={user}
         isOpen={menuOpen}
         onClose={toggleMenu}
-        onLogout={handleLogout}
+        onLogout={() => setLogoutModalOpen(true)}
         setLogoutModalOpen={setLogoutModalOpen}
       />
 
@@ -173,9 +206,10 @@ export default function Header() {
         onClose={() => setLogoutModalOpen(false)}
         title="Ви точно хочете вийти?"
         message="Ми будемо сумувати за вами!"
-        confirmButtonText="Вийти"
+        confirmButtonText={isLoading ? 'Вихід...' : 'Вийти'}
         cancelButtonText="Скасувати"
         onConfirm={handleLogout}
+        isConfirmLoading={isLoading}
       />
     </header>
   );
