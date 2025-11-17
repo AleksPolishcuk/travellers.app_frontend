@@ -128,26 +128,6 @@ export default function Header() {
                 Мандрівники
               </Link>
             </li>
-
-            {/* Десктопна навігація для авторизованих */}
-            <nav className={css.headerNav}>
-              {user ? (
-                <UserNav
-                  user={user}
-                  onLogout={() => setLogoutModalOpen(true)}
-                  setLogoutModalOpen={setLogoutModalOpen}
-                  iconColor={
-                    headerClass === css.headerTransparent ? '#fff' : '#000'
-                  }
-                  buttonVariant={
-                    headerClass === css.headerTransparent ? 'white' : 'blue'
-                  }
-                  textColor={headerColor}
-                />
-              ) : (
-                <AuthButtons variant="desktop" />
-              )}
-            </nav>
           </ul>
 
           {/* Навігація для авторизованих */}
@@ -177,16 +157,15 @@ export default function Header() {
           )}
         </nav>
 
-        <button 
-          className={css.burgerBtn} 
-          onClick={toggleMenu}
-          aria-label="Відкрити меню"
-        >
+        <button className={css.burgerBtn} onClick={toggleMenu}>
           <svg
             className={css.headerLogo}
             width="24"
             height="24"
-            aria-label="Іконка меню"
+            aria-label="Menu"
+            style={{
+              color: headerClass === css.headerTransparent ? '#fff' : '#000',
+            }}
           >
             <use href="/icons.svg#icon-menu"></use>
           </svg>

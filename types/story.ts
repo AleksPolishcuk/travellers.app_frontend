@@ -3,11 +3,11 @@ export type Story = {
   img?: string;
   title: string;
   article: string;
-  category: { _id: string; name: string };
+  category: { _id: string; name: string } | null;
   ownerId: {
     _id: string;
     avatarUrl?: string;
-    name: string;
+    name: string; 
     articlesAmount: number;
   };
   date: string;
