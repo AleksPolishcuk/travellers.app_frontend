@@ -33,13 +33,10 @@ export default function Header() {
   };
 
   const pathname = usePathname();
-  const isAuthPage = pathname.startsWith('/auth');
-
   const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
-
     return () => {
       document.body.style.overflow = '';
     };
@@ -56,7 +53,6 @@ export default function Header() {
   ];
 
   let headerClass = css.headerWhite;
-
   if (pathname.startsWith('/auth')) {
     headerClass = css.authHeader;
   } else if (transparentPages.some((p) => pathname === p)) {
@@ -72,7 +68,7 @@ export default function Header() {
   const isLoading = logoutMutation.isPending;
 
   return (
-    <header className={headerClass}>
+    <header className={`${css.header} ${headerClass}`}>
       <div className={css.headerContainer}>
         <Link href="/" className={css.headerLogoWrapper}>
           <svg
@@ -92,7 +88,7 @@ export default function Header() {
             <Link href="/create-story">
               <button
                 className={`${css.publishBtn} ${
-                  headerClass === css.headerTransparent
+                  headerVariant === 'transparent'
                     ? css.publishWhite
                     : css.publishBlue
                 }`}
@@ -153,6 +149,32 @@ export default function Header() {
               )}
             </nav>
           </ul>
+
+          {/* Навігація для авторизованих */}
+          {user && (
+            <div className={css.headerNavAuth}>
+              <UserNav
+                user={user}
+                onLogout={handleLogout}
+                setLogoutModalOpen={setLogoutModalOpen}
+                iconColor={headerColor}
+                buttonVariant={
+                  headerVariant === 'transparent' ? 'white' : 'blue'
+                }
+                headerVariant={headerVariant}
+                textColor={
+                  headerClass === css.headerTransparent ? '#fff' : '#000'
+                }
+              />
+            </div>
+          )}
+
+          {/* Навігація для неавторизованих */}
+          {!user && (
+            <div className={css.authButtonsWrapper}>
+              <AuthButtons variant="desktop" headerVariant={headerVariant} />
+            </div>
+          )}
         </nav>
 
         <button 
