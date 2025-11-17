@@ -1,7 +1,9 @@
 import Header from './components/Header/Header';
-import Popular from './components/Popular/Popular';
 import Footer from './components/Footer/Footer';
 import './globals.css';
+import { QueryClientProvider } from '@tanstack/react-query';
+import TanStackProvider from './components/TanStackProvider/TanStackProvider';
+import AuthProvider  from './components/AuthProvider/AuthProvider';
 
 
 export const metadata = {
@@ -32,16 +34,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="uk">
+    <html lang="uk" data-scroll-behavior="smooth">
       <body>
-        
+        <TanStackProvider>
+        <AuthProvider>
         <div className="container">
-         <Header/>
+          <Header />  
           <main>
       {children}
           </main>
           <Footer />
         </div>
+        </AuthProvider>
+        </TanStackProvider>
       </body>
     </html>
   );
