@@ -15,7 +15,11 @@
     text-align: center;
     width: 300px;
   }
- 
+ .cat{
+  display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+ }
 
   .list {
     display: flex;

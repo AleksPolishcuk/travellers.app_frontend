@@ -105,9 +105,10 @@ const Stories = () => {
   }, [buffer, isFetching]);
 
   const handleCategoryClick = (categoryName: string | null) => {
-    setSelectedCategory((prev) => (prev === categoryName ? null : categoryName));
+    setSelectedCategory((prev) =>
+      prev === categoryName ? null : categoryName,
+    );
   };
-
 
   const handleLoadMore = () => {
     loadMoreRef.current?.blur();
@@ -127,23 +128,37 @@ const Stories = () => {
   return (
     <div className={styles.story}>
       <h2 className={styles.storyTitle}>Історії Мандрівників</h2>
+
       <ul className={styles.categoryList}>
-       <li>
-       <button className={styles.allCategories}>Всі категорії</button>
-       </li>
-       <li>
-       {Array.isArray(categories) &&
-          categories.map((category) => (
-            <Category key={category._id} category={category} active={selectedCategory === category.name}
-            onClick={() => handleCategoryClick(category.name)} />
-          ))}
-       </li>
+        <li>
+        <ul className={styles.cat}>
+  <li>
+    <button
+      className={styles.allCategories}
+      onClick={() => handleCategoryClick(null)}
+    >
+      Всі категорії
+    </button>
+  </li>
+
+  {Array.isArray(categories) &&
+    categories.map((category) => (
+      <li key={category._id}>
+        <Category
+          category={category}
+          active={selectedCategory === category.name}
+          onClick={() => handleCategoryClick(category.name)}
+        />
+      </li>
+    ))}
+</ul>
+        </li>
+        <li className={styles.list}>
+          {Array.isArray(stories) &&
+            stories.map((story) => <StoryCard key={story._id} story={story} />)}
+        </li>
       </ul>
 
-      <ul className={styles.list}>
-        {Array.isArray(stories) &&
-          stories.map((story) => <StoryCard key={story._id} story={story} />)}
-      </ul>
       <div className={styles.readBtn}>
         {hasMore && (
           <button
