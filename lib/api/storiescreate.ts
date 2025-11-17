@@ -4,7 +4,7 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/';
 
 export const getDataForm = async (id: string): Promise<DataGetForm> => {
-  const res = await fetch(`${API_BASE_URL}/stories/`, {
+  const res = await fetch(`${API_BASE_URL}stories/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -25,6 +25,7 @@ export const saveStoryForm = async (formData: FormData) => {
   const response = await fetch(`${API_BASE_URL}stories/`, {
     method: 'POST',
     body: formData,
+    credentials: "include",
   });
 
   if (!response.ok) {

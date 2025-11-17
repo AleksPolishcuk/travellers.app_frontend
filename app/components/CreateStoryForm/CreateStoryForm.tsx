@@ -14,8 +14,8 @@ import css from './CreateStoryForm.module.css';
 
 export default function CreateStoryForm({ id }: CreateStoryFormProps) {
   const autoResizeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.target.style.height = 'auto'; // сброс
-    e.target.style.height = e.target.scrollHeight + 'px'; // ставим нужную высоту
+    e.target.style.height = 'auto';
+    e.target.style.height = e.target.scrollHeight + 'px';
   };
   const router = useRouter();
   const [initialValues, setInitialValues] = useState<StoryFormValues>({
@@ -30,7 +30,9 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
   );
   const [isLoaded, setIsLoaded] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [categories, setCategories] = useState<{ name: string }[]>([]);
+  const [categories, setCategories] = useState<{ _id: string; name: string }[]>(
+    [],
+  );
 
   useEffect(() => {
     async function fetchCategories() {
@@ -44,23 +46,31 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
     }
     fetchCategories();
   }, []);
-  // === Загрузка данных если редактирование ===
+  // Загрузка данных если редактирование
   useEffect(() => {
-    if (!id) {
-      setIsLoaded(true);
-      return;
-    }
+    if (!id || categories.length === 0) return;
 
     async function loadStory() {
       try {
         const data: DataGetForm = await getDataForm(id!);
+
+        const selectedCategoryId =
+          typeof data.category === 'string'
+            ? data.category
+            : data.category.$oid;
+
+        const selectedCategory = categories.find(
+          (cat) => cat._id === selectedCategoryId,
+        );
+
         setInitialValues({
           title: data.title || '',
-          category: data.category || '',
+          category: selectedCategory?._id || '',
           article: data.article || '',
           fullText: data.fullText || '',
           img: data.img || '',
         });
+
         setPreviewImg(data.img || '/Placeholder-story-create.png');
       } catch (err) {
         console.error(err);
@@ -70,7 +80,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
     }
 
     loadStory();
-  }, [id]);
+  }, [id, categories]);
   if (!isLoaded) return <p>Завантаження...</p>;
 
   const validationSchema = Yup.object().shape({
@@ -102,10 +112,10 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
       formData.append('article', values.article);
       formData.append('fullText', values.fullText);
       if (values.img instanceof File) {
-        formData.append('img', values.img); // файл
+        formData.append('img', values.img);
       }
 
-      const storyId = await saveStoryForm(formData); // функция отправки на бек
+      const storyId = await saveStoryForm(formData);
       router.push(`/stories/${storyId}`);
     } catch (err) {
       console.error(err);
@@ -164,8 +174,9 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
                   placeholder="Категорія"
                   className={css.inputForm}
                 >
+                  <option value="">Категорія</option>
                   {categories.map((cat) => (
-                    <option key={cat.name} value={cat.name}>
+                    <option key={cat._id} value={cat._id}>
                       {cat.name}
                     </option>
                   ))}

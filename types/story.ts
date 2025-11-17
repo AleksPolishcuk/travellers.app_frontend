@@ -15,7 +15,7 @@ export interface DataGetForm {
   title: string;
   article: string;
   fullText: string;
-  category: string;
+  category: { $oid: string } | string;
 }
 
 export interface UserSaveData {
@@ -28,6 +28,12 @@ export interface UserSaveData {
 
 export interface CreateStoryFormProps {
   id?: string;
+}
+
+export interface EditStoryFormProps {
+  params: {
+    id: string
+  }
 }
 
 export interface StoryFormValues {
