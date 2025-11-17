@@ -58,27 +58,23 @@
     list-style: none;
     padding-bottom: 40px;
     margin: 0;
+    border: 1px solid transparent;
+    display: inline-flex;
+    transition: transform 0.2s ease;
 }
 
 .socialList li:hover,
 .socialList li:focus {
-    border: 1px solid #000;
-    border-radius: 8px;
-    width: 28px;
-    height: 28px;
-    transform: translateY(-2px);
+    translate: 0 -1px;
 }
 
-.socialList li:active {
-    background: #d8d8d8;
-}
 
 .footerNav {
     font-size: 18px;
     height: 152px;
     margin-bottom: 18px;
-    padding-left: 150px;
-    padding-right: 150px;
+    /* padding-left: 150px;
+    padding-right: 150px; */
 
 }
 
@@ -96,14 +92,14 @@
 .footerNav li {
     color: #000;
     text-decoration: none;
-    display: inline-block;
-    transition: transform 0.2s ease, color 0.2s ease;
+    display: inline-flex;
+    transition: transform 0.2s ease;
 }
 
 .footerNav li:hover,
 .footerNav li:focus {
-    transform: translateY(-3px);
-    color: #4169e1;
+    transform: translateY(-2px);
+    color: #7a96ea;
 }
 
 .footerNav li:active {

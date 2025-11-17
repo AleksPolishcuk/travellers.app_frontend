@@ -10,6 +10,7 @@ interface ConfirmModalProps {
   confirmButtonText: string;
   cancelButtonText: string;
   onConfirm: () => void;
+  isConfirmLoading?: boolean;
 }
 
 export default function ConfirmModal({

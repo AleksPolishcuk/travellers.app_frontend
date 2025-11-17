@@ -2,8 +2,10 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import './globals.css';
 import TanStackProvider from './components/TanStackProvider/TanStackProvider';
-import AuthProvider  from './components/AuthProvider/AuthProvider';
-
+import AuthProvider from './components/AuthProvider/AuthProvider';
+import GlobalLoader from './GlobalLoader';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {
   title: 'Подорожники',
@@ -36,15 +38,31 @@ export default function RootLayout({
     <html lang="uk" data-scroll-behavior="smooth">
       <body>
         <TanStackProvider>
-        <div className="container">
-          <Header />  
-          <main>
-      {children}
-          </main>
-          <Footer />
-        </div>
+          <AuthProvider>
+            <div className="container">
+              <Header />  
+              <main>
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <GlobalLoader />
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>
   );
 }
+
