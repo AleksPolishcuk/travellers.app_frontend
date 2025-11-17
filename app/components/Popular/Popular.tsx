@@ -5,25 +5,8 @@ import { getStories } from '@/lib/api/clientApi';
 import styles from './Popular.module.css';
 import { useScreenSize } from '../../../hooks/useScreenSize';
 import { StoryCard } from '../StoryCard/StoryCard';
+import { Story } from  '../../../types/story';
 
-interface Story {
-  _id: string;
-  img?: string;
-  title: string;
-  article: string;
-  category: {
-    _id: string;
-    name: string;
-  };
-  ownerId: {
-    _id: string;
-    name: string;
-    avatarUrl?: string;
-    articlesAmount: number;
-  };
-  date: string;
-  favoriteCount: number;
-}
 
 const Popular = () => {
   const [stories, setStories] = useState<Story[]>([]);

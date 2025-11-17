@@ -38,34 +38,35 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
         throw new Error('Користувача не знайдено.');
       }
 
-     
-      if (response.status === 401) {
-        throw new Error('Необхідна авторизація');
-      }
-      
-      throw new Error(errorMessage);
-    }
-
-  
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-      return response.json();
-    } else {
-
-      try {
-        const text = await response.text();
-        return text ? { message: text } : {};
-      } catch {
-        return {};
-      }
-    }
-  } catch (error: any) {
-    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-      throw new Error('Помилка мережі. Перевірте підключення до інтернету.');
-    }
-    throw error;
-  }
+  const responseData = await response.json();
+  return responseData;
 };
+
+export const getCategories = async (
+  page: number = 1,
+  perPage: number = 9,
+): Promise<any> => {
+  const response = await fetch(
+    `${API_BASE_URL}/categories?page=${page}&perPage=${perPage}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      cache: 'no-store',
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to fetch categories');
+  }
+
+  const responseData = await response.json();
+  return responseData;
+};
+
+
+//todo==============================
+
 
 const logoutApi = async (): Promise<void> => {
   const response = await fetch(`${API_BASE_URL}/auth/logout`, {
