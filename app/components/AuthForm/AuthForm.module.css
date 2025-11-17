@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: flex-start;
   background: #fff;
-;
 }
 
 .tabs {
@@ -17,6 +16,7 @@
   margin-top: 64px;
   width: 100%;
   gap: 0;
+  max-width: 335px;
 }
 
 .tab {
@@ -34,10 +34,14 @@
   margin-bottom: -1px;
 }
 
+.tab:hover {
+  color: #4169e1;
+  background-color: rgba(65, 105, 225, 0.05);
+}
+
 .tab.active {
   color: #000;
   border-bottom-color: rgba(0, 0, 0, 0.15);
-  
 }
 
 .content {
@@ -84,6 +88,12 @@
   font-weight: 500;
   color: #131f43;
   margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* Стилі для лейбла з помилкою */
+.labelError {
+  color: #b00101 !important;
 }
 
 .input {
@@ -96,15 +106,59 @@
   width: 100%;
   box-sizing: border-box;
   height: 48px;
+  color: #131f43;
 }
 
 .input:focus {
   outline: none;
   border-color: #4169e1;
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
 }
 
 .input::placeholder {
   color: rgba(0, 0, 0, 0.6);
+}
+
+.input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Стилі для інпута з помилкою */
+.inputError {
+  border-color: #b00101 !important;
+  background-color: #fef5f5 !important;
+}
+
+.inputError:focus {
+  border-color: #b00101 !important;
+  box-shadow: 0 0 0 3px rgba(176, 1, 1, 0.1) !important;
+}
+
+.inputError::placeholder {
+  color: rgba(176, 1, 1, 0.6) !important;
+}
+
+/* Стилі для тексту помилки */
+.errorText {
+  color: #b00101 !important;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.apiError {
+  color: #b00101;
+  font-size: 14px;
+  text-align: center;
+  padding: 12px 16px;
+  background: #fef5f5;
+  border-radius: 8px;
+  border: 1px solid #b00101;
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 .submitButton {
@@ -120,7 +174,8 @@
   transition: all 0.3s ease;
   width: 100%;
   height: 48px;
-  margin-bottom:77px ;
+  margin-bottom: 77px;
+  position: relative;
 }
 
 .submitButton:hover:not(:disabled) {
@@ -140,7 +195,6 @@
 }
 
 .submitButton.loading {
-  position: relative;
   color: transparent;
 }
 
@@ -159,18 +213,6 @@
   animation: spin 1s linear infinite;
 }
 
-.error {
-  color: #e53e3e;
-  font-size: 14px;
-  text-align: center;
-  margin-top: 16px;
-  padding: 12px 16px;
-  background: #fed7d7;
-  border-radius: 8px;
-  border: 1px solid #feb2b2;
-  line-height: 1.4;
-}
-
 .forgotPassword {
   text-align: center;
   margin-top: 16px;
@@ -181,6 +223,7 @@
   text-decoration: none;
   font-size: 14px;
   transition: color 0.2s ease;
+  cursor: pointer;
 }
 
 .forgotPasswordLink:hover {
@@ -197,11 +240,11 @@
 @media (min-width: 375px) {
   .content {
     max-width: 335px;
-    padding: 0 ;
+    padding: 0;
   }
   
   .tabs {
-   max-width: 335px;
+    max-width: 335px;
   }
   
   .tab {
@@ -217,9 +260,10 @@
   }
   
   .content {
-    max-width: 664px;
+    max-width: 440px;
     border-radius: 16px;
     margin-bottom: 0;
+    padding: 0 40px;
   }
   
   .title {
@@ -233,7 +277,7 @@
   }
   
   .tabs {
-    max-width: 664px;
+    max-width: 440px;
     margin-bottom: 40px;
   }
   
@@ -259,6 +303,7 @@
   }
   
   .content {
+    max-width: 480px;
     padding: 48px;
   }
   
@@ -271,7 +316,7 @@
   }
   
   .tabs {
-    max-width: 440px;
+    max-width: 480px;
   }
   
   .tab {

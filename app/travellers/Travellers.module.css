@@ -1,87 +1,125 @@
-@media (min-width: 768px) {
-}
-
-@media (min-width: 1440px) {
+@media (min-width: 320px) {
   .travellersPageWrapper {
-    padding-left: 64px;
-    padding-right: 64px;
     box-sizing: border-box;
     width: 100%;
     background: #f7f9ff;
+    padding-top: 32px;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 
-  /* 2. СТИЛІ ЗАГОЛОВКА */
-
-  .sectionTitle {
-    color: #000000;
+  .pageTitle {
     font-family: 'Sora', sans-serif;
-    font-size: 52px;
     font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    margin-bottom: 48px;
-    margin-top: 72px;
-  }
-
-  .centeredTitle {
-    /* Центрування заголовка "Мандрівники" на цій сторінці */
     text-align: center;
+    color: #000;
+    margin-bottom: 24px;
+
+    font-size: clamp(28px, 5vw, 32px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
 
-  /* 3. СТИЛІ СІТКИ: Фіксований gap 24px та Центрування */
   .travellersGrid {
     display: grid;
-    gap: 24px; /* Фіксований проміжок */
-    list-style: none;
+    gap: 24px;
     padding: 0;
-    margin: 0;
-
-    /* Адаптивна сітка для мобільних та планшетів */
-    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-
-    /* Відступ до кнопки */
-    margin-bottom: 24px;
+    list-style: none;
+    margin: 0 auto 24px auto;
+    grid-template-columns: 1fr;
+    max-width: 335px;
+    width: 100%;
   }
-
-  @media (min-width: 1440px) {
-    .travellersGrid {
-      /* Обмежуємо ширину контейнера сітки для 4 карток і центруємо */
-      width: 1312px; /* (4 * 310) + (3 * 24) = 1312px */
-      margin-left: auto;
-      margin-right: auto;
-
-      grid-template-columns: repeat(4, 310px);
-    }
-  }
-
-  /* 4. СТИЛІ ЕЛЕМЕНТІВ ПАГІНАЦІЇ та УТИЛІТИ */
 
   .loadMoreContainer {
-    text-align: center;
-  }
-
-  .buttonToFooterMargin {
-    /* Відступ 72px до футера */
-    margin-bottom: 72px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 64px;
   }
 
   .loadMoreButton {
-    /* Стилі кнопки Royal Blue */
-    justify-content: center;
-    align-items: center;
-    padding: 12px 32px;
+    width: 335px;
+    height: 48px;
+    padding: 6px 12px;
     border-radius: 8px;
     border: 1px solid #4169e1;
-    background: #4169e1;
+    background-color: #4169e1;
     color: #ffffff;
-    font-weight: 600;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 500;
+    font-size: clamp(14px, 4vw, 16px);
+    line-height: 1.5;
     cursor: pointer;
-    transition: background 0.3s;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .loadMoreButton:hover,
+  .loadMoreButton:focus {
+    background-color: #e8eeff;
+    color: #000000;
+  }
+
+  .loadMoreButton:active {
+    background-color: #7a96ea;
+    color: #000000;
   }
 
   .noMoreTravellers {
-    color: #000000;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px 0;
+    color: #000;
+    text-align: center;
+  }
+}
+
+@media (min-width: 375px) {
+  .pageTitle {
+    font-size: 32px;
+  }
+}
+/* =================== TABLET (768px - 1439px) =================== */
+@media (min-width: 768px) {
+  .travellersPageWrapper {
+    padding: 32px 32px 0 32px;
+  }
+
+  .pageTitle {
+    font-size: 48px;
+  }
+
+  .travellersGrid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 704px;
+  }
+
+  .loadMoreButton {
+    width: auto;
+    font-size: 16px;
+  }
+}
+
+/* =================== DESKTOP (1440px+) =================== */
+@media (min-width: 1440px) {
+  .travellersPageWrapper {
+    padding: 48px 64px 0 64px;
+  }
+
+  .pageTitle {
+    font-size: 56px;
+    line-height: 1.11;
+  }
+
+  .travellersGrid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1312px;
+  }
+
+  .loadMoreContainer {
+    padding-bottom: 72px;
+  }
+
+  .loadMoreButton {
+    font-size: 18px;
   }
 }
