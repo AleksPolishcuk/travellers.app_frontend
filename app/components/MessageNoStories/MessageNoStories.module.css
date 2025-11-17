@@ -1,0 +1,111 @@
+
+
+/* Mobile styles (base) - 320px+ */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 32px;
+    padding: 20px;
+    width: 100%;
+    max-width: 335px;
+    background: var(--color-royal-blue-lighter, #e6edff);
+    border: 1px solid rgba(68, 105, 255, 0.25);
+    border-radius: 24px;
+    box-shadow: 0 12px 28px rgba(35, 83, 189, 0.1);
+}
+
+.title {
+    width: 100%;
+    max-width: 1312px;
+    margin: 0 auto 24px;
+    font-family: var(--font-family-heading, 'Montserrat', sans-serif);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 42px;
+    color: var(--color-text-primary);
+}
+
+.messageBox {
+    max-width: 768px;
+    width: 100%;
+    padding: 24px 16px;
+    border-radius: 16px;
+    background: var(--color-scheme-2-foreground);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.text {
+    font-family: var(--second-family,
+            'Sora',
+            sans-serif var(--font-nunito-sans, 'Nunito Sans', sans-serif));
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: #1e1e2f;
+    text-align: start;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    max-width: 295px;
+    height: 48px;
+    border: 1px solid #4169e1;
+    border-radius: 8px;
+    background: #4169e1;
+    color: #fff;
+    font-family: var(--font-family, 'Nunito Sans', sans-serif);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.button:hover {
+    border: 1px solid #4169e1;
+    background: #e8eeff;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(42, 109, 255, 0.35);
+    color: #000;
+}
+
+.button:active {
+    border: 1px solid #4169e1;
+    background: #7a96ea;
+    transform: translateY(0);
+    opacity: 0.9;
+    color: #000;
+}
+
+.button:focus-visible {
+    border: 1px solid var(--opacity-transparent);
+    background: #4169e1;
+}
+
+/* Tablet and up - 768px+ */
+@media only screen and (min-width: 768px) {
+    .container {
+        max-width: 533px;
+        padding: 40px 32px;
+    }
+
+    .button {
+        max-width: 190px;
+    }
+}
+
+/* Desktop and up - 1440px+ */
+@media only screen and (min-width: 1440px) {
+    .text {
+        font-size: 26px;
+    }
+}

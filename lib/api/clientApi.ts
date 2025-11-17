@@ -1,6 +1,12 @@
-
-import { User, RegisterRequest, LoginRequest, AuthResponse, Traveller, TravellersResponseData } from '@/types/user';
-import axios from 'axios';
+import {
+  User,
+  RegisterRequest,
+  LoginRequest,
+  AuthResponse,
+  Traveller,
+  TravellersResponseData,
+} from '@/types/user';
+import axios, { AxiosError, isAxiosError } from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -27,29 +33,6 @@ export const getStories = async (
   const responseData = await response.json();
   return responseData; //  повертаємо всю відповідь, не тільки data
 };
-
-// export type StoryListResponse = {
-//   data: Story[];
-//   page?: number;
-//   perPage?: number;
-//   totalPages?: number;
-// };
-// const api = axios.create({
-//   baseURL: process.env.NEXT_PUBLIC_API_URL,
-// });
-
-// export const getStories = async (page = 1, perPage = 3): Promise<Story[]> => {
-//   const res = await api.get<StoryListResponse>(`/stories?page=${page}&perPage=${perPage}`);
-  
-
-//   return res.data.data;
-// };
-
-
-
-
-//todo==============================
-
 
 export const register = async (userData: RegisterRequest): Promise<User> => {
   const response = await fetch(`${API_BASE_URL}/auth/register`, {

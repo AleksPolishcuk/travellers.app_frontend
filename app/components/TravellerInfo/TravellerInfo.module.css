@@ -1,0 +1,58 @@
+.wrapper__content {
+    margin-bottom: 16px;
+}
+
+.traveller__avatar {
+    border-radius: 100%;
+    width: 112px;
+    height: 112px;
+    margin-bottom: 24px;
+}
+
+.traveller__name {
+    display: block;
+    width: 100%;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.traveller__text {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    height: 72px;
+
+    overflow: hidden;
+    display: -webkit-box;
+    display: box;
+    -webkit-box-orient: vertical;
+    box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    text-overflow: ellipsis;
+}
+
+@media only screen and (min-width: 1440px) {
+    .traveller__name {
+        width: 100%;
+        height: 78px;
+        font-size: 26px;
+        margin-bottom: 16px;
+    }
+
+    .traveller__text {
+        height: 81px;
+        line-height: 1.6;
+        overflow: hidden;
+        display: -webkit-box;
+        display: box;
+        -webkit-box-orient: vertical;
+        box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        text-overflow: ellipsis;
+    }
+}
