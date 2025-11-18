@@ -4,6 +4,7 @@ import './globals.css';
 import TanStackProvider from './components/TanStackProvider/TanStackProvider';
 import AuthProvider from './components/AuthProvider/AuthProvider';
 import GlobalLoader from './GlobalLoader';
+import Loader from './components/Loader/Loader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -40,13 +41,12 @@ export default function RootLayout({
         <TanStackProvider>
           <AuthProvider>
             <div className="container">
-              <Header />  
-              <main>
-                {children}
-              </main>
+              <Header />
+              <main>{children}</main>
               <Footer />
             </div>
             <GlobalLoader />
+            <Loader />
             <ToastContainer
               position="bottom-right"
               autoClose={3000}
@@ -65,4 +65,3 @@ export default function RootLayout({
     </html>
   );
 }
-
