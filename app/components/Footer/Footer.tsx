@@ -6,9 +6,12 @@ import { usePathname } from 'next/navigation';
 
 export default function Footer() {
   const pathname = usePathname();
-  const isAuthPage = pathname?.startsWith('/auth');
-
   const { user, isAuthenticated } = useAuthStore();
+
+  const hiddenFooterPages = ['/auth', '/profile'];
+  const hideFooterDeck = hiddenFooterPages.some((path) =>
+    pathname?.startsWith(path),
+  );
 
   const authLinks = [
     { label: 'Головна', href: '/' },
@@ -26,10 +29,9 @@ export default function Footer() {
   const navLinks = isAuthenticated ? authLinks : guestLinks;
 
   return (
-    <footer className={isAuthPage ? css.authFooter : css.footer}>
+    <footer className={hideFooterDeck ? css.authFooter : css.footer}>
       <div className={css.footerContainer}>
-        {/* Показываем footerDeck только на не-auth страницах */}
-        {!isAuthPage && (
+        {!hideFooterDeck && (
           <div className={css.footerDeck}>
             <div className={css.footerTop}>
               <div className={css.logoWrapper}>
@@ -93,7 +95,6 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Навигация */}
             <nav className={css.footerNav}>
               <ul>
                 {navLinks.map((link) => (
@@ -106,9 +107,10 @@ export default function Footer() {
           </div>
         )}
 
-        {/* Нижняя часть футера */}
         <div className={css.footerBottom}>
-          <p> © 2025 Подорожники {!isAuthPage && ' • Усі права захищені.'} </p>
+          <p>
+            © 2025 Подорожники {!hideFooterDeck && '• Усі права захищені.'}
+          </p>
         </div>
       </div>
     </footer>
