@@ -6,6 +6,7 @@ import styles from './Popular.module.css';
 import { useScreenSize } from '../../../lib/hooks/useScreenSize';
 import { StoryCard } from '../StoryCard/StoryCard';
 import { Story } from '../../../types/story';
+import Loader from '../Loader/Loader';
 
 const Popular = () => {
   const [stories, setStories] = useState<Story[]>([]);
@@ -102,25 +103,28 @@ const Popular = () => {
     return <div className={styles.empty}>Історії відсутні</div>;
 
   return (
-    <div className={styles.storyPopular}>
+    <section className={styles.popular}>
+      <div className={styles.storyPopular}>
       <h2 className={styles.storyTitle}>Популярні історії</h2>
       <ul className={styles.list}>
         {Array.isArray(stories) &&
           stories.map((story) => <StoryCard key={story._id} story={story} />)}
       </ul>
       <div className={styles.readBtn}>
-        {hasMore && (
-          <button
-            className={styles.readButton}
-            ref={loadMoreRef}
-            onClick={handleLoadMore}
-            disabled={isFetching}
-          >
-            {isFetching ? 'loader...' : 'Переглянути всі'}
-          </button>
-        )}
-      </div>
+  {isFetching ? (
+    <Loader />
+  ) : hasMore ? (
+    <button
+      className={styles.readButton}
+      ref={loadMoreRef}
+      onClick={handleLoadMore}
+    >
+      Показати ще
+    </button>
+  ) : null}
+</div>
     </div>
+    </section>
   );
 };
 
