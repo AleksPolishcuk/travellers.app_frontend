@@ -46,7 +46,7 @@ export const login = async (data: LoginRequest) => {
  */
 export async function getGoogleAuthUrl(): Promise<string> {
   const { data } = await api.get('/auth/google/get-oauth-url');
-  // сервер возвращает data.data.url, а не data.url
+
   return data?.data?.url || '';
 }
 
@@ -98,7 +98,7 @@ export const getMe = async (silent: boolean = false) => {
     }
     const axiosError = error as AxiosError;
     if (axiosError.response?.status === 401) {
-      // 401 - це очікувано, якщо користувач не залогінений
+      // 401  якщо користувач не залогінений
       // Не логуємо як помилку
       return null;
     }
@@ -165,7 +165,7 @@ export async function addStoryToFavorites(storyId: string): Promise<void> {
 export async function removeStoryFromFavorites(storyId: string): Promise<void> {
   await api.delete(`/users/me/saved/${storyId}`);
 }
-/*Haievoi Serhii*/
+
 export async function getUsersClient({
   page = 1,
   perPage = 4,
@@ -215,7 +215,6 @@ export async function getArticlesByUserClient(
   }
 }
 
-/*end Haievoi Serhii*/
 export async function fetchStoryByIdClient(storyId: string): Promise<Story> {
   const response = await api.get<StoryByIdResponse>(`/stories/${storyId}`);
   const story = response.data.data;
@@ -225,7 +224,6 @@ export async function fetchStoryByIdClient(storyId: string): Promise<Story> {
     ...story.ownerId,
     articlesAmount: (story.ownerId as any)?.articlesAmount ?? 0,
     // Якщо бекенд не повернув email/onboarding — не змінюємо ownerId тут,
-    // ownerId у Story може бути легшим за повний User
   };
 
   return {
@@ -335,8 +333,8 @@ export async function getUserSavedArticles(userId: string): Promise<{
   const user: User = {
     _id: data.user._id,
     name: data.user.name,
-    email: data.user.email ?? '', // <-- ОБОВ'ЯЗКОВО
-    onboardingCompleted: data.user.onboardingCompleted ?? false, // <-- ОБОВ'ЯЗКОВО
+    email: data.user.email ?? '',
+    onboardingCompleted: data.user.onboardingCompleted ?? false,
     avatarUrl: data.user.avatarUrl,
     articlesAmount: data.user.articlesAmount ?? 0,
     createdAt: data.user.createdAt,
