@@ -58,7 +58,7 @@ const handleSaveClick = async () => {
               </div>
               <div className={styles.storyContent}>
                 <div className={styles.content}>
-                  <p className={styles.category}>{story.category.name}</p>
+                  <p className={styles.category}>{story.category?.name}</p>
                   <h3 className={styles.title}>{story.title}</h3>
                   <p className={styles.article}>
                     {story.article

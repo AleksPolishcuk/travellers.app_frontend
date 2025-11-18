@@ -53,28 +53,44 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 32px;
     height: 32px;
     gap: 16px;
-    list-style: none;
     padding-bottom: 40px;
     margin: 0;
-    border: 1px solid transparent;
     display: inline-flex;
-    transition: transform 0.2s ease;
+
+
+}
+
+.socialList li {
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 2px;
+    width: 28px;
+    height: 28px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .socialList li:hover,
 .socialList li:focus {
-    translate: 0 -1px;
+    border-color: #000;
+    background: none;
+
 }
 
+.socialList li:active {
+    background: #d8d8d8;
+    border-color: #000;
+
+}
 
 .footerNav {
     font-size: 18px;
     height: 152px;
     margin-bottom: 18px;
-    padding-left: 150px;
-    padding-right: 150px;
+    /* padding-left: 150px;
+    padding-right: 150px; */
 
 }
 
@@ -89,21 +105,24 @@
 
 }
 
-.footerNav li {
+.footerNav li a {
     color: #000;
     text-decoration: none;
     display: inline-flex;
-    transition: transform 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 0 2px;
 }
 
-.footerNav li:hover,
-.footerNav li:focus {
-    transform: translateY(-2px);
-    color: #7a96ea;
+.footerNav li a:hover,
+.footerNav li a:focus {
+    border-color: #000;
 }
 
-.footerNav li:active {
-    color: #000;
+.footerNav li a:active {
+    border-color: #000;
+    background: #d8d8d8;
 }
 
 .footerBottom {
