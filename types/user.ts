@@ -6,6 +6,9 @@ export interface User {
   description?: string;
   onboardingCompleted: boolean;
   savedStories?: string[];
+  articlesAmount: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface RegisterRequest {

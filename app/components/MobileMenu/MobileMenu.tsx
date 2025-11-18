@@ -37,8 +37,8 @@ export default function MobileMenu({
         </Link>
 
         <button className={css.closeBtn} onClick={onClose}>
-          <svg width="24" height="24" aria-label="close">
-            <use href="/icons.svg#icon-close"></use>
+          <svg width="24" height="24" aria-label="close"  >
+            <use href="/icons.svg#icon-close" ></use>
           </svg>
         </button>
       </div>
