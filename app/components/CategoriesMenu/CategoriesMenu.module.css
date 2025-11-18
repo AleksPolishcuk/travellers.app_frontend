@@ -1,0 +1,54 @@
+.menuContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.menuBtn {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 8px;
+  width: 335px;
+  height: 40px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.menuBtn:hover {
+  border: 1px solid #7a96ea;
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: block;
+  width: 335px;
+  padding: 8px 16px;
+  margin-top: 4px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #000;
+  text-align: left;
+  list-style: none;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.175);
+  max-height: 0;
+  padding: 0;
+  border-width: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.menu:hover .menu:focus {
+  border: 1px solid #7a96ea;
+}
+.menu.open {
+  max-height: 500px;
+  padding: 8px 16px;
+  border-width: 1px;
+}
