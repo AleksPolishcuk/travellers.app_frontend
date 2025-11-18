@@ -7,6 +7,7 @@ export type Story = {
     ownerId: { _id: string; avatarUrl?: string; name: string; articlesAmount: number };
     date: string;
     favoriteCount: number;
+    isSaved?: boolean;
 };
   
 export interface DataGetForm {
