@@ -96,8 +96,7 @@ const Popular = () => {
     }
   };
 
-  if (loading)
-    return <div className={styles.loading}>Завантаження історій...</div>;
+ if (loading) return <Loader />;
   if (error) return <div className={styles.error}>Помилка: {error}</div>;
   if (!stories || stories.length === 0)
     return <div className={styles.empty}>Історії відсутні</div>;
