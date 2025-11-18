@@ -1,6 +1,7 @@
 /* Базові стилі - Mobile First (320px+) */
 .container {
   max-width: 100%;
+  padding: 0 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,13 +11,12 @@
 
 .tabs {
   display: flex;
-  padding-top: 64px;
   background: transparent;
   margin-bottom: 32px;
   margin-top: 64px;
   width: 100%;
   gap: 0;
-  max-width: 335px;
+  max-width: none;
 }
 
 .tab {
@@ -31,13 +31,17 @@
   flex: 1;
   text-align: center;
   border-bottom: 1px solid transparent;
-  margin-bottom: -1px;
+  transition: all 0.3s ease;
 }
 
 .tab:hover {
-  color: #4169e1;
-  background-color: rgba(65, 105, 225, 0.05);
+  border-bottom-color: rgba(0, 0, 0, 0.10);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
 }
+
+
 
 .tab.active {
   color: #000;
@@ -47,7 +51,7 @@
 .content {
   background: white;
   border-radius: 12px;
-  max-width: 335px;
+  max-width: none;
   width: 100%;
   text-align: center;
   margin-bottom: auto;
@@ -56,18 +60,21 @@
 }
 
 .title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
-  color: #2d3748;
+  color: #000;
   margin-bottom: 24px;
-  text-align: center;
+  line-height: 1.2;
+letter-spacing: -0.01em;
+text-align: center;
 }
 
 .subtitle {
-  color: #131f43;
+  color: #000;
   margin-bottom: 32px;
-  font-size: 14px;
-  line-height: 1.5;
+  font-weight: 400;
+font-size: 16px;
+line-height: 1.5;
   text-align: center;
 }
 
@@ -84,11 +91,11 @@
 }
 
 .label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #131f43;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #000;
   margin-bottom: 8px;
-  transition: color 0.2s ease;
 }
 
 /* Стилі для лейбла з помилкою */
@@ -97,7 +104,7 @@
 }
 
 .input {
-  padding: 12px 16px;
+  padding: 8px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   font-size: 16px;
@@ -105,35 +112,30 @@
   background: #fff;
   width: 100%;
   box-sizing: border-box;
-  height: 48px;
-  color: #131f43;
+  height: 40px;
+  color: #000;
 }
 
 .input:focus {
   outline: none;
   border-color: #4169e1;
-  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
 }
 
 .input::placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-.input:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
+
 
 /* Стилі для інпута з помилкою */
 .inputError {
   border-color: #b00101 !important;
-  background-color: #fef5f5 !important;
+  
 }
 
 .inputError:focus {
   border-color: #b00101 !important;
-  box-shadow: 0 0 0 3px rgba(176, 1, 1, 0.1) !important;
+  
 }
 
 .inputError::placeholder {
@@ -163,28 +165,30 @@
 
 .submitButton {
   font-family: var(--font-family);
-  padding: 14px 10px;
+  padding:10px 0;
   background: #4169e1;
   color: white;
-  border: none;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
-  height: 48px;
+  height: 44px;
   margin-bottom: 77px;
+  line-height: 1.5;
   position: relative;
 }
 
 .submitButton:hover:not(:disabled) {
-  background: #3151c7;
+  background: #e8eeff;
+  color: #000;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(65, 105, 225, 0.3);
+  
 }
 
 .submitButton:active:not(:disabled) {
+  background-color: #7a96ea;
   transform: translateY(0);
 }
 
@@ -198,20 +202,6 @@
   color: transparent;
 }
 
-.submitButton.loading::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 50%;
-  left: 50%;
-  margin-left: -10px;
-  margin-top: -10px;
-  border: 2px solid transparent;
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
 
 .forgotPassword {
   text-align: center;
@@ -231,16 +221,16 @@
   text-decoration: underline;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+
 
 /* Адаптивний mobile (375px+) */
 @media (min-width: 375px) {
+  .container {
+    padding: 0 20px;
+  }
   .content {
     max-width: 335px;
-    padding: 0;
+    padding: 0 ;
   }
   
   .tabs {
@@ -260,25 +250,24 @@
   }
   
   .content {
-    max-width: 440px;
-    border-radius: 16px;
-    margin-bottom: 0;
-    padding: 0 40px;
+    max-width: 644px;
+    margin-bottom: 0 auto;
+    padding: 0 ;
   }
   
   .title {
-    font-size: 28px;
-    margin-bottom: 16px;
+    font-size: 44px;
+    margin-bottom: 24px;
   }
   
   .subtitle {
-    font-size: 16px;
     margin-bottom: 32px;
   }
   
   .tabs {
-    max-width: 440px;
+    max-width: 644px;
     margin-bottom: 40px;
+
   }
   
   .tab {
@@ -286,13 +275,12 @@
     font-size: 16px;
   }
   
-  .input {
-    height: 52px;
-  }
+  /* .input {
+    height: 40px;
+  } */
   
   .submitButton {
-    height: 52px;
-    font-size: 16px;
+    margin-bottom: 242px;
   }
 }
 
@@ -302,26 +290,17 @@
     padding: 0 64px;
   }
   
-  .content {
-    max-width: 480px;
-    padding: 48px;
-  }
-  
   .title {
-    font-size: 32px;
+    font-size: 52px;
   }
   
   .subtitle {
     font-size: 17px;
   }
   
-  .tabs {
-    max-width: 480px;
-  }
-  
   .tab {
-    padding: 16px 28px;
-    font-size: 17px;
+    padding: 10px 0;
+    font-size: 18px;
   }
   
   .input {
@@ -330,7 +309,7 @@
   }
   
   .submitButton {
-    height: 56px;
-    font-size: 17px;
+    font-size: 18px;
+    padding: 8;
   }
 }
