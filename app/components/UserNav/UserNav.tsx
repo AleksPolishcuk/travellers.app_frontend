@@ -49,7 +49,7 @@ export default function UserNav({
       </li>
       <li>
         <Link
-          href="/stories"
+          href="/stories/create"
           onClick={onClose}
           className={`${css.publishBtn} ${
             buttonVariant === 'white' ? css.publishWhite : css.publishBlue
