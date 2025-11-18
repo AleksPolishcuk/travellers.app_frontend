@@ -4,21 +4,21 @@ import { useState } from "react";
 import css from "./StoryDetails.module.css";
 
 export type StoryDetailsProps = {
-  author: string;
-  publishedAt: string;
-  country: string;
-  image: string;
-  description: string;
-  storyId: number;
+  ownerId: string;
+  date: string;
+  category: string;
+  img: string;
+  article: string;
+  _id: string;
 };
 
 export default function StoryDetails({
-  author,
-  publishedAt,
-  country,
-  image,
-  description,
-  storyId
+  ownerId,
+  date,
+  article,
+  img,
+  _id,
+  category,
 }: StoryDetailsProps) {
 
   const [saved, setSaved] = useState(false);
@@ -27,10 +27,14 @@ export default function StoryDetails({
   const handleSave = async () => {
     setLoading(true);
     try {
-      await fetch(`/api/stories/${storyId}/save`, {
-        method: "POST",
+      await fetch(`http://localhost:4000/api/stories/${_id}/save`, {
+        method: 'GET',
       });
+      console.log(123123123);
       setSaved(true);
+    } catch (err){
+      console.error(err);
+      
     } finally {
       setLoading(false);
     }
@@ -38,13 +42,13 @@ export default function StoryDetails({
 
   return (
     <div className={css.wrapper}>
-      <p className={css.author}>Автор статті: {author}</p>
-      <p className={css.date}>Опубліковано: {publishedAt}</p>
-      <p className={css.country}>Країна: {country}</p>
+      <p className={css.author}>Автор статті: {ownerId}</p>
+      <p className={css.date}>Опубліковано: {date}</p>
+      <p className={css.country}>Країна: {category}</p>
 
-      <img className={css.image} src={image} alt={country} />
+      <img className={css.image} src={img} alt={category} />
 
-      <p className={css.description}>{description}</p>
+      <p className={css.description}>{article}</p>
 
       <div className={css.saveBlock}>
         <h3>Збережіть собі історію</h3>

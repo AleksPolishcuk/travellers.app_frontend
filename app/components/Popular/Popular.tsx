@@ -3,10 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { getStories } from '@/lib/api/clientApi';
 import styles from './Popular.module.css';
-import { useScreenSize } from '../../../hooks/useScreenSize';
+import { useScreenSize } from '../../../lib/hooks/useScreenSize';
 import { StoryCard } from '../StoryCard/StoryCard';
-import { Story } from  '../../../types/story';
-
+import { Story } from '../../../types/story';
 
 const Popular = () => {
   const [stories, setStories] = useState<Story[]>([]);

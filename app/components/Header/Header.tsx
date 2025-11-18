@@ -1,4 +1,3 @@
-// components/Header/Header.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -9,27 +8,17 @@ import AuthButtons from '../AuthButtons/AuthButtons';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import UserNav from '../UserNav/UserNav';
 import { useAuthStore } from '@/store/authStore';
-import { usePathname, useRouter } from 'next/navigation';
-import { useLogout } from '@/lib/api/clientApi';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
-  const router = useRouter();
-  const logoutMutation = useLogout();
-
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  const handleLogout = async () => {
-    try {
-      await logoutMutation.mutateAsync();
-      setLogoutModalOpen(false);
-      router.push('/');
-    } catch (error) {
-      // Помилки обробляються в useLogout, але все одно закриваємо модалку
-      setLogoutModalOpen(false);
-    }
+  const handleLogout = () => {
+    useAuthStore.getState().clearUser();
+    setLogoutModalOpen(false);
   };
 
   const pathname = usePathname();
@@ -42,15 +31,18 @@ export default function Header() {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1339) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const transparentPages = ['/'];
-  const whitePages = [
-    '/travellers',
-    '/travellers/',
-    '/stories',
-    '/stories/create',
-    '/stories/',
-    '/profile',
-  ];
+  const whitePages = ['/travellers', '/stories', '/stories/create', '/profile'];
 
   let headerClass = css.headerWhite;
   if (pathname.startsWith('/auth')) {
@@ -61,11 +53,9 @@ export default function Header() {
     headerClass = css.headerWhite;
   }
 
+  const headerVariant =
+    headerClass === css.headerTransparent ? 'transparent' : 'white';
   const headerColor = headerClass === css.headerTransparent ? '#fff' : '#000';
-  const headerHoverColor = headerClass === css.headerTransparent ? '#e8eeff' : '#4169e1';
-  const headerVariant = headerClass === css.headerTransparent ? 'transparent' : 'white';
-
-  const isLoading = logoutMutation.isPending;
 
   return (
     <header className={`${css.header} ${headerClass}`}>
@@ -75,14 +65,13 @@ export default function Header() {
             className={css.headerLogo}
             width="30"
             height="30"
-            aria-label="Logo Подорожники"
+            aria-label="Logo"
           >
             <use href="/icons.svg#icon-company-logo"></use>
           </svg>
           <span className={css.logoText}>Подорожники</span>
         </Link>
 
-        {/* Кнопка "Опублікувати історію" — тільки на планшете */}
         {user && (
           <div className={css.publishTabletOnly}>
             <Link href="/create-story">
@@ -102,28 +91,37 @@ export default function Header() {
         <nav className={css.headerNav}>
           <ul className={css.headerNavList}>
             <li>
-              <Link 
-                href="/" 
-                style={{ color: headerColor }}
-                className={css.navLink}
+              <Link
+                href="/"
+                className={`${css.navLink} ${
+                  headerVariant === 'transparent'
+                    ? css.navLink_transparent
+                    : css.navLink_white
+                }`}
               >
                 Головна
               </Link>
             </li>
             <li>
-              <Link 
-                href="/stories" 
-                style={{ color: headerColor }}
-                className={css.navLink}
+              <Link
+                href="/stories"
+                className={`${css.navLink} ${
+                  headerVariant === 'transparent'
+                    ? css.navLink_transparent
+                    : css.navLink_white
+                }`}
               >
                 Історії
               </Link>
             </li>
             <li>
-              <Link 
-                href="/travellers" 
-                style={{ color: headerColor }}
-                className={css.navLink}
+              <Link
+                href="/travellers"
+                className={`${css.navLink} ${
+                  headerVariant === 'transparent'
+                    ? css.navLink_transparent
+                    : css.navLink_white
+                }`}
               >
                 Мандрівники
               </Link>
@@ -176,7 +174,7 @@ export default function Header() {
         user={user}
         isOpen={menuOpen}
         onClose={toggleMenu}
-        onLogout={() => setLogoutModalOpen(true)}
+        onLogout={handleLogout}
         setLogoutModalOpen={setLogoutModalOpen}
       />
 
@@ -185,10 +183,9 @@ export default function Header() {
         onClose={() => setLogoutModalOpen(false)}
         title="Ви точно хочете вийти?"
         message="Ми будемо сумувати за вами!"
-        confirmButtonText={isLoading ? 'Вихід...' : 'Вийти'}
+        confirmButtonText="Вийти"
         cancelButtonText="Скасувати"
         onConfirm={handleLogout}
-        isConfirmLoading={isLoading}
       />
     </header>
   );

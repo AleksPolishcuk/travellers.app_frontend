@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { getStories, getCategories } from '@/lib/api/clientApi';
 import styles from './Stories.module.css';
-import { useScreenSize } from '../../hooks/useScreenSize';
+import { useScreenSize } from '../../lib/hooks/useScreenSize';
 import { StoryCard } from '../components/StoryCard/StoryCard';
 import { Story } from '../../types/story';
 import { Category } from '../components/Category/Category';
 import { CategoryType } from '@/types/category';
+import CategoriesMenu from '../components/CategoriesMenu/CategoriesMenu';
 
 const Stories = () => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
@@ -105,9 +106,10 @@ const Stories = () => {
   }, [buffer, isFetching]);
 
   const handleCategoryClick = (categoryName: string | null) => {
-    setSelectedCategory((prev) => (prev === categoryName ? null : categoryName));
+    setSelectedCategory((prev) =>
+      prev === categoryName ? null : categoryName,
+    );
   };
-
 
   const handleLoadMore = () => {
     loadMoreRef.current?.blur();
@@ -127,23 +129,52 @@ const Stories = () => {
   return (
     <div className={styles.story}>
       <h2 className={styles.storyTitle}>Історії Мандрівників</h2>
-      <ul className={styles.categoryList}>
-       <li>
-       <button className={styles.allCategories}>Всі категорії</button>
-       </li>
-       <li>
-       {Array.isArray(categories) &&
-          categories.map((category) => (
-            <Category key={category._id} category={category} active={selectedCategory === category.name}
-            onClick={() => handleCategoryClick(category.name)} />
-          ))}
-       </li>
-      </ul>
+      <div className={styles.cat}>
+        {width > 768 ? (
+          <>
+            <button
+              className={`${styles.allCategories} ${selectedCategory === null ? styles.activeAllCategories : ''}`}
+              onClick={() => handleCategoryClick(null)}
+            >
+              Всі історії
+            </button>
+            {categories.map((category) => (
+              <Category
+                key={category._id}
+                category={category}
+                active={selectedCategory === category.name}
+                onClick={() => handleCategoryClick(category.name)}
+              />
+            ))}
+          </>
+        ) : (
+          <div className={styles.selectWrap}>
+            <p className={styles.selectText}>Категорії</p>
+
+            <CategoriesMenu
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelectCategory={handleCategoryClick}
+            />
+          </div>
+        )}
+      </div>
 
       <ul className={styles.list}>
         {Array.isArray(stories) &&
-          stories.map((story) => <StoryCard key={story._id} story={story} />)}
+          stories
+            .filter((story) =>
+              selectedCategory
+                ? story.category.name === selectedCategory
+                : true,
+            )
+            .map((story) => (
+              <li key={story._id}>
+                <StoryCard story={story} />
+              </li>
+            ))}
       </ul>
+
       <div className={styles.readBtn}>
         {hasMore && (
           <button
