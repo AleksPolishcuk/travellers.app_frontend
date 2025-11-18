@@ -17,7 +17,7 @@ import {
   UserSavedArticlesResponse,
 } from '@/types/story';
 import { AxiosError, isAxiosError } from 'axios';
-import { api } from '../api';
+import { api } from './api';
 import { CreateStory, StoryResponse } from '../../../types/addStoryForm/story';
 
 export type ApiError = AxiosError<{ error: string }>;
