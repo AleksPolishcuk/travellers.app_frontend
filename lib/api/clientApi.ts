@@ -363,7 +363,7 @@ export const useCategories = (page: number = 1, perPage: number = 9) => {
 };
 
 export const saveStory = async (storyId: string): Promise<any> => {
-  const response = await fetch(`${API_BASE_URL}/saved/${storyId}`, {
+  const response = await fetch(`${API_BASE_URL}/users/saved/${storyId}`, {
     method: "POST",
     credentials: "include",
   });

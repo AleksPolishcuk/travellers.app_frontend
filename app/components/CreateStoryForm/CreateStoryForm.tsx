@@ -37,7 +37,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch('http://localhost:4000/stories/categories');
+        const res = await fetch('http://localhost:4000/api/stories/categories');
         const data = await res.json();
         setCategories(data.data);
       } catch (err) {
@@ -81,7 +81,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
 
     loadStory();
   }, [id, categories]);
-  if (!isLoaded) return <p>Завантаження...</p>;
+  if (!isLoaded) return <p>Завантаження...89</p>;
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Заголовок обовʼязковий'),
