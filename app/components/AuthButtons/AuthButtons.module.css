@@ -29,8 +29,8 @@
 
 .mobileLoginBtn {
     background: rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.15);
     color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .mobileLoginBtn:hover {
@@ -84,7 +84,7 @@
     .desktopLoginTransparent {
         color: #fff;
         background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .desktopLoginTransparent:hover,
