@@ -1,89 +1,42 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { login } from '@/lib/api/clientApi';
-import { useAuthStore } from '@/store/authStore';
+import { useLogin } from '@/lib/api/clientApi';
+import { loginValidationSchema } from '@/lib/validation/schemas';
 import styles from './AuthForm.module.css';
-
-interface FormDataState {
-  email: string;
-  password: string;
-}
 
 export default function LoginForm() {
   const router = useRouter();
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState<FormDataState>({
-    email: '',
-    password: ''
+  const loginMutation = useLogin();
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: loginValidationSchema,
+    onSubmit: async (values) => {
+      try {
+        await loginMutation.mutateAsync(values);
+        router.push('/');
+      } catch (error) {
+        console.error('Login error:', error);
+      }
+    },
   });
-  
-  const setUser = useAuthStore((state) => state.setUser);
 
-  useEffect(() => {
-    const savedData = localStorage.getItem('loginFormData');
-    if (savedData) {
-      setFormData(JSON.parse(savedData));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('loginFormData', JSON.stringify(formData));
-  }, [formData]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const { email, password } = formData;
-
-      if (!email.includes('@')) {
-        setError('Некоректний формат email');
-        return;
-      }
-
-      if (!password || password.length < 8) {
-        setError('Пароль повинен містити мінімум 8 символів');
-        return;
-      }
-
-      const userData = {
-        email,
-        password,
-      };
-
-      const user = await login(userData);
-      setUser(user);
-      
-      localStorage.removeItem('loginFormData');
-      router.push('/');
-
-    } catch (error) {
-      console.error('Login error:', error);
-      setError(
-        error instanceof Error ? error.message : 'Сталася помилка входу'
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const isLoading = loginMutation.isPending;
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={formik.handleSubmit} className={styles.form}>
       <div className={styles.inputGroup}>
-        <label htmlFor="email" className={styles.label}>
+        <label 
+          htmlFor="email" 
+          className={`${styles.label} ${
+            formik.touched.email && formik.errors.email ? styles.labelError : ''
+          }`}
+        >
           Пошта*
         </label>
         <input
@@ -91,15 +44,26 @@ export default function LoginForm() {
           name="email"
           type="email"
           placeholder="hello@podorozhnyky.ua"
-          className={styles.input}
-          value={formData.email}
-          onChange={handleInputChange}
-          required
+          className={`${styles.input} ${
+            formik.touched.email && formik.errors.email ? styles.inputError : ''
+          }`}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          disabled={isLoading}
         />
+        {formik.touched.email && formik.errors.email && (
+          <div className={styles.errorText}>{formik.errors.email}</div>
+        )}
       </div>
 
       <div className={styles.inputGroup}>
-        <label htmlFor="password" className={styles.label}>
+        <label 
+          htmlFor="password" 
+          className={`${styles.label} ${
+            formik.touched.password && formik.errors.password ? styles.labelError : ''
+          }`}
+        >
           Пароль*
         </label>
         <input
@@ -107,12 +71,24 @@ export default function LoginForm() {
           name="password"
           type="password"
           placeholder="********"
-          className={styles.input}
-          value={formData.password}
-          onChange={handleInputChange}
-          required
+          className={`${styles.input} ${
+            formik.touched.password && formik.errors.password ? styles.inputError : ''
+          }`}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          disabled={isLoading}
         />
+        {formik.touched.password && formik.errors.password && (
+          <div className={styles.errorText}>{formik.errors.password}</div>
+        )}
       </div>
+
+      {loginMutation.isError && (
+        <div className={styles.apiError}>
+          {loginMutation.error?.message || 'Сталася помилка при вході'}
+        </div>
+      )}
 
       <button
         type="submit"
@@ -121,8 +97,6 @@ export default function LoginForm() {
       >
         {isLoading ? 'Завантаження...' : 'Увійти'}
       </button>
-
-      {error && <p className={styles.error}>{error}</p>}
     </form>
   );
 }

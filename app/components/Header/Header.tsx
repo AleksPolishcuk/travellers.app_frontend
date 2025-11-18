@@ -8,62 +8,43 @@ import AuthButtons from '../AuthButtons/AuthButtons';
 import MobileMenu from '../MobileMenu/MobileMenu';
 import UserNav from '../UserNav/UserNav';
 import { useAuthStore } from '@/store/authStore';
-import { usePathname, useRouter } from 'next/navigation';
-import { logout } from '@/lib/api/clientApi';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
-  const router = useRouter();
-
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  const handleLogout = async () => {
-    try {
-      
-      await logout();
-      
-      useAuthStore.getState().clearUser();
-      
-      setLogoutModalOpen(false);
-      
-      router.push('/');
-      
-    } catch (error) {
-      console.error('Logout failed:', error);
-      useAuthStore.getState().clearUser();
-      setLogoutModalOpen(false);
-    }
+  const handleLogout = () => {
+    useAuthStore.getState().clearUser();
+    setLogoutModalOpen(false);
   };
 
-
   const pathname = usePathname();
-  const isAuthPage = pathname.startsWith('/auth');
-
   const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
-
     return () => {
       document.body.style.overflow = '';
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1339) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const transparentPages = ['/'];
-  const whitePages = [
-    '/travellers',
-    '/travellers/',
-    '/stories',
-    '/stories/create',
-    '/stories/',
-    '/stories/',
-    '/profile',
-  ];
+  const whitePages = ['/travellers', '/stories', '/stories/create', '/profile'];
 
   let headerClass = css.headerWhite;
-
   if (pathname.startsWith('/auth')) {
     headerClass = css.authHeader;
   } else if (transparentPages.some((p) => pathname === p)) {
@@ -72,14 +53,12 @@ export default function Header() {
     headerClass = css.headerWhite;
   }
 
-  const headerColor = headerClass === css.headerTransparent ? '#fff' : '#000';
-  const headerHoverColor =
-    headerClass === css.headerTransparent ? '#e8eeff' : '#4169e1';
   const headerVariant =
     headerClass === css.headerTransparent ? 'transparent' : 'white';
+  const headerColor = headerClass === css.headerTransparent ? '#fff' : '#000';
 
   return (
-    <header className={headerClass}>
+    <header className={`${css.header} ${headerClass}`}>
       <div className={css.headerContainer}>
         <Link href="/" className={css.headerLogoWrapper}>
           <svg
@@ -91,13 +70,13 @@ export default function Header() {
           </svg>
           <span className={css.logoText}>Подорожники</span>
         </Link>
-        {/*  Кнопка "Опублікувати історію" — только на планшете */}
+
         {user && (
           <div className={css.publishTabletOnly}>
             <Link href="/create-story">
               <button
                 className={`${css.publishBtn} ${
-                  headerClass === css.headerTransparent
+                  headerVariant === 'transparent'
                     ? css.publishWhite
                     : css.publishBlue
                 }`}
@@ -111,41 +90,68 @@ export default function Header() {
         <nav className={css.headerNav}>
           <ul className={css.headerNavList}>
             <li>
-              <Link href="/" style={{ color: headerColor }}>
+              <Link
+                href="/"
+                className={`${css.navLink} ${
+                  headerVariant === 'transparent'
+                    ? css.navLink_transparent
+                    : css.navLink_white
+                }`}
+              >
                 Головна
               </Link>
             </li>
             <li>
-              <Link href="/stories" style={{ color: headerColor }}>
+              <Link
+                href="/stories"
+                className={`${css.navLink} ${
+                  headerVariant === 'transparent'
+                    ? css.navLink_transparent
+                    : css.navLink_white
+                }`}
+              >
                 Історії
               </Link>
             </li>
             <li>
-              <Link href="/travellers" style={{ color: headerColor }}>
+              <Link
+                href="/travellers"
+                className={`${css.navLink} ${
+                  headerVariant === 'transparent'
+                    ? css.navLink_transparent
+                    : css.navLink_white
+                }`}
+              >
                 Мандрівники
               </Link>
             </li>
-
-            {/* Десктопна навігація для авторизованих */}
-            <nav className={css.headerNav}>
-              {user ? (
-                <UserNav
-                  user={user}
-                  onLogout={() => setLogoutModalOpen(true)}
-                  setLogoutModalOpen={setLogoutModalOpen}
-                  iconColor={
-                    headerClass === css.headerTransparent ? '#fff' : '#000'
-                  }
-                  buttonVariant={
-                    headerClass === css.headerTransparent ? 'white' : 'blue'
-                  }
-                  textColor={headerColor}
-                />
-              ) : (
-                <AuthButtons variant="desktop" />
-              )}
-            </nav>
           </ul>
+
+          {/* Навігація для авторизованих */}
+          {user && (
+            <div className={css.headerNavAuth}>
+              <UserNav
+                user={user}
+                onLogout={handleLogout}
+                setLogoutModalOpen={setLogoutModalOpen}
+                iconColor={headerColor}
+                buttonVariant={
+                  headerVariant === 'transparent' ? 'white' : 'blue'
+                }
+                headerVariant={headerVariant}
+                textColor={
+                  headerClass === css.headerTransparent ? '#fff' : '#000'
+                }
+              />
+            </div>
+          )}
+
+          {/* Навігація для неавторизованих */}
+          {!user && (
+            <div className={css.authButtonsWrapper}>
+              <AuthButtons variant="desktop" headerVariant={headerVariant} />
+            </div>
+          )}
         </nav>
 
         <button className={css.burgerBtn} onClick={toggleMenu}>
@@ -153,17 +159,21 @@ export default function Header() {
             className={css.headerLogo}
             width="24"
             height="24"
-            aria-label="Logo"
+            aria-label="Menu"
+            style={{
+              color: headerClass === css.headerTransparent ? '#fff' : '#000',
+            }}
           >
             <use href="/icons.svg#icon-menu"></use>
           </svg>
         </button>
       </div>
+
       <MobileMenu
         user={user}
         isOpen={menuOpen}
         onClose={toggleMenu}
-        onLogout={() => setLogoutModalOpen(true)}
+        onLogout={handleLogout}
         setLogoutModalOpen={setLogoutModalOpen}
       />
 

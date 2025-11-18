@@ -1,97 +1,43 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import { register } from '@/lib/api/clientApi';
-import { useAuthStore } from '@/store/authStore';
+import { useRegister } from '@/lib/api/clientApi';
+import { registerValidationSchema } from '@/lib/validation/schemas';
 import styles from './AuthForm.module.css';
-
-interface FormDataState {
-  name: string;
-  email: string;
-  password: string;
-}
 
 export default function RegisterForm() {
   const router = useRouter();
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState<FormDataState>({
-    name: '',
-    email: '',
-    password: ''
+  const registerMutation = useRegister();
+
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+    },
+    validationSchema: registerValidationSchema,
+    onSubmit: async (values) => {
+      try {
+        await registerMutation.mutateAsync(values);
+        router.push('/');
+      } catch (error) {
+        console.error('Registration error:', error);
+      }
+    },
   });
-  
-  const setUser = useAuthStore((state) => state.setUser);
 
-  useEffect(() => {
-    const savedData = localStorage.getItem('registerFormData');
-    if (savedData) {
-      setFormData(JSON.parse(savedData));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('registerFormData', JSON.stringify(formData));
-  }, [formData]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const { name, email, password } = formData;
-
-      if (!name || name.length < 2) {
-        setError('Імʼя повинно містити мінімум 2 символи');
-        return;
-      }
-
-      if (!email.includes('@')) {
-        setError('Некоректний формат email');
-        return;
-      }
-
-      if (!password || password.length < 8) {
-        setError('Пароль повинен містити мінімум 8 символів');
-        return;
-      }
-
-      const userData = {
-        name,
-        email,
-        password,
-      };
-
-      const user = await register(userData);
-      setUser(user);
-      
-      localStorage.removeItem('registerFormData');
-      router.push('/');
-
-    } catch (error) {
-      console.error('Registration error:', error);
-      setError(
-        error instanceof Error ? error.message : 'Сталася помилка реєстрації'
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const isLoading = registerMutation.isPending;
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={formik.handleSubmit} className={styles.form}>
       <div className={styles.inputGroup}>
-        <label htmlFor="name" className={styles.label}>
+        <label 
+          htmlFor="name" 
+          className={`${styles.label} ${
+            formik.touched.name && formik.errors.name ? styles.labelError : ''
+          }`}
+        >
           Імʼя та Прізвище*
         </label>
         <input
@@ -99,15 +45,26 @@ export default function RegisterForm() {
           name="name"
           type="text"
           placeholder="Ваше імʼя та прізвище"
-          className={styles.input}
-          value={formData.name}
-          onChange={handleInputChange}
-          required
+          className={`${styles.input} ${
+            formik.touched.name && formik.errors.name ? styles.inputError : ''
+          }`}
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          disabled={isLoading}
         />
+        {formik.touched.name && formik.errors.name && (
+          <div className={styles.errorText}>{formik.errors.name}</div>
+        )}
       </div>
 
       <div className={styles.inputGroup}>
-        <label htmlFor="email" className={styles.label}>
+        <label 
+          htmlFor="email" 
+          className={`${styles.label} ${
+            formik.touched.email && formik.errors.email ? styles.labelError : ''
+          }`}
+        >
           Пошта*
         </label>
         <input
@@ -115,15 +72,26 @@ export default function RegisterForm() {
           name="email"
           type="email"
           placeholder="hello@podorozhnyky.ua"
-          className={styles.input}
-          value={formData.email}
-          onChange={handleInputChange}
-          required
+          className={`${styles.input} ${
+            formik.touched.email && formik.errors.email ? styles.inputError : ''
+          }`}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          disabled={isLoading}
         />
+        {formik.touched.email && formik.errors.email && (
+          <div className={styles.errorText}>{formik.errors.email}</div>
+        )}
       </div>
 
       <div className={styles.inputGroup}>
-        <label htmlFor="password" className={styles.label}>
+        <label 
+          htmlFor="password" 
+          className={`${styles.label} ${
+            formik.touched.password && formik.errors.password ? styles.labelError : ''
+          }`}
+        >
           Пароль*
         </label>
         <input
@@ -131,12 +99,24 @@ export default function RegisterForm() {
           name="password"
           type="password"
           placeholder="********"
-          className={styles.input}
-          value={formData.password}
-          onChange={handleInputChange}
-          required
+          className={`${styles.input} ${
+            formik.touched.password && formik.errors.password ? styles.inputError : ''
+          }`}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          disabled={isLoading}
         />
+        {formik.touched.password && formik.errors.password && (
+          <div className={styles.errorText}>{formik.errors.password}</div>
+        )}
       </div>
+
+      {registerMutation.isError && (
+        <div className={styles.apiError}>
+          {registerMutation.error?.message || 'Сталася помилка при реєстрації'}
+        </div>
+      )}
 
       <button
         type="submit"
@@ -145,8 +125,6 @@ export default function RegisterForm() {
       >
         {isLoading ? 'Завантаження...' : 'Зареєструватись'}
       </button>
-
-      {error && <p className={styles.error}>{error}</p>}
     </form>
   );
 }
