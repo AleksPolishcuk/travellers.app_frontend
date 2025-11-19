@@ -1,7 +1,11 @@
+.popular{
+  background-color: #f7f9ff;
+}
 .storyPopular {
   width: 335;
   margin: 0 auto;
   padding: 62px 0;
+  background-color: #f7f9ff;
 }
 
 .storyTitle {

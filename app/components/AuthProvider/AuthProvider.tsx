@@ -23,8 +23,13 @@ export default function AuthProvider({
     if (user) {
       setUser(user);
     } else {
-      // Якщо user === null, це означає, що користувач не авторизований
+   
       clearUser();
+      
+     
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth-storage');
+      }
     }
   }, [user, setUser, clearUser]);
 

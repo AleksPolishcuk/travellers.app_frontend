@@ -41,23 +41,30 @@ export default function StoryDetails({
   };
 
   return (
+    <section className={css.story}>
     <div className={css.wrapper}>
-      <p className={css.author}>Автор статті: {ownerId}</p>
-      <p className={css.date}>Опубліковано: {date}</p>
-      <p className={css.country}>Країна: {category}</p>
-
+      <div className={css.dataDiv}>
+        <div className={css.data}>
+        <p className={css.author}>Автор статті: {ownerId}</p>
+        <p className={css.date}>Опубліковано: {date}</p>
+        </div>
+        <p className={css.country}>Країна: {category}</p>
+      </div>
       <img className={css.image} src={img} alt={category} />
 
+      <div className={css.descriptionDiv}>
       <p className={css.description}>{article}</p>
 
       <div className={css.saveBlock}>
-        <h3>Збережіть собі історію</h3>
-        <p>Вона буде доступна у вашому профілі у розділі збережене</p>
+        <h3 className={css.saveTitle}>Збережіть собі історію</h3>
+        <p className={css.saveText}>Вона буде доступна у вашому профілі у розділі збережене</p>
 
-        <button onClick={handleSave} disabled={loading}>
+        <button className={css.saveBtn} onClick={handleSave} disabled={loading}>
           {loading ? "Збереження..." : saved ? "Збережено ✓" : "Зберегти"}
         </button>
       </div>
+      </div>
     </div>
+    </section>
   );
 }
