@@ -24,6 +24,7 @@ export default function Header() {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
 
+  // Блокировка скролла при открытом меню
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => {
@@ -31,27 +32,34 @@ export default function Header() {
     };
   }, [menuOpen]);
 
+  // Автоскрытие меню на десктопе
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1339) {
         setMenuOpen(false);
       }
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  const transparentPages = ['/'];
-  const whitePages = ['/travellers', '/stories', '/stories/create', '/profile'];
 
-  let headerClass = css.headerWhite;
-  if (pathname.startsWith('/auth')) {
-    headerClass = css.authHeader;
-  } else if (transparentPages.some((p) => pathname === p)) {
-    headerClass = css.headerTransparent;
-  } else if (whitePages.some((p) => pathname.startsWith(p))) {
-    headerClass = css.headerWhite;
-  }
+  // Определяем тип хедера
+  const minimalHeaderPages = ['/auth', '/profile'];
+  const transparentPages = ['/'];
+  const internalPages = ['/stories', '/travellers', '/stories/create'];
+  const whitePages = ['/profile'];
+
+  const isMinimalHeader = minimalHeaderPages.some((p) =>
+    pathname.startsWith(p),
+  );
+  const isTransparentHeader = transparentPages.some((p) => pathname === p);
+  const isInternalHeader = internalPages.some((p) => pathname.startsWith(p));
+  const isWhiteHeader =
+    whitePages.some((p) => pathname.startsWith(p)) || isMinimalHeader;
+
+  let headerClass = css.headerInternal;
+  if (isTransparentHeader) headerClass = css.headerTransparent;
+  if (isWhiteHeader) headerClass = css.headerWhite;
 
   const headerVariant =
     headerClass === css.headerTransparent ? 'transparent' : 'white';
@@ -68,105 +76,108 @@ export default function Header() {
             aria-label="Logo">
             <use href="/icons.svg#icon-company-logo"></use>
           </svg>
-          <span className={css.logoText}>Подорожники</span>
+          <span className={css.logoText} style={{ color: headerColor }}>
+            Подорожники
+          </span>
         </Link>
 
-        {user && (
-          <div className={css.publishTabletOnly}>
-            <Link href="/create-story">
-              <button
-                className={`${css.publishBtn} ${
-                  headerVariant === 'transparent'
-                    ? css.publishWhite
-                    : css.publishBlue
-                }`}
+        {!isMinimalHeader && (
+          <>
+            {user && (
+              <div className={css.publishTabletOnly}>
+                <Link href="/stories/create">
+                  <button
+                    className={`${css.publishBtn} ${
+                      headerVariant === 'transparent'
+                        ? css.publishWhite
+                        : css.publishBlue
+                    }`}
+                  >
+                    Опублікувати історію
+                  </button>
+                </Link>
+              </div>
+            )}
+
+            <nav className={css.headerNav}>
+              <ul className={css.headerNavList}>
+                <li>
+                  <Link
+                    href="/"
+                    className={`${css.navLink} ${
+                      headerVariant === 'transparent'
+                        ? css.navLink_transparent
+                        : css.navLink_white
+                    }`}
+                  >
+                    Головна
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/stories"
+                    className={`${css.navLink} ${
+                      headerVariant === 'transparent'
+                        ? css.navLink_transparent
+                        : css.navLink_white
+                    }`}
+                  >
+                    Історії
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/travellers"
+                    className={`${css.navLink} ${
+                      headerVariant === 'transparent'
+                        ? css.navLink_transparent
+                        : css.navLink_white
+                    }`}
+                  >
+                    Мандрівники
+                  </Link>
+                </li>
+              </ul>
+
+              {user && (
+                <div className={css.headerNavAuth}>
+                  <UserNav
+                    user={user}
+                    onLogout={handleLogout}
+                    setLogoutModalOpen={setLogoutModalOpen}
+                    iconColor={headerColor}
+                    buttonVariant={
+                      headerVariant === 'transparent' ? 'white' : 'blue'
+                    }
+                    headerVariant={headerVariant}
+                    textColor={headerColor}
+                  />
+                </div>
+              )}
+
+              {!user && (
+                <div className={css.authButtonsWrapper}>
+                  <AuthButtons
+                    variant="desktop"
+                    headerVariant={headerVariant}
+                  />
+                </div>
+              )}
+            </nav>
+
+            <button className={css.burgerBtn} onClick={toggleMenu}>
+              <svg
+                className={css.headerLogo}
+                width="24"
+                height="24"
+                aria-label="Menu"
+                style={{ color: headerColor }}
               >
-                Опублікувати історію
-              </button>
-            </Link>
-          </div>
+                <use href="/icons.svg#icon-menu"></use>
+              </svg>
+            </button>
+          </>
         )}
-
-        <nav className={css.headerNav}>
-          <ul className={css.headerNavList}>
-            <li>
-              <Link
-                href="/"
-                className={`${css.navLink} ${
-                  headerVariant === 'transparent'
-                    ? css.navLink_transparent
-                    : css.navLink_white
-                }`}
-              >
-                Головна
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/stories"
-                className={`${css.navLink} ${
-                  headerVariant === 'transparent'
-                    ? css.navLink_transparent
-                    : css.navLink_white
-                }`}
-              >
-                Історії
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/travellers"
-                className={`${css.navLink} ${
-                  headerVariant === 'transparent'
-                    ? css.navLink_transparent
-                    : css.navLink_white
-                }`}
-              >
-                Мандрівники
-              </Link>
-            </li>
-          </ul>
-
-          {/* Навігація для авторизованих */}
-          {user && (
-            <div className={css.headerNavAuth}>
-              <UserNav
-                user={user}
-                onLogout={handleLogout}
-                setLogoutModalOpen={setLogoutModalOpen}
-                iconColor={headerColor}
-                buttonVariant={
-                  headerVariant === 'transparent' ? 'white' : 'blue'
-                }
-                headerVariant={headerVariant}
-                textColor={
-                  headerClass === css.headerTransparent ? '#fff' : '#000'
-                }
-              />
-            </div>
-          )}
-
-          {/* Навігація для неавторизованих */}
-          {!user && (
-            <div className={css.authButtonsWrapper}>
-              <AuthButtons variant="desktop" headerVariant={headerVariant} />
-            </div>
-          )}
-        </nav>
-
-        <button className={css.burgerBtn} onClick={toggleMenu}>
-          <svg
-            className={css.headerLogo}
-            width="24"
-            height="24"
-            aria-label="Menu"
-            style={{
-              color: headerClass === css.headerTransparent ? '#fff' : '#000',
-            }}
-          >
-            <use href="/icons.svg#icon-menu"></use>
-          </svg>
-        </button>
       </div>
 
       <MobileMenu

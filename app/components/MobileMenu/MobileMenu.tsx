@@ -63,13 +63,15 @@ export default function MobileMenu({
           </li>
 
           {user ? (
-            <UserNav
-              user={user}
-              onLogout={onLogout}
-              setLogoutModalOpen={setLogoutModalOpen}
-              variant="mobile"
-              onClose={onClose}
-            />
+            <li className={css.userNavBlock}>
+              <UserNav
+                user={user}
+                onLogout={onLogout}
+                setLogoutModalOpen={setLogoutModalOpen}
+                variant="mobile"
+                onClose={onClose}
+              />
+            </li>
           ) : (
             <AuthButtons variant="mobile" onClick={onClose} />
           )}

@@ -20,7 +20,7 @@
 }
 
 .publishBlue:hover,
-.publishBlue:focus-visible {
+.publishBlue:focus {
     background-color: #e8eeff;
     color: #000;
     border-color: #4169e1;
@@ -40,7 +40,7 @@
 }
 
 .publishWhite:hover,
-.publishWhite:focus-visible {
+.publishWhite:focus {
     background-color: #e8eeff;
     color: #000;
     border-color: #4169e1;
@@ -52,8 +52,21 @@
     border-color: #7a96ea;
 }
 
-.userRow {
+.userInline {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+
+.userInline li {
+    display: flex;
+    align-items: center;
+}
+
+.userRowItem {
+    display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 12px;
     margin: 0 auto;
@@ -67,6 +80,8 @@
 
 }
 
+
+
 .userName {
     font-family: "Nunito Sans", sans-serif;
     font-weight: 400;
@@ -76,7 +91,7 @@
 }
 
 
-.divider {
+.dividerLi {
     width: 1px;
     background-color: #ccc;
     height: 29px;
@@ -119,8 +134,7 @@
 
 
 .mobileUserNav .profileLinkWhite:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border: 1px solid #fff;
+    border: 1px solid #000;
 }
 
 
@@ -159,7 +173,7 @@
         justify-content: flex-end;
     }
 
-    .desktopUserNav .userRow {
+    .desktopUserNav .userRowItem {
         flex-direction: row;
         gap: 12px;
         align-items: center;
@@ -183,14 +197,22 @@
     }
 
 
-    .profileLinkTransparent:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-        border: 1px solid #fff;
+    .profileLinkTransparent:hover,
+    .profileLinkTransparent:focus {
+        border-color: #fff
     }
 
-    .profileLinkWhite:hover {
-        background-color: #e8eeff;
-        border: 1px solid #4169e1;
+    .profileLinkTransparent:active {
+        background: #d8d8d8;
+    }
+
+    .profileLinkWhite:hover,
+    .profileLinkWhite:focus {
+        border-color: #000;
+    }
+
+    .profileLinkWhite:active {
+        background: #d8d8d8;
     }
 
     .headerLogout {
@@ -245,14 +267,6 @@
         color: #000;
     }
 
-    .desktopUserNav .linkDark {
-        color: #000;
-        text-decoration: none;
-    }
-
-    .desktopUserNav .linkDark:hover {
-        color: #4169e1;
-    }
 
     .desktopUserNav .userNameDark {
         color: #000;
