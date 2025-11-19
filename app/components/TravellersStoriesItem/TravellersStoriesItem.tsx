@@ -9,7 +9,7 @@ import { Story } from '@/types/story';
 import {
   addStoryToFavorites,
   removeStoryFromFavorites,
-} from '@/lib/api/user/clientapi';
+} from '../../../lib/api/user/clientApi';
 import css from './TravellersStoriesItem.module.css';
 import Link from 'next/link';
 import Modal from '../../@modal/default';
@@ -17,7 +17,8 @@ import Modal from '../../@modal/default';
 interface TravellersStoriesItemProps {
   story: Story;
   isAuthenticated: boolean;
-  onRemoveSavedStory?: (id: string) => void; // ⬅ додаємо!
+  onRemoveSavedStory?: (id: string) => void;
+  isMyStory?: boolean; // ⬅ додаємо!
 }
 
 export default function TravellersStoriesItem({

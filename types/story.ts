@@ -133,6 +133,16 @@ export interface UserSavedArticlesResponse {
     savedStories: SavedStory[];
   };
 }
+export interface CategoriesResponse {
+  status: number;
+  message: string;
+  data: Category[];
+}
+export type FetchStoriesOptions = {
+  page?: number;
+  perPage?: number;
+  excludeId?: string;
+};
 
 // export interface Story {
 //   _id: string;

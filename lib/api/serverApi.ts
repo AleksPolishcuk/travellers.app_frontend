@@ -1,9 +1,13 @@
 import 'server-only';
 import { cookies } from 'next/headers';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
-export const checkServerSession = async (): Promise<{ success: boolean; user?: any }> => {
+export const checkServerSession = async (): Promise<{
+  success: boolean;
+  user?: any;
+}> => {
   try {
     const cookieStore = await cookies();
     const sessionId = cookieStore.get('sessionId')?.value;
@@ -14,9 +18,8 @@ export const checkServerSession = async (): Promise<{ success: boolean; user?: a
     }
 
     const hasValidToken = !!(sessionId || accessToken);
-    
+
     if (hasValidToken) {
-     
       const mockUser = {
         _id: 'user123',
         name: 'Тестовий Користувач',
@@ -24,7 +27,7 @@ export const checkServerSession = async (): Promise<{ success: boolean; user?: a
         avatar: '',
         description: '',
         onboardingCompleted: false,
-        savedStories: []
+        savedStories: [],
       };
       return { success: true, user: mockUser };
     }
@@ -35,7 +38,6 @@ export const checkServerSession = async (): Promise<{ success: boolean; user?: a
     return { success: false };
   }
 };
-
 
 export const requireAuth = async () => {
   const session = await checkServerSession();

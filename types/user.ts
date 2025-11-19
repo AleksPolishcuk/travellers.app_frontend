@@ -1,10 +1,10 @@
 export interface User {
   _id: string;
   name: string;
-  email: string;
+  email?: string;
   avatarUrl?: string;
   description?: string;
-  onboardingCompleted: boolean;
+  onboardingCompleted?: boolean;
   savedStories?: string[];
   articlesAmount: number;
   createdAt?: string;
