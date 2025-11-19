@@ -37,7 +37,7 @@ export default async function StoryPage(props: {
 
   return (
     <div className={css.story}>
-      <h1 className={css.title}>{story.data.title}</h1>
+      <h1 className={css.title}>{story.title}</h1>
 
       <StoryDetails
         _id={story._id}  
