@@ -24,7 +24,6 @@ export default function Header() {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
 
-  // Блокировка скролла при открытом меню
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => {
@@ -32,7 +31,6 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  // Автоскрытие меню на десктопе
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1339) {
@@ -43,7 +41,6 @@ export default function Header() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Определяем тип хедера
   const minimalHeaderPages = ['/auth', '/profile'];
   const transparentPages = ['/'];
   const internalPages = ['/stories', '/travellers', '/stories/create'];
@@ -166,9 +163,13 @@ export default function Header() {
               )}
             </nav>
 
-            <button className={css.burgerBtn} onClick={toggleMenu}>
+            <button
+              className={`${css.burgerBtn} ${
+                headerClass === css.headerTransparent ? '' : css.burgerWhite
+              }`}
+              onClick={toggleMenu}
+            >
               <svg
-                className={css.headerLogo}
                 width="24"
                 height="24"
                 aria-label="Menu"
