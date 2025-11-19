@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { showErrorToast, showSuccessToast } from '@/lib/utils/errorHandler';
 import { useAuthStore } from '@/store/authStore';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const API_BASE_URL = 'http://localhost:4000/api';
 
 // Базова fetch функція
 const apiFetch = async (url: string, options: RequestInit = {}) => {
