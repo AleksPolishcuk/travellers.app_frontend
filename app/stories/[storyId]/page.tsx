@@ -1,5 +1,6 @@
 import PopularList from '@/app/components/Popular/Popular';
 import StoryDetails from '@/app/components/StoryDetails/StoryDetails';
+import css from "./page.module.css";
 
 async function getStory(id: string) {
   const res = await fetch(`${process.env.API_URL}/stories/${id}`, {
@@ -26,8 +27,8 @@ export default async function StoryPage(props: {
   }
 
   return (
-    <div>
-      <h1>{story.title}</h1>
+    <div className={css.story}>
+      <h1 className={css.title}>{story.data.title}</h1>
 
       <StoryDetails
         _id={story.data.id}
