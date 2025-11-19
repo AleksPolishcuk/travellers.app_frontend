@@ -157,7 +157,10 @@ export const getTravellers = async (
 export const getStories = async (
   page: number = 1,
   perPage: number = 9,
+  category: string | null = null,
 ): Promise<any> => {
+  const categoryQuery = category ? `&category=${encodeURIComponent(category)}` : '';
+
   const data = await apiFetch(`/stories?page=${page}&perPage=${perPage}`);
   return data;
 };
