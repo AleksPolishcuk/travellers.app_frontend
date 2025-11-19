@@ -1,0 +1,251 @@
+.story{
+  background-color: #f7f9ff;
+  display: block;
+  unicode-bidi: isolate;
+  box-sizing: border-box;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-sizing: content-box;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  max-width: 1440px;
+  margin: 0 auto;
+
+  padding-right: 64px;
+  padding-left: 64px;
+  padding-bottom: 48px;
+  padding-top: 0;
+
+}
+
+.dataDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+.data {
+  display: flex;
+  flex-direction: row;
+  gap: 48px;
+}
+
+.author {
+  color: #000000;
+  font-size: 18px;
+  margin: 0;
+
+}
+
+.date {
+  color: #000000;
+  font-size: 18px;
+  margin: 0;
+}
+
+.country {
+  color: #000000;
+  font-size: 18px;
+  margin: 0;
+}
+
+.image {
+  border-radius: 24px;
+  margin-top: 16px;
+  margin-bottom: 48px;
+}
+
+.descriptionDiv {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  max-width: 1440px;
+  gap: 24px;
+
+}
+.description {
+  max-width: 865px;
+  font-size: 18px;
+  
+}
+
+.saveBlock {
+  background-color: #F2F2F2 ;
+  padding: 32px;
+  gap: 16px;
+  border-radius: 24px;
+  
+}
+.saveTitle {
+  font-size: 26px;
+
+}
+.saveText {
+  font-size: 18px;
+  margin-top: 16px;
+}
+.saveBtn {
+  background-color: #4169E1;
+  padding: 10.5px 137.5px;
+  color: white;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-size: 18px;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  
+    max-width: 768px;
+    margin: 0 auto;
+  
+    padding-right: 32px;
+    padding-left: 32px;
+    padding-bottom: 32px;
+    padding-top: 0;
+  
+  }
+  
+  
+  .author {
+    color: #000000;
+    font-size: 18px;
+    margin: 0;
+  
+  }
+  
+  .date {
+    color: #000000;
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .country {
+    color: #000000;
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .image {
+
+    margin-bottom: 32px;
+  }
+  
+  .descriptionDiv {
+    flex-direction: column;
+    max-width: 768px;
+    margin-top: 32px;
+  }
+  .description {
+    max-width: 768px;
+    font-size: 18px;
+    
+  }
+  
+  .saveBlock {
+    max-width: 418px;
+    
+  }
+  .saveTitle {
+    font-size: 26px;
+  
+  }
+  .saveText {
+    font-size: 18px;
+    margin-top: 16px;
+  }
+  .saveBtn {
+    padding: 12px 141.5px;
+
+  }
+  
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    max-width: 375px;
+    margin: 0 auto;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 32px;
+    padding-top: 0;
+  
+  }
+  
+  .dataDiv {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .data {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .author {
+    color: #000000;
+    font-size: 18px;
+    margin: 0;
+  
+  }
+  
+  .date {
+    color: #000000;
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .country {
+    color: #000000;
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .image {
+
+    margin-bottom: 32px;
+  }
+  
+  .descriptionDiv {
+    flex-direction: column;
+    max-width: 335px;
+    margin-top: 32px;
+  }
+  .description {
+    max-width: 335px;
+    font-size: 18px;
+    
+  }
+  
+  .saveBlock {
+    max-width: 418px;
+    padding: 32px 20px;
+    
+  }
+  .saveTitle {
+    font-size: 26px;
+  
+  }
+  .saveText {
+    font-size: 18px;
+    margin-top: 16px;
+  }
+  .saveBtn {
+    padding: 12px 112px;
+    font-size: 16px;
+  }
+}
