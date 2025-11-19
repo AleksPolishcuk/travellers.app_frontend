@@ -178,9 +178,13 @@ export default function Header() {
               )}
             </nav>
 
-            <button className={css.burgerBtn} onClick={toggleMenu}>
+            <button
+              className={`${css.burgerBtn} ${
+                headerClass === css.headerTransparent ? '' : css.burgerWhite
+              }`}
+              onClick={toggleMenu}
+            >
               <svg
-                className={css.headerLogo}
                 width="24"
                 height="24"
                 aria-label="Menu"
