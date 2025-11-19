@@ -49,7 +49,7 @@ export default function UserNav({
       </li>
       <li>
         <Link
-          href="/stories"
+          href="/stories/create"
           onClick={onClose}
           className={`${css.publishBtn} ${
             buttonVariant === 'white' ? css.publishWhite : css.publishBlue
@@ -58,41 +58,40 @@ export default function UserNav({
           Опублікувати історію
         </Link>
       </li>
-      <li className={css.userRow}>
-        <Link
-          className={css.userRowRow}
-          style={{ color: textColor }}
-          href="/profile"
-          onClick={onClose}
-        >
-          <Image
-            src={user.avatar || '/Avatar.svg'}
-            alt={user.name}
-            width={24}
-            height={24}
-          />
-          <span className="userName">{user.name}</span>
-        </Link>
+      <li className={css.userBlock}>
+        <ul className={css.userInline}>
+          <li className={css.userRowItem}>
+            <div className={css.userRowRow} style={{ color: textColor }}>
+              <Image
+                src={user.avatar || '/Avatar.svg'}
+                alt={user.name}
+                width={24}
+                height={24}
+              />
+              <span className="userName">{user.name}</span>
+            </div>
+          </li>
 
-        <span className={css.divider}></span>
+          <li className={css.dividerLi}>
+            <span className={css.divider}></span>
+          </li>
 
-        <button
-          className={css.headerLogoutButton}
-          onClick={() => {
-            setLogoutModalOpen(true);
-            onClose?.();
-          }}
-        >
-          <svg
-            className={css.headerLogout}
-            width="24"
-            height="24"
-            aria-label="Logout"
-            style={{ color: iconColor }}
-          >
-            <use href="/icons.svg#icon-logout"></use>
-          </svg>
-        </button>
+          <li className={css.logoutLi}>
+            <button
+              className={css.headerLogoutButton}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setLogoutModalOpen(true);
+                onClose?.();
+              }}
+            >
+              <svg width="24" height="24" style={{ color: iconColor }}>
+                <use href="/icons.svg#icon-logout" />
+              </svg>
+            </button>
+          </li>
+        </ul>
       </li>
     </ul>
   );

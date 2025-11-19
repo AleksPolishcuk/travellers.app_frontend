@@ -9,6 +9,7 @@ import { Story } from '../../types/story';
 import { Category } from '../components/Category/Category';
 import { CategoryType } from '@/types/category';
 import CategoriesMenu from '../components/CategoriesMenu/CategoriesMenu';
+import Loader from '../components/Loader/Loader';
 
 const Stories = () => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
@@ -84,7 +85,7 @@ const Stories = () => {
     setIsFetching(true);
 
     try {
-      const response = await getStories(nextPage, perPage);
+      const response = await getStories(nextPage, perPage, selectedCategory);
       const list = response?.data?.data ?? [];
 
       setBuffer((prev) => [...prev, ...list]);
@@ -93,7 +94,7 @@ const Stories = () => {
         setHasMore(false);
       }
     } catch (err) {
-      console.error(err);
+      console.error('Error loading more stories', err);
     } finally {
       setIsFetching(false);
     }
@@ -105,10 +106,25 @@ const Stories = () => {
     }
   }, [buffer, isFetching]);
 
-  const handleCategoryClick = (categoryName: string | null) => {
+  const handleCategoryClick = async (categoryName: string | null) => {
     setSelectedCategory((prev) =>
       prev === categoryName ? null : categoryName,
     );
+    setCurrentPage(1);
+    setIsFetching(true);
+
+    try {
+      const response = await getStories(1, perPage, categoryName);
+      const list = response?.data?.data ?? [];
+
+      setStories(list.slice(0, perPage));
+      setBuffer(list.slice(perPage));
+      setHasMore(list.length > perPage);
+    } catch (err) {
+      console.error('Error fetching filtered stories', err);
+    } finally {
+      setIsFetching(false);
+    }
   };
 
   const handleLoadMore = () => {
@@ -120,74 +136,76 @@ const Stories = () => {
     }
   };
 
-  if (loading)
-    return <div className={styles.loading}>Завантаження історій...</div>;
+  if (loading) return <Loader />;
   if (error) return <div className={styles.error}>Помилка: {error}</div>;
   if (!stories || stories.length === 0)
     return <div className={styles.empty}>Історії відсутні</div>;
 
   return (
-    <div className={styles.story}>
-      <h2 className={styles.storyTitle}>Історії Мандрівників</h2>
-      <div className={styles.cat}>
-        {width > 768 ? (
-          <>
-            <button
-              className={`${styles.allCategories} ${selectedCategory === null ? styles.activeAllCategories : ''}`}
-              onClick={() => handleCategoryClick(null)}
-            >
-              Всі історії
-            </button>
-            {categories.map((category) => (
-              <Category
-                key={category._id}
-                category={category}
-                active={selectedCategory === category.name}
-                onClick={() => handleCategoryClick(category.name)}
+    <section className={styles.stories}>
+      <div className={styles.story}>
+        <h2 className={styles.storyTitle}>Історії Мандрівників</h2>
+        <div className={styles.cat}>
+          {width > 768 ? (
+            <>
+              <button
+                className={`${styles.allCategories} ${selectedCategory === null ? styles.activeAllCategories : ''}`}
+                onClick={() => handleCategoryClick(null)}
+              >
+                Всі історії
+              </button>
+              {categories.map((category) => (
+                <Category
+                  key={category._id}
+                  category={category}
+                  active={selectedCategory === category.name}
+                  onClick={() => handleCategoryClick(category.name)}
+                />
+              ))}
+            </>
+          ) : (
+            <div className={styles.selectWrap}>
+              <p className={styles.selectText}>Категорії</p>
+
+              <CategoriesMenu
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onSelectCategory={handleCategoryClick}
               />
-            ))}
-          </>
-        ) : (
-          <div className={styles.selectWrap}>
-            <p className={styles.selectText}>Категорії</p>
+            </div>
+          )}
+        </div>
 
-            <CategoriesMenu
-              categories={categories}
-              selectedCategory={selectedCategory}
-              onSelectCategory={handleCategoryClick}
-            />
-          </div>
-        )}
+        <ul className={styles.list}>
+          {Array.isArray(stories) &&
+            stories
+              .filter((story) =>
+                selectedCategory
+                  ? story.category?.name === selectedCategory
+                  : true,
+              )
+              .map((story) => (
+                <li key={story._id}>
+                  <StoryCard story={story} />
+                </li>
+              ))}
+        </ul>
+
+        <div className={styles.readBtn}>
+  {isFetching ? (
+    <Loader />
+  ) : hasMore ? (
+    <button
+      className={styles.readButton}
+      ref={loadMoreRef}
+      onClick={handleLoadMore}
+    >
+      Показати ще
+    </button>
+  ) : null}
+</div>
       </div>
-
-      <ul className={styles.list}>
-        {Array.isArray(stories) &&
-          stories
-            .filter((story) =>
-              selectedCategory
-                ? story.category.name === selectedCategory
-                : true,
-            )
-            .map((story) => (
-              <li key={story._id}>
-                <StoryCard story={story} />
-              </li>
-            ))}
-      </ul>
-
-      <div className={styles.readBtn}>
-        {hasMore && (
-          <button
-            className={styles.readButton}
-            ref={loadMoreRef}
-            onClick={handleLoadMore}
-            disabled={isFetching}
-          >
-            {isFetching ? 'loader...' : 'Показати ще'}
-          </button>
-        )}
-      </div>
-    </div>
+    </section>
   );
 };
 
