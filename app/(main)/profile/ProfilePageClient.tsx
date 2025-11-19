@@ -1,107 +1,185 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import TravellerInfo from "../../components/TravellerInfo/TravellerInfo";
-import ProfileTabs from "../../components/ProfileTabs/ProfileTabs";
-import TravellersStories from "../../components/TravellersStories/TravellersStories";
-import MessageNoStories from "../../components/MessageNoStories/MessageNoStories";
-import Loader from "../../components/Loader/Loader";
+import { useState, useEffect, useRef } from 'react';
+import TravellerInfo from '../../components/TravellerInfo/TravellerInfo';
+import ProfileTabs from '../../components/ProfileTabs/ProfileTabs';
+import TravellersStories from '../../components/TravellersStories/TravellersStories';
+import MessageNoStories from '../../components/MessageNoStories/MessageNoStories';
+import Loader from '../../components/Loader/Loader';
+import { User } from '@/types/user';
+import { Story } from '@/types/story';
+import { getMeProfile, getUserSavedArticles } from '@/lib/api/user/clientApi';
+import { useAuthStore } from '@/lib/store/authStore';
+import toast from 'react-hot-toast';
+import css from './ProfilePage.module.css';
 
-import { User } from "@/types/user";
-import { Story } from "@/types/story";
-import {
-  getMeProfile,
-  getUserSavedArticles,
-} from "@/lib/api/user/clientApi";
+type TabType = 'saved' | 'my';
 
-import { useAuthStore } from "@/lib/store/authStore";
-import toast from "react-hot-toast";
-import css from "./ProfilePage.module.css";
-
-type TabType = "saved" | "my";
-
-interface Props {
+interface ProfilePageClientProps {
   initialUser: User | null;
   initialMyStories: Story[];
-  initialSavedStories: Story[];
+  initialSavedStories: Story[] | null;
 }
 
 export default function ProfilePageClient({
   initialUser,
   initialMyStories,
   initialSavedStories,
-}: Props) {
-  const [activeTab, setActiveTab] = useState<TabType>("my");
+}: ProfilePageClientProps) {
+  const [activeTab, setActiveTab] = useState<TabType>('my');
   const [user, setUser] = useState<User | null>(initialUser);
-  const [stories, setStories] = useState<Story[]>(initialMyStories);
-
+  const [stories, setStories] = useState<Story[]>(
+    initialUser && initialMyStories.length > 0 ? initialMyStories : []
+  );
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const authLoading = useAuthStore((s) => s.isLoading);
-  const currentUser = useAuthStore((s) => s.user);
+  const savedStoriesLoadedRef = useRef(initialSavedStories !== null);
+  const myStoriesLoadedRef = useRef(initialMyStories.length > 0);
 
-  const handleRemoveSavedStory = (id: string) => {
-    setStories((prev) => prev.filter((s) => s._id !== id));
+  // рефи для стабільних значень initial
+  const initialMyStoriesRef = useRef(initialMyStories);
+  const initialSavedStoriesRef = useRef(initialSavedStories);
+
+  const currentUser = useAuthStore(state => state.user);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const authIsLoading = useAuthStore(state => state.isLoading);
+
+  // Видалення картки зі сторінки після "unfavorite"
+  const handleRemoveSavedStory = (storyId: string) => {
+    setStories(prev => prev.filter(story => story._id !== storyId));
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      if (authLoading) return;
-      if (!isAuthenticated) return;
+      if (authIsLoading) return;
+      if (!isAuthenticated) {
+        setError('Користувач не залогінений');
+        setIsLoading(false);
+        return;
+      }
 
-      setIsLoading(true);
+      // --- Мої історії ---
+      if (activeTab === 'my') {
+        if (
+          myStoriesLoadedRef.current &&
+          initialMyStoriesRef.current.length > 0
+        ) {
+          setStories(initialMyStoriesRef.current);
+          setIsLoading(false);
+          return;
+        }
 
-      try {
-        if (activeTab === "my") {
-          // Мої історії
-          const data = await getMeProfile();
-          setUser(data.user);
-          setStories(data.articles || []);
-        } else {
-          // Збережені історії
-          const userId = currentUser?._id || user?._id;
+        try {
+          setIsLoading(true);
+          setError(null);
+          const { user: profileUser, articles } = await getMeProfile();
+          setUser(profileUser);
+          setStories(articles || []);
+          myStoriesLoadedRef.current = true;
+        } catch (error) {
+          console.error('Failed to fetch my stories:', error);
+          const errorMessage =
+            error instanceof Error
+              ? error.message
+              : 'Не вдалося завантажити дані профілю';
+          setError(errorMessage);
+          toast.error(errorMessage);
+        } finally {
+          setIsLoading(false);
+        }
+        return;
+      }
 
-          if (!userId) throw new Error("Не вдалося отримати userId");
+      // --- Збережені історії ---
+      if (activeTab === 'saved') {
+        if (
+          savedStoriesLoadedRef.current &&
+          initialSavedStoriesRef.current !== null
+        ) {
+          const savedStoriesWithFavorite = initialSavedStoriesRef.current.map(
+            story => ({
+              ...story,
+              isFavorite: true,
+            })
+          );
+          setStories(savedStoriesWithFavorite);
+          setIsLoading(false);
+          return;
+        }
 
-          const data = await getUserSavedArticles(userId);
-          setUser(data.user);
+        try {
+          setIsLoading(true);
+          setError(null);
+          let userId = currentUser?._id || user?._id;
+          if (!userId) {
+            const { getMe } = await import('@/lib/api/user/clientApi');
+            const me = await getMe(true);
+            if (!me?._id) throw new Error('Не вдалося отримати ID користувача');
+            userId = me._id;
+          }
 
-          const saved = (data.savedStories || []).map((s) => ({
-            ...s,
+          const { user: profileUser, savedStories } =
+            await getUserSavedArticles(userId);
+          setUser(profileUser);
+
+          const savedStoriesWithFavorite = (savedStories || []).map(story => ({
+            ...story,
             isFavorite: true,
           }));
 
-          setStories(saved);
+          setStories(savedStoriesWithFavorite);
+          savedStoriesLoadedRef.current = true;
+        } catch (error) {
+          console.error('Failed to fetch saved stories:', error);
+          const errorMessage =
+            error instanceof Error
+              ? error.message
+              : 'Не вдалося завантажити збережені історії';
+          setError(errorMessage);
+          toast.error(errorMessage);
+        } finally {
+          setIsLoading(false);
         }
-      } catch (e) {
-        const msg =
-          e instanceof Error ? e.message : "Не вдалося завантажити дані";
-        toast.error(msg);
-      } finally {
-        setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [activeTab, isAuthenticated, authLoading]);
+  }, [activeTab, isAuthenticated, authIsLoading, currentUser?._id, user?._id]);
 
-  const getMessageProps = () => {
-    if (activeTab === "my")
-      return {
-        text: "Ви ще нічого не публікували.",
-        buttonText: "Створити історію",
-        route: "/stories/create" as const,
-      };
+  const handleTabChange = (tab: 'saved' | 'my') => setActiveTab(tab);
 
-    return {
-      text: "У вас ще немає збережених історій.",
-      buttonText: "До історій",
-      route: "/stories" as const,
-    };
+  const handleUpdateProfile = (updatedUser: User) => {
+    setUser(updatedUser);
+    // Оновлюємо також в authStore, якщо це поточний користувач
+    const { setUser: setAuthUser } = useAuthStore.getState();
+    if (currentUser?._id === updatedUser._id) {
+      setAuthUser(updatedUser);
+    }
   };
 
-  if (authLoading || isLoading)
+  const getMessageNoStoriesProps = (): {
+    text: string;
+    buttonText: string;
+    route: '/stories/create' | '/stories';
+  } => {
+    if (activeTab === 'my') {
+      return {
+        text: 'Ви ще нічого не публікували, поділіться своєю першою історією!',
+        buttonText: 'Опублікувати історію',
+        route: '/stories/create',
+      };
+    } else {
+      return {
+        text: 'У вас ще немає збережених історій, мершій збережіть вашу першу історію!',
+        buttonText: 'До історій',
+        route: '/stories',
+      };
+    }
+  };
+
+  if (authIsLoading || isLoading) {
     return (
       <div className="container">
         <div className={css.loaderWrapper}>
@@ -109,41 +187,75 @@ export default function ProfilePageClient({
         </div>
       </div>
     );
+  }
 
   return (
     <section className={css.profile}>
       <div className="container">
-        {user && (
-          <>
-            <TravellerInfo
-              user={user}
-              priority
-              className={{
-                travellerInfoWraper: css.travellerInfoWraper,
-                image: css.image,
-                wrapper: css.wrapperContent,
-                container: css.travellerContainer,
-                name: css.travellerName,
-                text: css.travellerText,
-              }}
-            />
-          </>
-        )}
-
-        <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
-        {stories.length === 0 ? (
-          <MessageNoStories {...getMessageProps()} />
+        {error ? (
+          <div className={css.errorWrapper}>
+            <p className={css.errorText}>{error}</p>
+          </div>
         ) : (
-          <TravellersStories
-            stories={stories}
-            isAuthenticated={isAuthenticated}
-            onRemoveSavedStory={handleRemoveSavedStory}
-            isMyStory={activeTab === "my"}
-          />
+          <>
+            {user && (
+              <div className={css.containerTraveller}>
+                <div className={css.travellerInfoWrapper}>
+                  <TravellerInfo
+                    user={user}
+                    useDefaultStyles={false}
+                    priority
+                    className={{
+                      travellerInfoWraper: css.travellerInfoWraper,
+                      image: css.image,
+                      wrapper: css.wrapperContent,
+                      container: css.travellerContainer,
+                      name: css.travellerName,
+                      text: css.travellerText,
+                    }}
+                    imageSize={{ width: 199, height: 199 }}
+                  />
+                  <button
+                    className={css.editButton}
+                    onClick={() => setIsEditModalOpen(true)}
+                    type="button"
+                    aria-label="Редагувати профіль"
+                  >
+                    Редагувати профіль
+                  </button>
+                </div>
+              </div>
+                          )}
+                          {/* має бути модалка */}
+            {/* {user && (
+              <EditProfileModal
+                user={user}
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                onUpdate={handleUpdateProfile}
+              />
+            )} */}
+            <div className={css.tabsWrapper}>
+              <ProfileTabs
+                activeTab={activeTab}
+                onTabChange={handleTabChange}
+              />
+            </div>
+            <div className={css.storiesWrapper}>
+              {stories.length === 0 ? (
+                <MessageNoStories {...getMessageNoStoriesProps()} />
+              ) : (
+                <TravellersStories
+                  stories={stories}
+                  isAuthenticated={isAuthenticated}
+                  onRemoveSavedStory={handleRemoveSavedStory}
+                  isMyStory={activeTab === 'my'}
+                />
+              )}
+            </div>
+          </>
         )}
       </div>
     </section>
   );
 }
-
