@@ -17,7 +17,10 @@ export default function ProfileForm() {
 
   useEffect(() => {
     async function load() {
-      const data = await getProfile();
+      const result = await getProfile();
+      const data = result.data;
+      console.log('result', data);
+      
 
       setUserId(data._id);
       setBio(data.description || '');
