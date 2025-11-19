@@ -21,24 +21,39 @@ export default function ConfirmModal({
   confirmButtonText,
   cancelButtonText,
   onConfirm,
+  isConfirmLoading = false,
 }: ConfirmModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape' && !isConfirmLoading) {
+        onClose();
+      }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  }, [onClose, isConfirmLoading]);
 
   if (!isOpen) return null;
 
+  const handleConfirm = () => {
+    console.log('🔄 ConfirmModal: Confirm button clicked');
+    onConfirm();
+  };
+
+  const handleOverlayClick = () => {
+    if (!isConfirmLoading) {
+      onClose();
+    }
+  };
+
   return (
-    <div className={css.overlay} onClick={onClose}>
+    <div className={css.overlay} onClick={handleOverlayClick}>
       <div className={css.modal} onClick={(e) => e.stopPropagation()}>
         <button
           className={css.closeButton}
           onClick={onClose}
           aria-label="Close modal"
+          disabled={isConfirmLoading}
         >
           <svg width="24" height="24" aria-hidden="true">
             <use href="/icons.svg#icon-close" />
@@ -47,15 +62,17 @@ export default function ConfirmModal({
         <h2 className={css.title}>{title}</h2>
         <p className={css.message}>{message}</p>
         <div className={css.buttons}>
-          <button className={css.cancel} onClick={onClose}>
+          <button 
+            className={css.cancel} 
+            onClick={onClose}
+            disabled={isConfirmLoading}
+          >
             {cancelButtonText}
           </button>
           <button
             className={css.confirm}
-            onClick={() => {
-              onConfirm();
-              onClose();
-            }}
+            onClick={handleConfirm}
+            disabled={isConfirmLoading}
           >
             {confirmButtonText}
           </button>

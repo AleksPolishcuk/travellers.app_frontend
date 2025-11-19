@@ -9,22 +9,36 @@ import MobileMenu from '../MobileMenu/MobileMenu';
 import UserNav from '../UserNav/UserNav';
 import { useAuthStore } from '@/store/authStore';
 import { usePathname } from 'next/navigation';
+import { useLogout } from '@/lib/api/clientApi';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  
+  const logoutMutation = useLogout();
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  const handleLogout = () => {
-    useAuthStore.getState().clearUser();
-    setLogoutModalOpen(false);
+  const handleLogout = async () => {
+    console.log('🔄 Header: handleLogout called');
+    try {
+      await logoutMutation.mutateAsync();
+    } catch (error) {
+      console.error('Header: Logout error:', error);
+      setLogoutModalOpen(false);
+    }
   };
+
+  useEffect(() => {
+    if (logoutMutation.isSuccess) {
+      console.log('✅ Header: Logout successful, closing modal');
+      setLogoutModalOpen(false);
+    }
+  }, [logoutMutation.isSuccess]);
 
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
 
-  // Блокировка скролла при открытом меню
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
     return () => {
@@ -32,7 +46,6 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  // Автоскрытие меню на десктопе
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1339) {
@@ -43,7 +56,6 @@ export default function Header() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Определяем тип хедера
   const minimalHeaderPages = ['/auth', '/profile'];
   const transparentPages = ['/'];
   const internalPages = ['/stories', '/travellers', '/stories/create'];
@@ -194,9 +206,10 @@ export default function Header() {
         onClose={() => setLogoutModalOpen(false)}
         title="Ви точно хочете вийти?"
         message="Ми будемо сумувати за вами!"
-        confirmButtonText="Вийти"
+        confirmButtonText={logoutMutation.isPending ? 'Вихід...' : 'Вийти'}
         cancelButtonText="Скасувати"
         onConfirm={handleLogout}
+        isConfirmLoading={logoutMutation.isPending}
       />
     </header>
   );
