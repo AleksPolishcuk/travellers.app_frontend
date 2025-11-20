@@ -3,10 +3,7 @@ import { cookies } from 'next/headers';
 
 const API_BASE_URL = 'http://localhost:4000/api';
 
-export const checkServerSession = async (): Promise<{
-  success: boolean;
-  user?: any;
-}> => {
+export const checkServerSession = async (): Promise<{ success: boolean; user?: any }> => {
   try {
     const cookieStore = await cookies();
     const sessionId = cookieStore.get('sessionId')?.value;
@@ -17,9 +14,10 @@ export const checkServerSession = async (): Promise<{
     }
 
     const hasValidToken = !!(sessionId || accessToken);
-
+    
     if (hasValidToken) {
-      return { success: true };
+     
+      return { success: true,};
     }
 
     return { success: false };
@@ -28,6 +26,7 @@ export const checkServerSession = async (): Promise<{
     return { success: false };
   }
 };
+
 
 export const requireAuth = async () => {
   const session = await checkServerSession();
