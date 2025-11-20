@@ -1,0 +1,38 @@
+.containerTraveller {
+  background-color: #f7f9ff;
+}
+
+.infoTravellerContainer {
+  padding: 32px;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 24px;
+}
+
+.imageTraveller {
+  border-radius: 50%;
+}
+
+.textsContainer {
+  text-align: center;
+}
+
+.nameContainer {
+  padding-bottom: 8px;
+}
+
+.storiesContainer {
+  padding: 0 20px 64px 20px;
+}
+
+.titleContainer {
+  padding-bottom: 40px;
+}
+
+.textTitle {
+  text-align: center;
+}
