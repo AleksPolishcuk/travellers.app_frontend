@@ -28,7 +28,7 @@ export default function TravellerCard({ traveller }: TravellerCardProps) {
       </div>
       <h3 className={styles.name}>{traveller.name}</h3>
       <p className={styles.description}>{shortDescription}</p>
-      <Link href={`/profile/${traveller._id}`} passHref>
+      <Link href={`/travellers/${traveller._id}`} passHref>
         <button className={styles.button}>Переглянути профіль</button>
       </Link>
     </li>

@@ -3,8 +3,10 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import styles from './ProfileForm.module.css';
 import { getProfile, saveBio, saveAvatar } from '@/lib/api/profileApi';
+import { useRouter } from 'next/navigation';
 
 export default function ProfileForm() {
+  const router = useRouter();
   const [userId, setUserId] = useState('');
   const [bio, setBio] = useState('');
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -67,6 +69,7 @@ export default function ProfileForm() {
     }
 
     setOriginalData({ bio, avatar: avatarPreview });
+    router.push('/profile');
   };
 
   const hasChanges =
