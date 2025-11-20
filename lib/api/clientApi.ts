@@ -2,8 +2,9 @@ import { User, RegisterRequest, LoginRequest, TravellersResponseData } from '@/t
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { showErrorToast, showSuccessToast } from '@/lib/utils/errorHandler';
 import { useAuthStore } from '@/store/authStore';
+import { NEXT_PUBLIC_API_URL } from '@/constants';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const API_BASE_URL = NEXT_PUBLIC_API_URL;
 
 // Базова fetch функція
 const apiFetch = async (url: string, options: RequestInit = {}) => {
@@ -32,12 +33,10 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
         }
       }
       
-      // Спеціальна обробка для 404 (користувач не знайдений)
       if (response.status === 404) {
         throw new Error('Користувача не знайдено.');
       }
 
-      // Спеціальна обробка для 401 (неавторизований)
       if (response.status === 401) {
         throw new Error('Необхідна авторизація');
       }
@@ -45,12 +44,10 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
       throw new Error(errorMessage);
     }
 
-    // Обробка успішної відповіді
     const responseData = await response.json();
     return responseData;
 
   } catch (error: any) {
-    // Обробка помилок мережі
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
       throw new Error('Помилка мережі. Перевірте підключення до інтернету.');
     }
@@ -58,58 +55,7 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
   }
 };
 
-// Функція для отримання категорій
-export const getCategories = async (
-  page: number = 1,
-  perPage: number = 9,
-): Promise<any> => {
-  const data = await apiFetch(`/categories?page=${page}&perPage=${perPage}`, {
-    method: 'GET',
-  });
-  return data;
-};
-
-// Спеціальна функція для logout
-const logoutApi = async (): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    let errorMessage = `HTTP error! status: ${response.status}`;
-    
-    try {
-      const errorData = await response.json();
-      errorMessage = errorData.message || errorMessage;
-    } catch {
-      if (response.status === 204) {
-        return;
-      }
-    }
-    
-    throw new Error(errorMessage);
-  }
-
-  if (response.status === 204) {
-    return;
-  }
-
-  // Спроба обробити JSON, якщо він є
-  try {
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-      await response.json();
-    }
-  } catch {
-    // Ігноруємо помилки парсингу для logout
-  }
-};
-
-// Базові функції для прямого використання
+// Базові API функції
 export const register = async (userData: RegisterRequest): Promise<User> => {
   const data = await apiFetch('/auth/register', {
     method: 'POST',
@@ -126,16 +72,11 @@ export const login = async (userData: LoginRequest): Promise<User> => {
   return data.data;
 };
 
-export const logout = async (): Promise<void> => {
-  await logoutApi();
-};
-
 export const getCurrentUser = async (): Promise<User | null> => {
   try {
     const data = await apiFetch('/users/me');
     return data.data;
   } catch (error: any) {
-    // Якщо помилка авторизації, повертаємо null замість викидання помилки
     if (error.message.includes('access token') || 
         error.message.includes('access token in cookies') ||
         error.message.includes('Необхідна авторизація') ||
@@ -159,9 +100,42 @@ export const getStories = async (
   perPage: number = 9,
   category: string | null = null,
 ): Promise<any> => {
-  const categoryQuery = category ? `&category=${encodeURIComponent(category)}` : '';
-
   const data = await apiFetch(`/stories?page=${page}&perPage=${perPage}`);
+  return data;
+};
+
+export const getCategories = async (
+  page: number = 1,
+  perPage: number = 9,
+): Promise<any> => {
+  const data = await apiFetch(`/categories?page=${page}&perPage=${perPage}`, {
+    method: 'GET',
+  });
+  return data;
+};
+
+export const saveStory = async (storyId: string): Promise<any> => {
+  const data = await apiFetch(`/users/saved/${storyId}`, {
+    method: "POST",
+  });
+  return data;
+};
+
+//?==============================
+export const getUserStories = async (userId: string) =>
+  apiFetch(`/stories/user/${userId}`);
+
+export const getSavedStories = async (userId: string) =>
+  apiFetch(`/stories/user/${userId}/saved`);
+
+export const getUserById = async (userId: string) =>
+  apiFetch(`/users/${userId}`);
+//?=====================
+
+export const removeSavedStory = async (storyId: string): Promise<any> => {
+  const data = await apiFetch(`/saved/${storyId}`, {
+    method: "DELETE",
+  });
   return data;
 };
 
@@ -199,7 +173,6 @@ const handleLoginError = (error: any): string => {
 const handleRegisterError = (error: any): string => {
   const errorMessage = error.message || 'Помилка реєстрації';
   
-  // Перевіряємо, чи email вже використовується
   if (errorMessage.includes('email already exists') || 
       errorMessage.includes('email вже використовується') ||
       errorMessage.includes('user already exists') ||
@@ -225,7 +198,6 @@ export const useLogin = () => {
         });
         return data.data;
       } catch (error: any) {
-        console.error('Login API error:', error);
         throw error;
       } finally {
         setLoading(false);
@@ -237,7 +209,6 @@ export const useLogin = () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
     },
     onError: (error: any) => {
-      console.log('Login mutation error:', error);
       const userFriendlyMessage = handleLoginError(error);
       showErrorToast(userFriendlyMessage);
     },
@@ -275,26 +246,32 @@ export const useRegister = () => {
 
 export const useLogout = () => {
   const queryClient = useQueryClient();
-  const setLoading = useAuthStore((state) => state.setLoading);
   
   return useMutation({
-    mutationFn: async () => {
-      setLoading(true);
-      try {
-        await logoutApi();
-      } finally {
-        setLoading(false);
+    mutationFn: async (): Promise<void> => {
+      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok && response.status !== 204) {
+        throw new Error(`Logout failed: ${response.status}`);
       }
     },
     onSuccess: () => {
       useAuthStore.getState().clearUser();
-      showSuccessToast('Ви вийшли з системи');
-      queryClient.clear();
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth-storage');
+      }
+      queryClient.setQueryData(['user'], null);
+      queryClient.removeQueries({ queryKey: ['user'] });
+      window.location.href = '/';
     },
-    onError: (error: any) => {
-      showErrorToast(error.message || 'Помилка виходу');
+    onError: () => {
       useAuthStore.getState().clearUser();
-      queryClient.clear();
+      queryClient.setQueryData(['user'], null);
+      window.location.href = '/';
     },
   });
 };
@@ -302,31 +279,7 @@ export const useLogout = () => {
 export const useCurrentUser = () => {
   return useQuery({
     queryKey: ['user'],
-    queryFn: async () => {
-      try {
-        const user = await getCurrentUser();
-        return user;
-      } catch (error: any) {
-        // Якщо помилка авторизації, повертаємо null
-        if (error.message.includes('access token') || 
-            error.message.includes('access token in cookies') ||
-            error.message.includes('Необхідна авторизація') ||
-            error.message.includes('401')) {
-          return null;
-        }
-        throw error;
-      }
-    },
-    retry: (failureCount, error: any) => {
-      // Не повторюємо запит при помилках авторизації
-      if (error.message.includes('access token') || 
-          error.message.includes('access token in cookies') ||
-          error.message.includes('Необхідна авторизація') ||
-          error.message.includes('401')) {
-        return false;
-      }
-      return failureCount < 1;
-    },
+    queryFn: getCurrentUser,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
@@ -363,32 +316,5 @@ export const useCategories = (page: number = 1, perPage: number = 9) => {
     },
     staleTime: 2 * 60 * 1000,
   });
-};
-
-export const saveStory = async (storyId: string): Promise<any> => {
-  const response = await fetch(`${API_BASE_URL}/users/saved/${storyId}`, {
-    method: "POST",
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Failed to save story");
-  }
-
-  return response.json();
-};
-export const removeSavedStory = async (storyId: string): Promise<any> => {
-  const response = await fetch(`${API_BASE_URL}/saved/${storyId}`, {
-    method: "DELETE",
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "Failed to remove saved story");
-  }
-
-  return response.json();
 };
 

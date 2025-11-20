@@ -1,5 +1,6 @@
 .listItem {
   width: 335px;
+  min-width: 320px;
   height: 575px;
 
   background-color: #e8eeff;

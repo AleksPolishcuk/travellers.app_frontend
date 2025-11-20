@@ -1,8 +1,11 @@
 import PopularList from '@/app/components/Popular/Popular';
 import StoryDetails from '@/app/components/StoryDetails/StoryDetails';
+import { NEXT_PUBLIC_API_URL } from '@/constants';
+import css from "./page.module.css";
+
 
 async function getStory(id: string) {
-  const res = await fetch(`${process.env.API_URL}/stories/${id}`, {
+  const res = await fetch(`${NEXT_PUBLIC_API_URL}/stories/${id}`, {
     method: 'GET',
     cache: 'no-store',
     credentials: 'include',
@@ -17,25 +20,32 @@ export default async function StoryPage(props: {
 }) {
   const { storyId } = await props.params;
 
-  let story;
+  let response;
 
   try {
-    story = await getStory(storyId);
+    response = await getStory(storyId);
   } catch (err) {
     return <p>Помилка завантаження історії.</p>;
   }
 
+  if (!response.data) {
+    console.error('No data in response:', response);
+    return <p>Дані історії не знайдені.</p>;
+  }
+
+  const story = response.data;
+
   return (
-    <div>
-      <h1>{story.title}</h1>
+    <div className={css.story}>
+      <h1 className={css.title}>{story.title}</h1>
 
       <StoryDetails
-        _id={story.data.id}
-        ownerId={story.data.ownerId}
-        date={story.data.date}
-        category={story.data.category}
-        img={story.data.img}
-        article={story.data.article}
+        _id={story._id}  
+        ownerId={story.ownerId.name} 
+        date={story.date}
+        category={story.category.name} 
+        img={story.img}
+        article={story.article}
       />
 
       <PopularList />
