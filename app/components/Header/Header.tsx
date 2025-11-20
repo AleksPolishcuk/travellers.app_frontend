@@ -85,7 +85,8 @@ export default function Header() {
             className={css.headerLogo}
             width="30"
             height="30"
-            aria-label="Logo">
+            aria-label="Logo"
+          >
             <use href="/icons.svg#icon-company-logo"></use>
           </svg>
           <span className={css.logoText} style={{ color: headerColor }}>
