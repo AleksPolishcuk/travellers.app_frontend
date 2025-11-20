@@ -1,16 +1,10 @@
-import {
-  User,
-  RegisterRequest,
-  LoginRequest,
-  TravellersResponseData,
-} from '@/types/user';
+import { User, RegisterRequest, LoginRequest, TravellersResponseData } from '@/types/user';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { showErrorToast, showSuccessToast } from '@/lib/utils/errorHandler';
 import { useAuthStore } from '@/store/authStore';
 import { NEXT_PUBLIC_API_URL } from '@/constants';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const API_BASE_URL = NEXT_PUBLIC_API_URL;
 
 // Базова fetch функція
 const apiFetch = async (url: string, options: RequestInit = {}) => {
@@ -26,7 +20,7 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
 
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
-
+      
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorMessage;
@@ -38,8 +32,7 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
           // Якщо навіть текст не вдалося отримати, використовуємо статус
         }
       }
-
-      // Спеціальна обробка для 404 (користувач не знайдений)
+      
       if (response.status === 404) {
         throw new Error('Користувача не знайдено.');
       }
@@ -47,18 +40,15 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
       if (response.status === 401) {
         throw new Error('Необхідна авторизація');
       }
-
+      
       throw new Error(errorMessage);
     }
 
     const responseData = await response.json();
     return responseData;
+
   } catch (error: any) {
-    // Обробка помилок мережі
-    if (
-      error.message.includes('Failed to fetch') ||
-      error.message.includes('NetworkError')
-    ) {
+    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
       throw new Error('Помилка мережі. Перевірте підключення до інтернету.');
     }
     throw error;
@@ -87,13 +77,10 @@ export const getCurrentUser = async (): Promise<User | null> => {
     const data = await apiFetch('/users/me');
     return data.data;
   } catch (error: any) {
-    // Якщо помилка авторизації, повертаємо null замість викидання помилки
-    if (
-      error.message.includes('access token') ||
-      error.message.includes('access token in cookies') ||
-      error.message.includes('Необхідна авторизація') ||
-      error.message.includes('401')
-    ) {
+    if (error.message.includes('access token') || 
+        error.message.includes('access token in cookies') ||
+        error.message.includes('Необхідна авторизація') ||
+        error.message.includes('401')) {
       return null;
     }
     throw error;
@@ -129,14 +116,14 @@ export const getCategories = async (
 
 export const saveStory = async (storyId: string): Promise<any> => {
   const data = await apiFetch(`/users/saved/${storyId}`, {
-    method: 'POST',
+    method: "POST",
   });
   return data;
 };
 
 export const removeSavedStory = async (storyId: string): Promise<any> => {
   const data = await apiFetch(`/saved/${storyId}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   return data;
 };
@@ -145,53 +132,43 @@ export const removeSavedStory = async (storyId: string): Promise<any> => {
 const handleLoginError = (error: any): string => {
   const errorMessage = error.message || 'Помилка входу';
 
-  if (
-    errorMessage.includes('user not found') ||
-    errorMessage.includes('користувача не знайдено') ||
-    errorMessage.includes('User not found') ||
-    errorMessage.toLowerCase().includes('not found') ||
-    errorMessage.includes('404') ||
-    errorMessage.includes('неправильний email або пароль')
-  ) {
+  if (errorMessage.includes('user not found') || 
+      errorMessage.includes('користувача не знайдено') ||
+      errorMessage.includes('User not found') ||
+      errorMessage.toLowerCase().includes('not found') ||
+      errorMessage.includes('404') ||
+      errorMessage.includes('неправильний email або пароль')) {
     return 'Користувача не знайдено.';
   }
-
-  if (
-    errorMessage.includes('password') ||
-    errorMessage.includes('пароль') ||
-    errorMessage.includes('invalid password') ||
-    errorMessage.includes('невірний пароль')
-  ) {
+  
+  if (errorMessage.includes('password') || 
+      errorMessage.includes('пароль') ||
+      errorMessage.includes('invalid password') ||
+      errorMessage.includes('невірний пароль')) {
     return 'Невірний email або пароль.';
   }
-
+  
   if (errorMessage.includes('email') || errorMessage.includes('пошта')) {
     return 'Невірний формат email.';
   }
-
-  if (
-    errorMessage.includes('Помилка мережі') ||
-    errorMessage.includes('Failed to fetch')
-  ) {
+  
+  if (errorMessage.includes('Помилка мережі') || errorMessage.includes('Failed to fetch')) {
     return 'Помилка мережі. Перевірте підключення до інтернету.';
   }
-
+  
   return 'Сталася невідома помилка. Спробуйте ще раз.';
 };
 
 const handleRegisterError = (error: any): string => {
   const errorMessage = error.message || 'Помилка реєстрації';
-
-  // Перевіряємо, чи email вже використовується
-  if (
-    errorMessage.includes('email already exists') ||
-    errorMessage.includes('email вже використовується') ||
-    errorMessage.includes('user already exists') ||
-    errorMessage.includes('користувач вже існує')
-  ) {
+  
+  if (errorMessage.includes('email already exists') || 
+      errorMessage.includes('email вже використовується') ||
+      errorMessage.includes('user already exists') ||
+      errorMessage.includes('користувач вже існує')) {
     return 'Користувач з таким email вже існує.';
   }
-
+  
   return errorMessage;
 };
 
@@ -199,7 +176,7 @@ const handleRegisterError = (error: any): string => {
 export const useLogin = () => {
   const queryClient = useQueryClient();
   const setLoading = useAuthStore((state) => state.setLoading);
-
+  
   return useMutation({
     mutationFn: async (userData: LoginRequest) => {
       setLoading(true);
@@ -230,7 +207,7 @@ export const useLogin = () => {
 export const useRegister = () => {
   const queryClient = useQueryClient();
   const setLoading = useAuthStore((state) => state.setLoading);
-
+  
   return useMutation({
     mutationFn: async (userData: RegisterRequest) => {
       setLoading(true);
@@ -258,7 +235,7 @@ export const useRegister = () => {
 
 export const useLogout = () => {
   const queryClient = useQueryClient();
-
+  
   return useMutation({
     mutationFn: async (): Promise<void> => {
       const response = await fetch(`${API_BASE_URL}/auth/logout`, {
@@ -301,9 +278,7 @@ export const useTravellers = (page: number, limit: number) => {
   return useQuery({
     queryKey: ['travellers', page, limit],
     queryFn: async () => {
-      const data = await apiFetch(
-        `/users/travellers?page=${page}&limit=${limit}`,
-      );
+      const data = await apiFetch(`/users/travellers?page=${page}&limit=${limit}`);
       return data.data;
     },
     staleTime: 2 * 60 * 1000,
