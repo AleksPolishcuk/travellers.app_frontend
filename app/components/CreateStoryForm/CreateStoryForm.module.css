@@ -2,6 +2,11 @@
   color: red;
 }
 
+.containerForm {
+  padding: 0 20px 64px 20px;
+  background-color: #f7f9ff;
+}
+
 .titleContainer {
   padding: 32px 0px;
 }
@@ -51,6 +56,11 @@
   padding: 8px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 8px;
+  background-color: #f7f9ff;
+}
+
+.inputForm:focus {
+  border: 1px solid #4169E1;
 }
 
 .inputFormTextArea {
@@ -61,6 +71,11 @@
   height: 100%;
   overflow: hidden;
   resize: none;
+  background-color: #f7f9ff;
+}
+
+.inputFormTextArea:focus {
+  border: 1px solid #4169E1;
 }
 
 .buttonsContainer {
@@ -71,13 +86,16 @@
 }
 
 .buttonForm {
-  border: none;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: rgba(65, 105, 225, 1);
   padding: 12px;
   width: 100%;
   color: #fff;
-  transition: background-color 250ms ease-in-out;
+  transition:
+    background-color 250ms ease-in-out,
+    border 250ms ease-in-out,
+    color 250ms ease-in-out;
 }
 
 .buttonFormBack {
@@ -87,6 +105,9 @@
   padding: 12px;
   width: 100%;
   color: #000;
+  transition:
+    background-color 250ms ease-in-out,
+    color 250ms ease-in-out;
 }
 
 .buttonForm:disabled {
@@ -94,6 +115,28 @@
   pointer-events: none;
 }
 
+.buttonForm:hover {
+  color: #000;
+  border: 1px solid #4169e1;
+  background-color: #e8eeff;
+}
+
 .buttonForm:active {
   background-color: #1a2a5a;
+}
+
+.buttonFormBack:hover {
+  background-color: rgba(65, 105, 225, 1);
+  color: #fff;
+}
+
+.inputError {
+  border: 1px solid red;
+  background: #fff5f5;
+}
+
+@media (min-width: 768px) {
+  .containerForm {
+    padding: 0 32px 64px 32px;
+  }
 }
