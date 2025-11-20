@@ -40,15 +40,11 @@
 
 **Core:**
 
-- [React 19](https://react.dev/) + [React DOM](https://react.dev/)
-- [Vite](https://vitejs.dev/) (з плагіном [SWC](https://swc.rs/))
+
 
 **State Management:**
 
-- [Redux Toolkit](https://redux-toolkit.js.org/)
-- [React Redux](https://react-redux.js.org/)
-- [React Router DOM v7](https://reactrouter.com/)
-- [Axios](https://axios-http.com/)
+
 
 **Forms & Validation:**
 
@@ -57,20 +53,12 @@
 
 **UI & UX:**
 
-- [React Icons](https://react-icons.github.io/react-icons/)
-- [clsx](https://github.com/lukeed/clsx)
-- [modern-normalize](https://github.com/sindresorhus/modern-normalize)
-- [react-toastify](https://fkhadra.github.io/react-toastify/)
-- [react-spinners](https://www.davidhu.io/react-spinners/)
-- [react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton)
-- [react-responsive](https://github.com/contra/react-responsive)
-- [focus-trap-react](https://github.com/focus-trap/focus-trap-react)
-- [date-fns](https://date-fns.org/)
+
 
 **Dev Tools:**
 
-- ESLint, Prettier, EditorConfig
-- [vite-plugin-svgr](https://github.com/pd4d10/vite-plugin-svgr)
+- ESLint, Prettier
+
 
 
 
