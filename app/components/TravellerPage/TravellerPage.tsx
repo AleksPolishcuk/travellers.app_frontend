@@ -59,7 +59,7 @@ export default function TravellerComponent({
       </div>
       <div className={css.storiesContainer}>
         <div className={css.titleContainer}>
-          <h3 className={css.textTitle}>Історії Мандрівника</h3>
+          <h2 className={css.textTitle}>Історії Мандрівника</h2>
         </div>
         <div className="storiesListContainer">
           <TravellerStories travellerId={travellerId} />

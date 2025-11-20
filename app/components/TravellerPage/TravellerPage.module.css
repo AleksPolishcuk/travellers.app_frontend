@@ -4,6 +4,8 @@
 
 .infoTravellerContainer {
   padding: 32px;
+  display: flex;
+  flex-direction: column;
 }
 
 .imageContainer {
@@ -15,10 +17,13 @@
 
 .imageTraveller {
   border-radius: 50%;
+  max-width: 199px;
 }
 
 .textsContainer {
   text-align: center;
+  display: block;
+  padding-left: 0;
 }
 
 .nameContainer {
@@ -35,4 +40,41 @@
 
 .textTitle {
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .infoTravellerContainer {
+    flex-direction: row;
+  }
+
+  .textsContainer {
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+  }
+
+  .textTitle {
+    text-align: left;
+  }
+
+  .storiesContainer {
+    padding: 0 32px 64px 32px;
+  }
+}
+
+@media (min-width: 1158px) {
+  .infoTravellerContainer {
+    flex-direction: row;
+    padding: 48px 64px;
+  }
+
+  .textsContainer {
+    max-width: 367px;
+  }
+
+  .storiesContainer {
+    padding: 0 64px 72px 64px;
+  }
 }
