@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import css from "./StoryDetails.module.css";
+import { useCurrentUser } from "@/lib/api/clientApi";
+
+import MessageNoAuth from "@/app/components/MessageNoAuth/MessageNoAuth";
 
 export type StoryDetailsProps = {
   ownerId: string;
@@ -21,10 +24,17 @@ export default function StoryDetails({
   category,
 }: StoryDetailsProps) {
 
+  const { data: user } = useCurrentUser();
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleSave = async () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+
     setLoading(true);
     try {
       await fetch(`http://localhost:4000/api/stories/${_id}/save`, {
@@ -65,6 +75,9 @@ export default function StoryDetails({
       </div>
       </div>
     </div>
+
+    {showAuthModal && <MessageNoAuth />}
+
     </section>
   );
 }
