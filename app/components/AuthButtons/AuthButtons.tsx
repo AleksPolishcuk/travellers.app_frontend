@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import css from './AuthButtons.module.css';
 
 type AuthButtonsProps = {
@@ -14,8 +14,6 @@ export default function AuthButtons({
   headerVariant = 'white',
   onClick,
 }: AuthButtonsProps) {
-  const router = useRouter();
-
   const isDesktop = variant === 'desktop';
 
   const commonClass = css.authBtn;
@@ -36,29 +34,29 @@ export default function AuthButtons({
       } ${css.desktopRegisterBtn}`
     : `${commonClass} ${css.mobileRegisterBtn}`;
 
+  const handleClick = () => {
+    onClick?.();
+  };
+
   return (
     <ul className={css.BtnItem}>
       <li>
-        <button
+        <Link 
+          href="/auth/login" 
           className={loginClass}
-          onClick={() => {
-            onClick?.();
-            router.push('/auth/login');
-          }}
+          onClick={handleClick}
         >
           Вхід
-        </button>
+        </Link>
       </li>
       <li>
-        <button
+        <Link 
+          href="/auth/register" 
           className={registerClass}
-          onClick={() => {
-            onClick?.();
-            router.push('/auth/register');
-          }}
+          onClick={handleClick}
         >
           Реєстрація
-        </button>
+        </Link>
       </li>
     </ul>
   );

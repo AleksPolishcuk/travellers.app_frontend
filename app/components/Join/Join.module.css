@@ -67,8 +67,10 @@
 }
 
 .registerButton:hover {
-    background-color: #3151c7;
-    transform: translateY(-1px);
+        background-color: #e8eeff;
+        color: #000;
+        transform: translateY(-1px);
+
 }
 
 /* Mobile: адаптивна верстка з 375px */

@@ -6,7 +6,18 @@ import { NEXT_PUBLIC_API_URL } from '@/constants';
 
 const API_BASE_URL = NEXT_PUBLIC_API_URL;
 
-// Базова fetch функція
+let isRefreshing = false;
+let failedQueue: Array<{ resolve: (value: any) => void; reject: (error: any) => void }> = [];
+
+const processQueue = (error: any = null) => {
+  failedQueue.forEach(({ reject }) => {
+    if (error) {
+      reject(error);
+    }
+  });
+  failedQueue = [];
+};
+
 const apiFetch = async (url: string, options: RequestInit = {}) => {
   try {
     const response = await fetch(`${API_BASE_URL}${url}`, {
@@ -18,6 +29,60 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
       },
     });
 
+    if (response.status === 401 && !url.includes('/auth/refresh-session')) {
+      const originalRequest = () => 
+        fetch(`${API_BASE_URL}${url}`, {
+          ...options,
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            ...options.headers,
+          },
+        });
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(() => originalRequest())
+          .then(response => response.json())
+          .catch(err => Promise.reject(err));
+      }
+
+      isRefreshing = true;
+
+      try {
+        const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh-session`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (refreshResponse.ok) {
+          processQueue(null);
+          const retryResponse = await originalRequest();
+          
+          if (!retryResponse.ok) {
+            throw new Error(`HTTP error! status: ${retryResponse.status}`);
+          }
+          
+          return retryResponse.json();
+        } else {
+          processQueue(new Error('Не вдалося оновити сесію'));
+          useAuthStore.getState().clearUser();
+          throw new Error('Сесія закінчилася. Будь ласка, увійдіть знову.');
+        }
+      } catch (refreshError) {
+        processQueue(refreshError);
+        useAuthStore.getState().clearUser();
+        throw refreshError;
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
       
@@ -28,13 +93,11 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
         try {
           const text = await response.text();
           errorMessage = text || errorMessage;
-        } catch {
-          // Якщо навіть текст не вдалося отримати, використовуємо статус
-        }
+        } catch {}
       }
       
       if (response.status === 404) {
-        throw new Error('Користувача не знайдено.');
+        throw new Error('Ресурс не знайдено.');
       }
 
       if (response.status === 401) {
@@ -44,8 +107,7 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
       throw new Error(errorMessage);
     }
 
-    const responseData = await response.json();
-    return responseData;
+    return await response.json();
 
   } catch (error: any) {
     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
@@ -55,7 +117,22 @@ const apiFetch = async (url: string, options: RequestInit = {}) => {
   }
 };
 
-// Базові API функції
+export const refreshToken = async (): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/refresh-session`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
+
 export const register = async (userData: RegisterRequest): Promise<User> => {
   const data = await apiFetch('/auth/register', {
     method: 'POST',
@@ -77,10 +154,7 @@ export const getCurrentUser = async (): Promise<User | null> => {
     const data = await apiFetch('/users/me');
     return data.data;
   } catch (error: any) {
-    if (error.message.includes('access token') || 
-        error.message.includes('access token in cookies') ||
-        error.message.includes('Необхідна авторизація') ||
-        error.message.includes('401')) {
+    if (error.message.includes('Необхідна авторизація') || error.message.includes('401')) {
       return null;
     }
     throw error;
@@ -98,7 +172,6 @@ export const getTravellers = async (
 export const getStories = async (
   page: number = 1,
   perPage: number = 9,
-  category: string | null = null,
 ): Promise<any> => {
   const data = await apiFetch(`/stories?page=${page}&perPage=${perPage}`);
   return data;
@@ -108,9 +181,7 @@ export const getCategories = async (
   page: number = 1,
   perPage: number = 9,
 ): Promise<any> => {
-  const data = await apiFetch(`/categories?page=${page}&perPage=${perPage}`, {
-    method: 'GET',
-  });
+  const data = await apiFetch(`/categories?page=${page}&perPage=${perPage}`);
   return data;
 };
 
@@ -128,7 +199,6 @@ export const removeSavedStory = async (storyId: string): Promise<any> => {
   return data;
 };
 
-// Функції для обробки помилок
 const handleLoginError = (error: any): string => {
   const errorMessage = error.message || 'Помилка входу';
 
@@ -172,7 +242,6 @@ const handleRegisterError = (error: any): string => {
   return errorMessage;
 };
 
-// React Query hooks
 export const useLogin = () => {
   const queryClient = useQueryClient();
   const setLoading = useAuthStore((state) => state.setLoading);
@@ -238,6 +307,9 @@ export const useLogout = () => {
   
   return useMutation({
     mutationFn: async (): Promise<void> => {
+      isRefreshing = false;
+      failedQueue = [];
+
       const response = await fetch(`${API_BASE_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
@@ -255,12 +327,12 @@ export const useLogout = () => {
       }
       queryClient.setQueryData(['user'], null);
       queryClient.removeQueries({ queryKey: ['user'] });
-      window.location.href = '/';
+      queryClient.removeQueries({ queryKey: ['stories'] });
+      queryClient.removeQueries({ queryKey: ['travellers'] });
     },
     onError: () => {
       useAuthStore.getState().clearUser();
       queryClient.setQueryData(['user'], null);
-      window.location.href = '/';
     },
   });
 };
@@ -270,7 +342,15 @@ export const useCurrentUser = () => {
     queryKey: ['user'],
     queryFn: getCurrentUser,
     staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
+    retry: (failureCount, error: any) => {
+      if (error?.message?.includes('401') || 
+          error?.message?.includes('Сесія закінчилася')) {
+        return false;
+      }
+      return failureCount < 2;
+    },
   });
 };
 

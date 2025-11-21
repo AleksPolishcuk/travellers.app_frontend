@@ -7,12 +7,14 @@ import { useScreenSize } from '@/lib/hooks/useScreenSize';
 import { TravellerStoryCard } from './TravellerStoryCard';
 import { Story } from '@/types/story';
 import Loader from '@/app/components/Loader/Loader';
+import { useRouter } from 'next/navigation';
 
 interface TravellerStoriesProps {
-  travellerId: string ;
+  travellerId: string;
 }
 
 const TravellerStories = ({ travellerId }: TravellerStoriesProps) => {
+  const router = useRouter();
   const [stories, setStories] = useState<Story[]>([]);
   const [buffer, setBuffer] = useState<Story[]>([]);
 
@@ -107,8 +109,27 @@ const TravellerStories = ({ travellerId }: TravellerStoriesProps) => {
 
   if (loading) return <Loader />;
   if (error) return <div className={styles.error}>Помилка: {error}</div>;
-  if (!stories || stories.length === 0)
-    return <div className={styles.empty}>Історії відсутні</div>;
+  if (!stories || stories.length === 0) {
+    return (
+      <div className={styles.messageContainerNotFound}>
+        <div className="textMessageContainer">
+          <h4 className={styles.textNotFoundMessage}>
+            Цей користувач ще не публікував історій
+          </h4>
+        </div>
+        <div className={styles.buttonMessageContainer}>
+          <button
+            className={styles.buttonNotFound}
+            onClick={() => {
+              router.push('/travellers');
+            }}
+          >
+            Назад до історій
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className={styles.stories}>
