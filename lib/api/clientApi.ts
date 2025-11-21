@@ -386,3 +386,4 @@ export const useCategories = (page: number = 1, perPage: number = 9) => {
     staleTime: 2 * 60 * 1000,
   });
 };
+

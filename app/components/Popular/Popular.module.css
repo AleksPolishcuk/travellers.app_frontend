@@ -1,11 +1,12 @@
 .popular{
   background-color: #f7f9ff;
+  padding: 48px 0;
 }
 .storyPopular {
-  width: 335;
+  width: 100%;
   margin: 0 auto;
-  padding: 62px 0;
-  background-color: #f7f9ff;
+  padding: 0 20px;
+  max-width: 375px;
 }
 
 .storyTitle {
@@ -19,13 +20,12 @@
 }
 
 .list {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
   gap: 24px;
   padding: 0;
   margin: 0;
   list-style: none;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .readBtn {
@@ -71,17 +71,20 @@
   border-color: #1e3a8a;
 }
 @media screen and (min-width: 768px) {
-  .storyPopular {
-    width: 704px;
-    margin: 0 auto;
+  
+  .popular{
     padding: 64px 0;
+  }
+  .storyPopular {
+    padding: 0 32px;
+  max-width: 768px;
   }
 
   .storyTitle {
     font-size: 44px;
   }
   .list {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .readButton {
     display: inline-block;
@@ -89,17 +92,20 @@
 }
 
 @media screen and (min-width: 1440px) {
-  .storyPopular {
-    width: 1312px;
-    margin: 0 auto;
+  .popular{
     padding: 72px 0;
+  }
+  
+  .storyPopular {
+  padding: 0 64px;
+  max-width: 1440px;
   }
   .storyTitle {
     font-size: 52px;
     margin-bottom: 40px;
   }
   .list {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .readButton {
     font-size: 18px;

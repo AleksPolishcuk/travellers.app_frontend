@@ -1,0 +1,14 @@
+.infoTravellerContainer {
+    padding: 32px;
+  }
+  
+  .imageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 24px;
+  }
+  
+  .imageTraveller {
+    border-radius: 50%;
+  }

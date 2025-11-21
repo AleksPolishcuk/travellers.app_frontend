@@ -48,8 +48,10 @@ const handleSaveClick = async () => {
 }
 
     return (
-        <div  className={styles.listItem}>
-              <div className={styles.storyImg}>
+        
+          <li>
+             <div className={styles.listItem}>
+             <div className={styles.storyImg}>
                 <img
                   className={styles.listImg}
                   src={story.img}
@@ -110,6 +112,9 @@ const handleSaveClick = async () => {
                   </button>
                 </div>
               </div>
-            </div>
+             </div>
+            
+            </li>
+         
     )
 }

@@ -108,6 +108,7 @@ const Popular = () => {
       <ul className={styles.list}>
         {Array.isArray(stories) &&
           stories.map((story) => <StoryCard key={story._id} story={story} />)}
+        
       </ul>
       <div className={styles.readBtn}>
   {isFetching ? (
