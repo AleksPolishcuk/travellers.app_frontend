@@ -28,7 +28,7 @@ export default function StoryDetails({
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-
+  
   const handleSave = async () => {
     if (!user) {
       setShowAuthModal(true);
@@ -76,7 +76,7 @@ export default function StoryDetails({
       </div>
     </div>
 
-    {showAuthModal && <MessageNoAuth />}
+    {showAuthModal && <MessageNoAuth onClose={() => setShowAuthModal(false)} />}
 
     </section>
   );
