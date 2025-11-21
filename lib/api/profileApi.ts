@@ -12,7 +12,7 @@ export const getProfile = async () => {
 };
 
 export const saveBio = async (userId: string, bio: string) => {
-  const res = await fetch(`${API}/users/${userId}/description`, {
+  const res = await fetch(`${API}/users/${userId}/avatar`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',

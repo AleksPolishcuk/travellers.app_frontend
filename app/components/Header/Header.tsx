@@ -56,10 +56,10 @@ export default function Header() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const minimalHeaderPages = ['/auth', '/profile'];
+  const minimalHeaderPages = ['/auth', '/profile/edit'];
   const transparentPages = ['/'];
   const internalPages = ['/stories', '/travellers', '/stories/create'];
-  const whitePages = ['/profile'];
+  const whitePages = ['/profile/edit'];
 
   const isMinimalHeader = minimalHeaderPages.some((p) =>
     pathname.startsWith(p),
@@ -178,9 +178,13 @@ export default function Header() {
               )}
             </nav>
 
-            <button className={css.burgerBtn} onClick={toggleMenu}>
+            <button
+              className={`${css.burgerBtn} ${
+                headerClass === css.headerTransparent ? '' : css.burgerWhite
+              }`}
+              onClick={toggleMenu}
+            >
               <svg
-                className={css.headerLogo}
                 width="24"
                 height="24"
                 aria-label="Menu"

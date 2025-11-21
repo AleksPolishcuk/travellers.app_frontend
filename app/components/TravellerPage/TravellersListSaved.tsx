@@ -1,17 +1,21 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { getStories } from '@/lib/api/clientApi';
-import styles from './Popular.module.css';
-import { useScreenSize } from '../../../lib/hooks/useScreenSize';
-import { StoryCard } from '../StoryCard/StoryCard';
-import { Story } from '../../../types/story';
-import Loader from '../Loader/Loader';
+import { getTravellerById } from '@/lib/api/travellerload';
+import styles from './TravellerCard.module.css';
+import { useScreenSize } from '@/lib/hooks/useScreenSize';
+import { TravellerStoryCard } from './TravellerStoryCard';
+import { Story } from '@/types/story';
+import Loader from '@/app/components/Loader/Loader';
 
-const Popular = () => {
+interface TravellerStoriesProps {
+  travellerId: string ;
+}
+
+const TravellerStories = ({ travellerId }: TravellerStoriesProps) => {
   const [stories, setStories] = useState<Story[]>([]);
-
   const [buffer, setBuffer] = useState<Story[]>([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -22,20 +26,25 @@ const Popular = () => {
   const loadMoreRef = useRef<HTMLButtonElement | null>(null);
 
   const width = useScreenSize();
-  const perPage = width > 1024 ? 3 : width > 768 ? 4 : 3;
+  const perPage = width > 1024 ? 9 : width > 768 ? 8 : 9;
 
   useEffect(() => {
     const fetchStories = async () => {
+      if (!travellerId) return;
       try {
         setLoading(true);
-        const response = await getStories(1, perPage);
-        console.log('Full API response:', response);
+        const response = await getTravellerById(travellerId);
+        const list = response?.data?.stories ?? [];
+        const user = response?.data?.user;
 
-        // ДОСТУП ДО ДАНИХ
-        if (response && response.data && Array.isArray(response.data.data)) {
-          console.log('Stories found:', response.data.data);
-          setStories(response.data.data.slice(0, perPage));
-          setBuffer(response.data.data.slice(perPage));
+        if (Array.isArray(list)) {
+          const storiesWithOwner = list.map((story) => ({
+            ...story,
+            ownerId: user,
+          }));
+
+          setStories(storiesWithOwner.slice(0, perPage));
+          setBuffer(storiesWithOwner.slice(perPage));
         } else {
           console.warn('Unexpected response structure:', response);
           setStories([]);
@@ -52,7 +61,7 @@ const Popular = () => {
     };
 
     fetchStories();
-  }, [perPage]);
+  }, [travellerId, perPage]);
 
   const renderFromBuffer = () => {
     const toRender = buffer.slice(0, perPage);
@@ -66,8 +75,8 @@ const Popular = () => {
     setIsFetching(true);
 
     try {
-      const response = await getStories(nextPage, perPage);
-      const list = response?.data?.data ?? [];
+      const response = await getTravellerById(travellerId);
+      const list = response?.data?.stories ?? [];
 
       setBuffer((prev) => [...prev, ...list]);
 
@@ -75,7 +84,7 @@ const Popular = () => {
         setHasMore(false);
       }
     } catch (err) {
-      console.error(err);
+      console.error('Error loading more stories', err);
     } finally {
       setIsFetching(false);
     }
@@ -96,36 +105,39 @@ const Popular = () => {
     }
   };
 
- if (loading) return <Loader />;
+  if (loading) return <Loader />;
   if (error) return <div className={styles.error}>Помилка: {error}</div>;
   if (!stories || stories.length === 0)
     return <div className={styles.empty}>Історії відсутні</div>;
 
   return (
-    <section className={styles.popular}>
-      <div className={styles.storyPopular}>
-      <h2 className={styles.storyTitle}>Популярні історії</h2>
-      <ul className={styles.list}>
-        {Array.isArray(stories) &&
-          stories.map((story) => <StoryCard key={story._id} story={story} />)}
-        
-      </ul>
-      <div className={styles.readBtn}>
-  {isFetching ? (
-    <Loader />
-  ) : hasMore ? (
-    <button
-      className={styles.readButton}
-      ref={loadMoreRef}
-      onClick={handleLoadMore}
-    >
-      Показати ще
-    </button>
-  ) : null}
-</div>
-    </div>
+    <section className={styles.stories}>
+      <div className={styles.story}>
+        <ul className={styles.list}>
+          {Array.isArray(stories) &&
+            stories.map((story) => (
+              <li key={story._id}>
+                <TravellerStoryCard story={story} />
+              </li>
+            ))}
+        </ul>
+
+        <div className={styles.readBtn}>
+          {isFetching ? (
+            <Loader />
+          ) : hasMore ? (
+            <button
+              className={styles.readButton}
+              ref={loadMoreRef}
+              onClick={handleLoadMore}
+            >
+              Показати ще
+            </button>
+          ) : null}
+        </div>
+      </div>
     </section>
   );
 };
 
-export default Popular;
+export default TravellerStories;

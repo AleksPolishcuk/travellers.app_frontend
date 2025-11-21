@@ -3,7 +3,7 @@ import css from '@/app/components/CreateStoryForm/CreateStoryForm.module.css';
 
 export default function CreateStory() {
   return (
-    <div>
+    <div className={css.containerForm}>
       <div className={css.titleContainer}>
         <h1 className="title">Створити нову історію</h1>
       </div>

@@ -121,17 +121,6 @@ export const saveStory = async (storyId: string): Promise<any> => {
   return data;
 };
 
-//?==============================
-export const getUserStories = async (userId: string) =>
-  apiFetch(`/stories/user/${userId}`);
-
-export const getSavedStories = async (userId: string) =>
-  apiFetch(`/stories/user/${userId}/saved`);
-
-export const getUserById = async (userId: string) =>
-  apiFetch(`/users/${userId}`);
-//?=====================
-
 export const removeSavedStory = async (storyId: string): Promise<any> => {
   const data = await apiFetch(`/saved/${storyId}`, {
     method: "DELETE",

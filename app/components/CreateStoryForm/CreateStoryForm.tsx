@@ -11,6 +11,7 @@ import {
   StoryFormValues,
 } from '@/types/story';
 import css from './CreateStoryForm.module.css';
+import { hideLoader, showLoader } from '../Loader/LoaderFunctions';
 
 export default function CreateStoryForm({ id }: CreateStoryFormProps) {
   const autoResizeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -48,7 +49,12 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
   }, []);
   // Загрузка данных если редактирование
   useEffect(() => {
-    if (!id || categories.length === 0) return;
+    if (!id) {
+      setIsLoaded(true);
+      return;
+    }
+
+    if (categories.length === 0) return;
 
     async function loadStory() {
       try {
@@ -81,7 +87,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
 
     loadStory();
   }, [id, categories]);
-  if (!isLoaded) return <p>Завантаження...89</p>;
+  if (!isLoaded) return <p></p>;
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Заголовок обовʼязковий'),
@@ -104,6 +110,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
 
   const handleSubmit = async (values: StoryFormValues) => {
     try {
+      showLoader();
       setSubmitError('');
 
       const formData = new FormData();
@@ -117,9 +124,12 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
 
       const storyId = await saveStoryForm(formData);
       router.push(`/stories/${storyId}`);
+      hideLoader();
     } catch (err) {
       console.error(err);
       setSubmitError('Помилка збереження');
+    } finally {
+      hideLoader();
     }
   };
 
@@ -131,7 +141,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ values, isValid, setFieldValue }) => (
+        {({ values, isValid, setFieldValue, errors, touched }) => (
           <Form>
             <div className={css.formPhotoContainer}>
               <p className="title-photo">Обкладинка статті</p>
@@ -157,7 +167,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
                 <Field
                   name="title"
                   placeholder="Введіть заголовок історії"
-                  className={css.inputForm}
+                  className={`${css.inputForm} ${errors.title && touched.title ? css.inputError : ''}`}
                 />
                 <ErrorMessage
                   name="title"
@@ -172,7 +182,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
                   as="select"
                   name="category"
                   placeholder="Категорія"
-                  className={css.inputForm}
+                  className={`${css.inputForm} ${errors.category && touched.category ? css.inputError : ''}`}
                 >
                   <option value="">Категорія</option>
                   {categories.map((cat) => (
@@ -195,7 +205,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
                   name="article"
                   rows=""
                   placeholder="Введіть короткий опис історії"
-                  className={css.inputFormTextArea}
+                  className={`${css.inputFormTextArea} ${errors.article && touched.article ? css.inputError : ''}`}
                   onInput={autoResizeTextarea}
                 />
                 <ErrorMessage
@@ -211,7 +221,7 @@ export default function CreateStoryForm({ id }: CreateStoryFormProps) {
                   as="textarea"
                   name="fullText"
                   placeholder="Ваша історія тут"
-                  className={css.inputFormTextArea}
+                  className={`${css.inputFormTextArea} ${errors.article && touched.article ? css.inputError : ''}`}
                   onInput={autoResizeTextarea}
                 />
                 <ErrorMessage

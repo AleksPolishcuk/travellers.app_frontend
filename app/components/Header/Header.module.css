@@ -95,13 +95,18 @@
     padding: 4px;
     width: 40px;
     height: 40px;
-    background: transparent;
-    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0);
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+}
 
+.burgerWhite {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: #000;
 }
 
 .authHeader .headerNav,
@@ -129,11 +134,8 @@
     .headerContentWrapper {
         display: flex;
         align-items: center;
-        /* по вертикали выравнивание */
         justify-content: flex-end;
-        /* кнопки и бургер справа */
         gap: 16px;
-        /* расстояние между кнопкой и бургером */
     }
 
     .headerNav {

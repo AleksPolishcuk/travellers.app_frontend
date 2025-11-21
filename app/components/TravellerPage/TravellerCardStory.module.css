@@ -1,7 +1,5 @@
-
 .listItem {
-  width: 100%;
-  max-width: 100%;
+  width: 335px;
   height: 575px;
 
   background-color: #e8eeff;
@@ -158,23 +156,14 @@
 
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 8px;
-  width: auto;
+  width: 229px;
   height: 48px;
   background: rgba(0, 0, 0, 0.05);
-
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 229px;
-  padding: 6px 12px;
-  flex-grow: 1;
 }
 
 .storyButton:hover,
 .storyButton:focus {
-  border-color: #4169e1;
-  background-color: #4169e1 ;
-  color:#fff;
+  border-color: #000;
 }
 
 .storyButton:active {
@@ -188,7 +177,6 @@
   height: 48px;
   color: #000;
   background: rgba(0, 0, 0, 0.05);
-  transition: color 0.2s ease;
 }
 .saveButton:hover,
 .saveButton:focus {
@@ -201,7 +189,7 @@
 
 @media screen and (min-width: 768px) {
   .listItem {
-    height: 578px;
+    width: 340px;
   }
   .storyButton {
     width: 234px;
@@ -239,6 +227,7 @@
   }
   .listItem {
     height: 677px;
+    width: 421px;
   }
   .list {
     grid-template-columns: repeat(3, 1fr);
