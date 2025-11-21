@@ -8,7 +8,7 @@ export default function Footer() {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuthStore();
 
-  const hiddenFooterPages = ['/auth', '/profile'];
+  const hiddenFooterPages = ['/auth', '/profile/edit'];
   const hideFooterDeck = hiddenFooterPages.some((path) =>
     pathname?.startsWith(path),
   );
