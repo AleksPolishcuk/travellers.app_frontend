@@ -21,7 +21,7 @@
 .headerContainer {
     max-width: 335px;
     margin: 0 auto;
-    padding: 16px 20px;
+    padding: 16px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -127,7 +127,7 @@
 
 @media screen and (min-width: 768px) {
     .headerContainer {
-        padding: 16px 32px;
+        padding: 16px 0;
         max-width: 704px;
     }
 

@@ -37,7 +37,7 @@
 .logoLink {
     display: flex;
     align-items: center;
-    gap: 3, 31px;
+    gap: 3.31px;
     text-decoration: none;
 }
 
@@ -54,13 +54,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
     gap: 16px;
     padding-bottom: 40px;
     margin: 0;
-    display: inline-flex;
-
+    max-width: 200px; /* Обмежуємо максимальну ширину */
 }
 
 .socialList li {
@@ -70,6 +67,7 @@
     width: 28px;
     height: 28px;
     transition: border-color 0.2s ease, background-color 0.2s ease;
+    flex-shrink: 0;
 }
 
 .socialList li:hover,
@@ -188,13 +186,7 @@
 @media screen and (min-width: 1440px) {
 
 
-    .footer {
-        padding: 0 64px;
-    }
 
-    .footerContainer {
-        padding: 0 64px;
-    }
 
     .logoWrapper {
         width: 400px;
