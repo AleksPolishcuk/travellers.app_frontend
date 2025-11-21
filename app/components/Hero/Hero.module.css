@@ -63,7 +63,7 @@
 .heroBtn:hover {
     background-color: #e8eeff;
     color: #000;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 /* Mobile: адаптивна верстка з 375px */

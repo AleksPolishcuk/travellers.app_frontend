@@ -93,6 +93,7 @@
   .loadMoreButton:focus {
     background-color: #e8eeff;
     color: #000000;
+    transform: translateY(-1px);
   }
 
   .loadMoreButton:active {
