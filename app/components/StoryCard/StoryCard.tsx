@@ -9,69 +9,65 @@ import { Story } from '@/types/story';
 import { useUser } from '@/lib/hooks/useUser';
 import { saveStory, removeSavedStory } from '@/lib/api/clientApi';
 
+type Variant = 'default' | 'own';
+
 interface StoryCardProps {
   story: Story;
-  initialSaved?: boolean; // ✅ додали
+  variant?: Variant; // ✅
 }
 
-export function StoryCard({ story, initialSaved = false }: StoryCardProps) {
+export function StoryCard({ story, variant = 'default' }: StoryCardProps) {
   const router = useRouter();
   const { user } = useUser();
 
   const [bookmarksCount, setBookmarksCount] = useState<number>(
-    // ✅ правильне поле з бекенду
     // @ts-ignore
-    story.favoriteCount ?? 0,
+    story.bookmarksCount ??
+      // @ts-ignore
+      story.savedCount ??
+      story.favoriteCount ??
+      0,
   );
 
-  const [isSaved, setIsSaved] = useState<boolean>(initialSaved); // ✅
+  const [isSaved, setIsSaved] = useState<boolean>(Boolean(story.isSaved));
   const [loading, setLoading] = useState(false);
-
-  const imgSrc = typeof story.img === 'string' ? story.img.trim() : '';
-  const avatarSrc =
-    typeof story.ownerId?.avatarUrl === 'string'
-      ? story.ownerId.avatarUrl.trim()
-      : '';
 
   const handleSaveClick = async () => {
     if (!user) {
       router.push('/auth/login');
       return;
     }
-    if (loading) return;
-
-    setLoading(true);
-
-    const next = !isSaved;
-    setIsSaved(next);
-    setBookmarksCount((prev) => Math.max(0, prev + (next ? 1 : -1)));
 
     try {
-      if (next) {
-        await saveStory(story._id);
-      } else {
-        await removeSavedStory(story._id);
-      }
-    } catch (err: any) {
-      // rollback
-      setIsSaved(!next);
-      setBookmarksCount((prev) => Math.max(0, prev + (!next ? 1 : -1)));
+      setLoading(true);
 
-      console.error('Помилка збереження:', err);
-      alert(err?.message || 'Помилка збереження');
+      if (isSaved) {
+        await removeSavedStory(story._id);
+        setBookmarksCount((prev) => Math.max(0, prev - 1));
+        setIsSaved(false);
+      } else {
+        await saveStory(story._id);
+        setBookmarksCount((prev) => prev + 1);
+        setIsSaved(true);
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  const handleEditClick = () => {
+    router.push(`/stories/${story._id}/edit`);
+  };
+
+  const storyImgSrc = story?.img?.trim() ? story.img : '/placeholder-story.jpg';
+  const ownerAvatarSrc = story?.ownerId?.avatarUrl?.trim()
+    ? story.ownerId.avatarUrl
+    : '/Avatar-Image.jpg';
+
   return (
     <div className={styles.listItem}>
       <div className={styles.storyImg}>
-        {imgSrc ? (
-          <img className={styles.listImg} src={imgSrc} alt={story.title} />
-        ) : (
-          <div className={styles.imgPlaceholder} aria-hidden="true" />
-        )}
+        <img className={styles.listImg} src={storyImgSrc} alt={story.title} />
       </div>
 
       <div className={styles.storyContent}>
@@ -87,11 +83,7 @@ export function StoryCard({ story, initialSaved = false }: StoryCardProps) {
 
         <div className={styles.user}>
           <div className={styles.imgCard}>
-            {avatarSrc ? (
-              <img className={styles.userImg} src={avatarSrc} alt="" />
-            ) : (
-              <div className={styles.avatarPlaceholder} aria-hidden="true" />
-            )}
+            <img className={styles.userImg} src={ownerAvatarSrc} alt="" />
 
             <div className={styles.userInfo}>
               <h4 className={styles.userName}>{story.ownerId?.name}</h4>
@@ -118,24 +110,39 @@ export function StoryCard({ story, initialSaved = false }: StoryCardProps) {
             </button>
           </Link>
 
-          <button
-            type="button"
-            className={styles.saveButton}
-            onClick={handleSaveClick}
-            disabled={loading}
-            aria-label={isSaved ? 'Видалити зі збережених' : 'Зберегти історію'}
-          >
-            <svg width="24" height="24">
-              <use
-                className={styles.icon}
-                href={
-                  isSaved
-                    ? '/icons.svg#icon-bookmark-filled'
-                    : '/icons.svg#icon-bookmark'
-                }
-              ></use>
-            </svg>
-          </button>
+          {variant === 'own' ? (
+            <button
+              type="button"
+              className={styles.saveButton}
+              onClick={handleEditClick}
+              aria-label="Редагувати статтю"
+            >
+              <svg width="24" height="24">
+                <use href="/icons.svg#icon-edit"></use>
+              </svg>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.saveButton}
+              onClick={handleSaveClick}
+              disabled={loading}
+              aria-label={
+                isSaved ? 'Видалити зі збережених' : 'Зберегти історію'
+              }
+            >
+              <svg width="24" height="24">
+                <use
+                  className={styles.icon}
+                  href={
+                    isSaved
+                      ? '/icons.svg#icon-bookmark-filled'
+                      : '/icons.svg#icon-bookmark'
+                  }
+                ></use>
+              </svg>
+            </button>
+          )}
         </div>
       </div>
     </div>

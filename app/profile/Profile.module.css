@@ -150,6 +150,20 @@
   white-space: nowrap;
 }
 
+.tabLink {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editButton {
+  text-decoration: none; /* щоб Link виглядав як кнопка */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ===== CONTENT ===== */
 .content {
   margin-top: 28px;

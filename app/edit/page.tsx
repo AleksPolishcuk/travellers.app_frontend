@@ -1,5 +1,5 @@
-import ProfileForm from '../components/ProfileForm';
-import styles from './page.module.css';
+import ProfileForm from './ProfileForm/ProfileForm';
+import styles from './Edit.module.css';
 
 export default function ProfilePage() {
   return (

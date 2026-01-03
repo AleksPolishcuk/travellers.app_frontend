@@ -10,7 +10,7 @@ import ProfileStoriesGrid from '@/app/components/ProfileStoriesGrid/ProfileStori
 
 import { getCurrentUser } from '@/lib/api/clientApi';
 import {
-  fetchMySavedStories,
+  fetchMyOwnStories,
   type ProfileStoriesResponse,
 } from '@/lib/api/profile';
 
@@ -33,10 +33,9 @@ function EmptyState({
   );
 }
 
-export default function SavedStoriesPage() {
+export default function OwnStoriesPage() {
   const router = useRouter();
 
-  // user береться з кешу (layout вже робив запит)
   const { data: user } = useQuery({
     queryKey: ['me'],
     queryFn: getCurrentUser,
@@ -44,7 +43,7 @@ export default function SavedStoriesPage() {
   });
 
   const queryKey = useMemo(
-    () => ['profile-stories', 'saved', user?._id],
+    () => ['profile-stories', 'own', user?._id],
     [user?._id],
   );
 
@@ -61,7 +60,11 @@ export default function SavedStoriesPage() {
     enabled: Boolean(user?._id),
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>
-      fetchMySavedStories({ page: Number(pageParam), perPage: 9 }),
+      fetchMyOwnStories({
+        page: Number(pageParam),
+        perPage: 9,
+        ownerId: user!._id,
+      }),
     getNextPageParam: (lastPage) =>
       lastPage?.pagination?.hasNextPage
         ? lastPage.pagination.page + 1
@@ -69,12 +72,12 @@ export default function SavedStoriesPage() {
   });
 
   const items = data?.pages?.flatMap((p) => p.items ?? []) ?? [];
-  const handleExploreStories = () => router.push('/stories');
+  const handleCreateStory = () => router.push('/stories/create');
 
   if (!user) return null;
 
   return (
-    <section className={styles.content} aria-label="saved stories">
+    <section className={styles.content} aria-label="own stories">
       {isLoading && (
         <div className={styles.loaderWrapper}>
           <Loader />
@@ -98,16 +101,16 @@ export default function SavedStoriesPage() {
 
       {!isLoading && !isError && items.length === 0 && (
         <EmptyState
-          title="У вас ще немає збережених історій, мерщій збережіть вашу першу історію!"
-          buttonText="До історій"
-          onClick={handleExploreStories}
+          title="Ви ще нічого не публікували, поділіться своєю першою історією"
+          buttonText="Опублікувати історію"
+          onClick={handleCreateStory}
         />
       )}
 
       {!isLoading && !isError && items.length > 0 && (
         <ProfileStoriesGrid
           stories={items}
-          isOwn={false}
+          isOwn
           onLoadMore={fetchNextPage}
           hasNextPage={!!hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
