@@ -11,12 +11,13 @@ import { CategoryType } from '@/types/category';
 import CategoriesMenu from '../components/CategoriesMenu/CategoriesMenu';
 import Loader from '../components/Loader/Loader';
 
-const Stories = () => {
+const StoriesPage = () => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [stories, setStories] = useState<Story[]>([]);
   const [buffer, setBuffer] = useState<Story[]>([]);
-
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null,
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
   const [isFetching, setIsFetching] = useState(false);
@@ -34,7 +35,8 @@ const Stories = () => {
     const fetchCategories = async () => {
       try {
         const response = await getCategories();
-        setCategories(response?.data?.data ?? []);
+        const list = response?.data?.data ?? response?.data ?? [];
+        setCategories(list);
       } catch (e) {
         console.error('Error fetching categories', e);
       }
@@ -47,31 +49,31 @@ const Stories = () => {
     const fetchStories = async () => {
       try {
         setLoading(true);
-        const response = await getStories(1, perPage);
-        console.log('Full API response:', response);
+        setError(null);
+        setCurrentPage(1);
+        setHasMore(true);
 
-        // ДОСТУП ДО ДАНИХ
-        if (response && response.data && Array.isArray(response.data.data)) {
-          console.log('Stories found:', response.data.data);
-          setStories(response.data.data.slice(0, perPage));
-          setBuffer(response.data.data.slice(perPage));
-        } else {
-          console.warn('Unexpected response structure:', response);
-          setStories([]);
-        }
+        const response = await getStories(1, perPage, selectedCategoryId);
+        const list = response?.data?.data ?? [];
+
+        setStories(list.slice(0, perPage));
+        setBuffer(list.slice(perPage));
+        setHasMore(list.length > perPage);
       } catch (err) {
         console.error('Error fetching stories:', err);
         setError(
           err instanceof Error ? err.message : 'Failed to fetch stories',
         );
         setStories([]);
+        setBuffer([]);
+        setHasMore(false);
       } finally {
         setLoading(false);
       }
     };
 
     fetchStories();
-  }, [perPage]);
+  }, [perPage, selectedCategoryId]);
 
   const renderFromBuffer = () => {
     const toRender = buffer.slice(0, perPage);
@@ -85,7 +87,7 @@ const Stories = () => {
     setIsFetching(true);
 
     try {
-      const response = await getStories(nextPage, perPage, selectedCategory);
+      const response = await getStories(nextPage, perPage, selectedCategoryId);
       const list = response?.data?.data ?? [];
 
       setBuffer((prev) => [...prev, ...list]);
@@ -106,25 +108,9 @@ const Stories = () => {
     }
   }, [buffer, isFetching]);
 
-  const handleCategoryClick = async (categoryName: string | null) => {
-    setSelectedCategory((prev) =>
-      prev === categoryName ? null : categoryName,
-    );
-    setCurrentPage(1);
-    setIsFetching(true);
-
-    try {
-      const response = await getStories(1, perPage, categoryName);
-      const list = response?.data?.data ?? [];
-
-      setStories(list.slice(0, perPage));
-      setBuffer(list.slice(perPage));
-      setHasMore(list.length > perPage);
-    } catch (err) {
-      console.error('Error fetching filtered stories', err);
-    } finally {
-      setIsFetching(false);
-    }
+  const handleCategoryClick = (categoryId: string | null) => {
+    setSelectedCategoryId((prev) => (prev === categoryId ? null : categoryId));
+    loadMoreRef.current?.blur();
   };
 
   const handleLoadMore = () => {
@@ -145,21 +131,25 @@ const Stories = () => {
     <section className={styles.stories}>
       <div className={styles.story}>
         <h2 className={styles.storyTitle}>Історії Мандрівників</h2>
+
         <div className={styles.cat}>
           {width > 768 ? (
             <>
               <button
-                className={`${styles.allCategories} ${selectedCategory === null ? styles.activeAllCategories : ''}`}
+                className={`${styles.allCategories} ${
+                  selectedCategoryId === null ? styles.activeAllCategories : ''
+                }`}
                 onClick={() => handleCategoryClick(null)}
               >
                 Всі історії
               </button>
+
               {categories.map((category) => (
                 <Category
                   key={category._id}
                   category={category}
-                  active={selectedCategory === category.name}
-                  onClick={() => handleCategoryClick(category.name)}
+                  active={selectedCategoryId === category._id}
+                  onClick={() => handleCategoryClick(category._id)}
                 />
               ))}
             </>
@@ -169,7 +159,7 @@ const Stories = () => {
 
               <CategoriesMenu
                 categories={categories}
-                selectedCategory={selectedCategory}
+                selectedCategory={selectedCategoryId}
                 onSelectCategory={handleCategoryClick}
               />
             </div>
@@ -178,35 +168,29 @@ const Stories = () => {
 
         <ul className={styles.list}>
           {Array.isArray(stories) &&
-            stories
-              .filter((story) =>
-                selectedCategory
-                  ? story.category?.name === selectedCategory
-                  : true,
-              )
-              .map((story) => (
-                <li key={story._id}>
-                  <StoryCard story={story} />
-                </li>
-              ))}
+            stories.map((story) => (
+              <li key={story._id}>
+                <StoryCard story={story} />
+              </li>
+            ))}
         </ul>
 
         <div className={styles.readBtn}>
-  {isFetching ? (
-    <Loader />
-  ) : hasMore ? (
-    <button
-      className={styles.readButton}
-      ref={loadMoreRef}
-      onClick={handleLoadMore}
-    >
-      Показати ще
-    </button>
-  ) : null}
-</div>
+          {isFetching ? (
+            <Loader />
+          ) : hasMore ? (
+            <button
+              className={styles.readButton}
+              ref={loadMoreRef}
+              onClick={handleLoadMore}
+            >
+              Показати ще
+            </button>
+          ) : null}
+        </div>
       </div>
     </section>
   );
 };
 
-export default Stories;
+export default StoriesPage;
