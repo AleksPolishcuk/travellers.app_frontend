@@ -28,12 +28,10 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
     retry: false,
   });
 
-  // redirect якщо не авторизований (тільки в effect)
   useEffect(() => {
     if (!isLoading && !user) router.replace('/auth/login');
   }, [isLoading, user, router]);
 
-  // Prefetch вкладок (ТЗ)
   useEffect(() => {
     if (!user?._id) return;
 

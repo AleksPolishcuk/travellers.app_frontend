@@ -13,7 +13,7 @@ type Variant = 'default' | 'own';
 
 interface StoryCardProps {
   story: Story;
-  variant?: Variant; // ✅
+  variant?: Variant;
 }
 
 export function StoryCard({ story, variant = 'default' }: StoryCardProps) {

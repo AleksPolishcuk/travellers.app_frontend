@@ -36,7 +36,6 @@ function EmptyState({
 export default function SavedStoriesPage() {
   const router = useRouter();
 
-  // user береться з кешу (layout вже робив запит)
   const { data: user } = useQuery({
     queryKey: ['me'],
     queryFn: getCurrentUser,

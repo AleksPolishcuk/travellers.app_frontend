@@ -22,7 +22,6 @@ export default function ProfileForm() {
       const result = await getProfile();
       const data = result.data;
       console.log('result', data);
-      
 
       setUserId(data._id);
       setBio(data.description || '');
@@ -78,7 +77,6 @@ export default function ProfileForm() {
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      {/* Avatar */}
       <div className={styles.avatarSection}>
         <label className={styles.avatarLabel}>Аватар</label>
 
@@ -118,7 +116,6 @@ export default function ProfileForm() {
         </div>
       </div>
 
-      {/* Bio */}
       <div className={styles.textareaWrapper}>
         <label className={styles.label}>Короткий опис</label>
 
@@ -133,7 +130,6 @@ export default function ProfileForm() {
         <p className={styles.charCounter}>Лишилось символів: {charCount}</p>
       </div>
 
-      {/* Save button */}
       <button
         type="submit"
         disabled={!hasChanges}
