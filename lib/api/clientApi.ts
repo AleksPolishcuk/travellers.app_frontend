@@ -19,9 +19,7 @@ let failedQueue: Array<{
 
 const processQueue = (error: any = null) => {
   failedQueue.forEach(({ reject }) => {
-    if (error) {
-      reject(error);
-    }
+    if (error) reject(error);
   });
   failedQueue = [];
 };
@@ -53,7 +51,7 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
           failedQueue.push({ resolve, reject });
         })
           .then(() => originalRequest())
-          .then((response) => response.json())
+          .then((r) => r.json())
           .catch((err) => Promise.reject(err));
       }
 
@@ -65,9 +63,7 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
           {
             method: 'POST',
             credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
           },
         );
 
@@ -107,13 +103,8 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
         } catch {}
       }
 
-      if (response.status === 404) {
-        throw new Error('Ресурс не знайдено.');
-      }
-
-      if (response.status === 401) {
-        throw new Error('Необхідна авторизація');
-      }
+      if (response.status === 404) throw new Error('Ресурс не знайдено.');
+      if (response.status === 401) throw new Error('Необхідна авторизація');
 
       throw new Error(errorMessage);
     }
@@ -121,8 +112,8 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
     return await response.json();
   } catch (error: any) {
     if (
-      error.message.includes('Failed to fetch') ||
-      error.message.includes('NetworkError')
+      error?.message?.includes('Failed to fetch') ||
+      error?.message?.includes('NetworkError')
     ) {
       throw new Error('Помилка мережі. Перевірте підключення до інтернету.');
     }
@@ -135,9 +126,7 @@ export const refreshToken = async (): Promise<boolean> => {
     const response = await fetch(`${API_BASE_URL}/auth/refresh-session`, {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     return response.ok;
@@ -168,8 +157,8 @@ export const getCurrentUser = async (): Promise<User | null> => {
     return data.data;
   } catch (error: any) {
     if (
-      error.message.includes('Необхідна авторизація') ||
-      error.message.includes('401')
+      error?.message?.includes('Необхідна авторизація') ||
+      error?.message?.includes('401')
     ) {
       return null;
     }
@@ -188,40 +177,37 @@ export const getTravellers = async (
 export const getStories = async (
   page: number = 1,
   perPage: number = 9,
+  categoryId?: string | null,
 ): Promise<any> => {
-  const data = await apiFetch(`/stories?page=${page}&perPage=${perPage}`);
-  return data;
+  const params = new URLSearchParams();
+  params.set('page', String(page));
+  params.set('perPage', String(perPage));
+  if (categoryId) params.set('categoryId', categoryId);
+
+  return apiFetch(`/stories?${params.toString()}`);
 };
 
-export const getCategories = async (
-  page: number = 1,
-  perPage: number = 9,
-): Promise<any> => {
-  const data = await apiFetch(`/categories?page=${page}&perPage=${perPage}`);
-  return data;
+export const getCategories = async (): Promise<any> => {
+  return apiFetch(`/stories/categories`);
 };
 
 export const saveStory = async (storyId: string): Promise<any> => {
-  // ✅ бек: POST /api/stories/:storyId/saved
-  return apiFetch(`/stories/${storyId}/saved`, {
-    method: 'POST',
-  });
+  return apiFetch(`/stories/${storyId}/saved`, { method: 'POST' });
 };
 
 export const removeSavedStory = async (storyId: string): Promise<any> => {
-  // ✅ бек: DELETE /api/stories/:storyId/saved
-  return apiFetch(`/stories/${storyId}/saved`, {
-    method: 'DELETE',
-  });
+  return apiFetch(`/stories/${storyId}/saved`, { method: 'DELETE' });
 };
 
 export const getSavedStories = async (page = 1, perPage = 9): Promise<any> => {
-  // ✅ бек: GET /api/stories/saved
-  return apiFetch(`/stories/saved?page=${page}&perPage=${perPage}`);
+  const params = new URLSearchParams();
+  params.set('page', String(page));
+  params.set('perPage', String(perPage));
+  return apiFetch(`/stories/saved?${params.toString()}`);
 };
 
 const handleLoginError = (error: any): string => {
-  const errorMessage = error.message || 'Помилка входу';
+  const errorMessage = error?.message || 'Помилка входу';
 
   if (
     errorMessage.includes('user not found') ||
@@ -258,7 +244,7 @@ const handleLoginError = (error: any): string => {
 };
 
 const handleRegisterError = (error: any): string => {
-  const errorMessage = error.message || 'Помилка реєстрації';
+  const errorMessage = error?.message || 'Помилка реєстрації';
 
   if (
     errorMessage.includes('email already exists') ||
@@ -285,8 +271,6 @@ export const useLogin = () => {
           body: JSON.stringify(userData),
         });
         return data.data;
-      } catch (error: any) {
-        throw error;
       } finally {
         setLoading(false);
       }
@@ -295,10 +279,10 @@ export const useLogin = () => {
       useAuthStore.getState().setUser(user);
       showSuccessToast('Успішний вхід!');
       queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.invalidateQueries({ queryKey: ['me'] });
     },
     onError: (error: any) => {
-      const userFriendlyMessage = handleLoginError(error);
-      showErrorToast(userFriendlyMessage);
+      showErrorToast(handleLoginError(error));
     },
   });
 };
@@ -324,10 +308,10 @@ export const useRegister = () => {
       useAuthStore.getState().setUser(user);
       showSuccessToast('Реєстрація успішна!');
       queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.invalidateQueries({ queryKey: ['me'] });
     },
     onError: (error: any) => {
-      const userFriendlyMessage = handleRegisterError(error);
-      showErrorToast(userFriendlyMessage);
+      showErrorToast(handleRegisterError(error));
     },
   });
 };
@@ -352,17 +336,20 @@ export const useLogout = () => {
     },
     onSuccess: () => {
       useAuthStore.getState().clearUser();
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined')
         localStorage.removeItem('auth-storage');
-      }
+
       queryClient.setQueryData(['user'], null);
+      queryClient.setQueryData(['me'], null);
       queryClient.removeQueries({ queryKey: ['user'] });
+      queryClient.removeQueries({ queryKey: ['me'] });
       queryClient.removeQueries({ queryKey: ['stories'] });
       queryClient.removeQueries({ queryKey: ['travellers'] });
     },
     onError: () => {
       useAuthStore.getState().clearUser();
       queryClient.setQueryData(['user'], null);
+      queryClient.setQueryData(['me'], null);
     },
   });
 };
@@ -399,23 +386,29 @@ export const useTravellers = (page: number, limit: number) => {
   });
 };
 
-export const useStories = (page: number = 1, perPage: number = 9) => {
+export const useStories = (
+  page: number = 1,
+  perPage: number = 9,
+  categoryId?: string | null,
+) => {
   return useQuery({
-    queryKey: ['stories', page, perPage],
+    queryKey: ['stories', page, perPage, categoryId ?? null],
     queryFn: async () => {
-      const data = await apiFetch(`/stories?page=${page}&perPage=${perPage}`);
-      return data;
+      const params = new URLSearchParams();
+      params.set('page', String(page));
+      params.set('perPage', String(perPage));
+      if (categoryId) params.set('categoryId', categoryId);
+      return apiFetch(`/stories?${params.toString()}`);
     },
     staleTime: 2 * 60 * 1000,
   });
 };
 
-export const useCategories = (page: number = 1, perPage: number = 9) => {
+export const useCategories = () => {
   return useQuery({
-    queryKey: ['categories', page, perPage],
+    queryKey: ['categories'],
     queryFn: async () => {
-      const data = await getCategories(page, perPage);
-      return data;
+      return getCategories();
     },
     staleTime: 2 * 60 * 1000,
   });
