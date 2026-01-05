@@ -8,7 +8,7 @@ type ApiEnvelope<T> = {
 };
 
 type StoriesListBackend = {
-  data: Story[]; // <- масив лежить тут
+  data: Story[];
   page: number;
   perPage: number;
   totalItems: number;
@@ -43,7 +43,6 @@ export async function fetchMySavedStories(params: {
 }) {
   const { page, perPage } = params;
 
-  // бек: GET /api/stories/saved?page&perPage
   const res = (await apiFetch(
     `/stories/saved?page=${page}&perPage=${perPage}`,
     { method: 'GET' },
@@ -59,7 +58,6 @@ export async function fetchMyOwnStories(params: {
 }) {
   const { page, perPage, ownerId } = params;
 
-  // бек: GET /api/stories?page&perPage&ownerId=...
   const res = (await apiFetch(
     `/stories?page=${page}&perPage=${perPage}&ownerId=${ownerId}`,
     { method: 'GET' },
