@@ -1,3 +1,4 @@
+// lib/api/clientApi.ts
 import {
   User,
   RegisterRequest,
@@ -9,7 +10,15 @@ import { showErrorToast, showSuccessToast } from '@/lib/utils/errorHandler';
 import { useAuthStore } from '@/store/authStore';
 import { NEXT_PUBLIC_API_URL } from '@/constants';
 
-const API_BASE_URL = NEXT_PUBLIC_API_URL;
+const API_BASE_URL = (NEXT_PUBLIC_API_URL || '').replace(/\/+$/, '');
+
+const buildUrl = (path: string) => {
+  const p = path.startsWith('/') ? path : `/${path}`;
+
+  if (API_BASE_URL.endsWith('/api')) return `${API_BASE_URL}${p}`;
+
+  return `${API_BASE_URL}/api${p}`;
+};
 
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -26,18 +35,21 @@ const processQueue = (error: any = null) => {
 
 export const apiFetch = async (url: string, options: RequestInit = {}) => {
   try {
-    const response = await fetch(`${API_BASE_URL}${url}`, {
-      ...options,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    });
+    const doFetch = () =>
+      fetch(buildUrl(url), {
+        ...options,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
+
+    const response = await doFetch();
 
     if (response.status === 401 && !url.includes('/auth/refresh-session')) {
       const originalRequest = () =>
-        fetch(`${API_BASE_URL}${url}`, {
+        fetch(buildUrl(url), {
           ...options,
           credentials: 'include',
           headers: {
@@ -58,29 +70,26 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
       isRefreshing = true;
 
       try {
-        const refreshResponse = await fetch(
-          `${API_BASE_URL}/auth/refresh-session`,
-          {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-          },
-        );
+        const refreshResponse = await fetch(buildUrl('/auth/refresh-session'), {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
 
         if (refreshResponse.ok) {
           processQueue(null);
-          const retryResponse = await originalRequest();
 
+          const retryResponse = await originalRequest();
           if (!retryResponse.ok) {
             throw new Error(`HTTP error! status: ${retryResponse.status}`);
           }
 
           return retryResponse.json();
-        } else {
-          processQueue(new Error('Не вдалося оновити сесію'));
-          useAuthStore.getState().clearUser();
-          throw new Error('Сесія закінчилася. Будь ласка, увійдіть знову.');
         }
+
+        processQueue(new Error('Не вдалося оновити сесію'));
+        useAuthStore.getState().clearUser();
+        throw new Error('Сесія закінчилася. Будь ласка, увійдіть знову.');
       } catch (refreshError) {
         processQueue(refreshError);
         useAuthStore.getState().clearUser();
@@ -123,12 +132,11 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
 
 export const refreshToken = async (): Promise<boolean> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/refresh-session`, {
+    const response = await fetch(buildUrl('/auth/refresh-session'), {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
-
     return response.ok;
   } catch {
     return false;
@@ -177,18 +185,19 @@ export const getTravellers = async (
 export const getStories = async (
   page: number = 1,
   perPage: number = 9,
-  categoryId?: string | null,
+  categoryName?: string | null,
 ): Promise<any> => {
   const params = new URLSearchParams();
   params.set('page', String(page));
   params.set('perPage', String(perPage));
-  if (categoryId) params.set('categoryId', categoryId);
+
+  if (categoryName) params.set('categoryName', categoryName);
 
   return apiFetch(`/stories?${params.toString()}`);
 };
 
 export const getCategories = async (): Promise<any> => {
-  return apiFetch(`/stories/categories`);
+  return apiFetch('/stories/categories');
 };
 
 export const saveStory = async (storyId: string): Promise<any> => {
@@ -200,10 +209,7 @@ export const removeSavedStory = async (storyId: string): Promise<any> => {
 };
 
 export const getSavedStories = async (page = 1, perPage = 9): Promise<any> => {
-  const params = new URLSearchParams();
-  params.set('page', String(page));
-  params.set('perPage', String(perPage));
-  return apiFetch(`/stories/saved?${params.toString()}`);
+  return apiFetch(`/stories/saved?page=${page}&perPage=${perPage}`);
 };
 
 const handleLoginError = (error: any): string => {
@@ -324,7 +330,7 @@ export const useLogout = () => {
       isRefreshing = false;
       failedQueue = [];
 
-      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+      const response = await fetch(buildUrl('/auth/logout'), {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -341,6 +347,7 @@ export const useLogout = () => {
 
       queryClient.setQueryData(['user'], null);
       queryClient.setQueryData(['me'], null);
+
       queryClient.removeQueries({ queryKey: ['user'] });
       queryClient.removeQueries({ queryKey: ['me'] });
       queryClient.removeQueries({ queryKey: ['stories'] });
@@ -386,19 +393,11 @@ export const useTravellers = (page: number, limit: number) => {
   });
 };
 
-export const useStories = (
-  page: number = 1,
-  perPage: number = 9,
-  categoryId?: string | null,
-) => {
+export const useStories = (page: number = 1, perPage: number = 9) => {
   return useQuery({
-    queryKey: ['stories', page, perPage, categoryId ?? null],
+    queryKey: ['stories', page, perPage],
     queryFn: async () => {
-      const params = new URLSearchParams();
-      params.set('page', String(page));
-      params.set('perPage', String(perPage));
-      if (categoryId) params.set('categoryId', categoryId);
-      return apiFetch(`/stories?${params.toString()}`);
+      return apiFetch(`/stories?page=${page}&perPage=${perPage}`);
     },
     staleTime: 2 * 60 * 1000,
   });
@@ -407,9 +406,7 @@ export const useStories = (
 export const useCategories = () => {
   return useQuery({
     queryKey: ['categories'],
-    queryFn: async () => {
-      return getCategories();
-    },
+    queryFn: async () => getCategories(),
     staleTime: 2 * 60 * 1000,
   });
 };
