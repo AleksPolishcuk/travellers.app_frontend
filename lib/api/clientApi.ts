@@ -1,4 +1,3 @@
-// lib/api/clientApi.ts
 import {
   User,
   RegisterRequest,
@@ -8,16 +7,14 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { showErrorToast, showSuccessToast } from '@/lib/utils/errorHandler';
 import { useAuthStore } from '@/store/authStore';
-import { NEXT_PUBLIC_API_URL } from '@/constants';
 
-const API_BASE_URL = (NEXT_PUBLIC_API_URL || '').replace(/\/+$/, '');
+const API_BASE_URL =
+  typeof window !== 'undefined' ? '' : 'http://localhost:3000';
 
 const buildUrl = (path: string) => {
   const p = path.startsWith('/') ? path : `/${path}`;
 
-  if (API_BASE_URL.endsWith('/api')) return `${API_BASE_URL}${p}`;
-
-  return `${API_BASE_URL}/api${p}`;
+  return `/api${p}`;
 };
 
 let isRefreshing = false;
@@ -35,8 +32,10 @@ const processQueue = (error: any = null) => {
 
 export const apiFetch = async (url: string, options: RequestInit = {}) => {
   try {
+    const fullUrl = buildUrl(url);
+
     const doFetch = () =>
-      fetch(buildUrl(url), {
+      fetch(fullUrl, {
         ...options,
         credentials: 'include',
         headers: {
@@ -48,22 +47,17 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
     const response = await doFetch();
 
     if (response.status === 401 && !url.includes('/auth/refresh-session')) {
-      const originalRequest = () =>
-        fetch(buildUrl(url), {
-          ...options,
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            ...options.headers,
-          },
-        });
-
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then(() => originalRequest())
-          .then((r) => r.json())
+          .then(() => doFetch())
+          .then(async (r) => {
+            if (!r.ok) {
+              throw new Error(`HTTP error! status: ${r.status}`);
+            }
+            return await r.json();
+          })
           .catch((err) => Promise.reject(err));
       }
 
@@ -79,7 +73,7 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
         if (refreshResponse.ok) {
           processQueue(null);
 
-          const retryResponse = await originalRequest();
+          const retryResponse = await doFetch();
           if (!retryResponse.ok) {
             throw new Error(`HTTP error! status: ${retryResponse.status}`);
           }
@@ -120,6 +114,8 @@ export const apiFetch = async (url: string, options: RequestInit = {}) => {
 
     return await response.json();
   } catch (error: any) {
+    console.error('API Fetch Error:', error);
+
     if (
       error?.message?.includes('Failed to fetch') ||
       error?.message?.includes('NetworkError')
